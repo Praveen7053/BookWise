@@ -5,7 +5,7 @@
     <artifactId>BookWise</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>fexmonModule</name>
+    <name>bookWise</name>
     <properties>
         <spring.version>4.0.6.RELEASE</spring.version>
         <hibernate.version>4.3.6.Final</hibernate.version>
@@ -338,7 +338,7 @@
     </dependencies>
 
     <build>
-        <finalName>fexmonModule</finalName>
+        <finalName>bookWise</finalName>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
@@ -347,7 +347,7 @@
                 <configuration>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <webApp>
-                        <contextPath>/fexmonModule</contextPath>
+                        <contextPath>/bookWise</contextPath>
                     </webApp>
                     <httpConnector>
                         <port>8098</port>
