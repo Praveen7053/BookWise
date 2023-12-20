@@ -7,11 +7,7 @@
     <script type="text/javascript" src="script/jquery-migrate-3.4.0.min.js"></script>
 
     <body style="margin: 0; padding: 0;">
-        <div id="mainDIVFORiPAD" style="float: left; width: 100%; height: 100%;">
-
-        test first 123
-
-        </div>
-
+        <div id="mainDIVFORiPAD" style="float: left; width: 100%; height: 100%;"></div>
+            here there this is a login page
     </body>
 </html>

@@ -1,6 +1,6 @@
 package com.bookWise.Helper;
 
-public class PraveenTestHelper {
+public class BookService {
     public String TestClass(){
         String a = "test";
 

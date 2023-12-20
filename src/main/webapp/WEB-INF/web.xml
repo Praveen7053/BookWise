@@ -2,29 +2,37 @@
 <web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>bookWise</display-name>
 
-	<!--<context-param>
-		<param-name>log4jConfigLocation</param-name>
-		<param-value>/WEB-INF/log4j.properties</param-value>
-	</context-param>
+	<!-- Spring MVC Dispatcher Servlet -->
+	<servlet>
+		<servlet-name>spring-mvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring-mvc-servlet.xml</param-value> <!-- Location of your Spring MVC configuration -->
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
-	<listener>
-		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-	</listener>-->
+	<servlet-mapping>
+		<servlet-name>spring-mvc</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
 
+	<!-- Other Servlets and Mappings -->
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:common/config/fexmon-web.xml
+			classpath:common/bookWise/bookWise-web.xml
+			classpath:common/bookWise/persistence.xml
 		</param-value>
 	</context-param>
 
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>Login.jsp</welcome-file>
 	</welcome-file-list>
 
 	<session-config>
 		<session-timeout>90</session-timeout>
 	</session-config>
-
 </web-app>
