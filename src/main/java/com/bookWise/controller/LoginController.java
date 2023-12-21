@@ -1,23 +1,19 @@
 // src/main/java/com/bookwise/controller/LoginController.java
 package com.bookWise.controller;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@WebServlet("/login")
-public class LoginController extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+@Controller
+public class LoginController {
 
-        // Add your authentication logic here
-        // Example: Check username and password against a database
+    @RequestMapping("/")
+    public String userLoginPage(){
+        return "Login";
+    }
 
-        // For demonstration purposes, assume a successful login and redirect to a welcome page
-        response.sendRedirect("welcome.jsp");
+    @RequestMapping("/signUp")
+    public String userSignUp(){
+        return "UserSignUp";
     }
 }

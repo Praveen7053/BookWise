@@ -28,9 +28,9 @@
 		</param-value>
 	</context-param>
 
-	<welcome-file-list>
-		<welcome-file>Login.jsp</welcome-file>
-	</welcome-file-list>
+<!--	<welcome-file-list>-->
+<!--		<welcome-file>Login.jsp</welcome-file>-->
+<!--	</welcome-file-list>-->
 
 	<session-config>
 		<session-timeout>90</session-timeout>

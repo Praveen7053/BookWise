@@ -5,7 +5,7 @@
     <title>Sign Up</title>
 </head>
 <body>
-    <h2>Sign Up</h2>
+    <h2>this is user Sign Up</h2>
     <form action="/register" method="post">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br>
