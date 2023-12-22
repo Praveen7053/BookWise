@@ -12,7 +12,7 @@ public class LoginController {
         return "Login";
     }
 
-    @RequestMapping("/signUp")
+    @RequestMapping("/registerNewUser")
     public String userSignUp(){
         return "UserSignUp";
     }

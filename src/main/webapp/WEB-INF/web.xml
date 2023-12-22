@@ -22,10 +22,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			classpath:common/bookWise/bookWise-web.xml
-			classpath:common/bookWise/persistence.xml
-		</param-value>
+		<param-value>/WEB-INF/spring-mvc-servlet.xml</param-value>
 	</context-param>
 
 <!--	<welcome-file-list>-->
