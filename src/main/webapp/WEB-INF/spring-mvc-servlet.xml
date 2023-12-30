@@ -44,7 +44,7 @@
         <property name="annotatedClasses">
             <list>
                 <!-- entity class will be added here-->
-                <value>com.bookWise.model.User</value>
+                <value>com.bookWise.model.BookWiseUser</value>
             </list>
         </property>
     </bean>

@@ -1,6 +1,6 @@
 package com.bookWise.controller;
 
-import com.bookWise.model.User;
+import com.bookWise.model.BookWiseUser;
 import com.bookWise.dao.BookWiseDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +15,10 @@ public class SignUpController {
     private BookWiseDAO bookWiseDAO;
 
     @RequestMapping(method = RequestMethod.POST)
-    public String registerUser(User user) {
+    public String registerUser(BookWiseUser bookWiseUser) {
         try {
             // Your logic to save the user using bookWiseDAO
-            bookWiseDAO.save(user);
+            bookWiseDAO.save(bookWiseUser);
             System.out.println("User registered successfully");
         } catch (Exception e) {
             e.printStackTrace();
