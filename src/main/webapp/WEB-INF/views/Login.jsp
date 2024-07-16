@@ -18,7 +18,7 @@
                         </div>
 
                         <div class="signin-form">
-                            <h3 class="form-title">Book Wise Login In</h3>
+                            <h3 class="form-title">Book Wise Log In</h3>
                             <form method="POST" class="register-form" id="login-form">
                                 <div class="form-group">
                                     <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>

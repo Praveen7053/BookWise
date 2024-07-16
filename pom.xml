@@ -232,6 +232,7 @@
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <webApp>
                         <contextPath>/bookWise</contextPath>
+                        <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
                     </webApp>
                     <httpConnector>
                         <port>8098</port>

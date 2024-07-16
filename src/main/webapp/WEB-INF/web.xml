@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-	<display-name>bookWise</display-name>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+		 version="3.1">
 
-	<!-- Spring MVC Dispatcher Servlet -->
+	<display-name>BookWise</display-name>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
 	<servlet>
 		<servlet-name>spring-mvc</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring-mvc-servlet.xml</param-value> <!-- Location of your Spring MVC configuration -->
-		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
@@ -18,18 +21,12 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-	<!-- Other Servlets and Mappings -->
-
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring-mvc-servlet.xml</param-value>
 	</context-param>
 
-<!--	<welcome-file-list>-->
-<!--		<welcome-file>Login.jsp</welcome-file>-->
-<!--	</welcome-file-list>-->
-
-	<session-config>
-		<session-timeout>90</session-timeout>
-	</session-config>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 </web-app>
