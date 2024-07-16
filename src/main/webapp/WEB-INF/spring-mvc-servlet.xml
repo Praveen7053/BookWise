@@ -2,24 +2,27 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <tx:annotation-driven />
+    <context:annotation-config/>
 
     <!-- Your bean definitions and configurations -->
     <context:component-scan base-package="com.bookWise" />
 
-    <!-- View resolver -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" name="viewResolver">
-        <property name="prefix" value="/WEB-INF/views/" />
-        <property name="suffix" value=".jsp" />
+    <!-- Ensure transaction management is enabled with correct namespace -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="mainSessionFactory" />
+        <property name="dataSource" ref="bookWise" />
     </bean>
 
-
-    <bean name="bookWise" class="org.apache.commons.dbcp2.BasicDataSource">
+    <bean id="bookWise" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost:3306/bookwise" />
         <property name="username" value="root" />
@@ -27,34 +30,33 @@
     </bean>
 
     <!-- Add this definition in your spring-mvc-servlet.xml or your main Spring configuration file -->
-    <bean name="factory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <!--data source-->
+    <bean id="mainSessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="bookWise" />
-
-        <!-- Hibernate properties -->
-        <property name="packagesToScan" value="com.bookWise.model" />
+        <property name="configLocations">
+            <list>
+                <value>classpath:common/config/hibernate-bookWise.cfg.xml</value>
+            </list>
+        </property>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.dbcp.initialSize">300</prop>
+                <prop key="hibernate.dbcp.maxActive">300</prop>
+                <prop key="hibernate.dbcp.maxIdle">20</prop>
+                <prop key="hibernate.dbcp.minIdle">20</prop>
             </props>
         </property>
-
-
-        <property name="annotatedClasses">
-            <list>
-                <!-- entity class will be added here-->
-                <value>com.bookWise.model.BookWiseUser</value>
-            </list>
-        </property>
     </bean>
 
-    <bean name="bookWiseDAO" class="com.bookWise.dao.BookWiseDAOImpl">
-        <property name="sessionFactory" ref="factory" />
+    <!-- View resolver -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" name="viewResolver">
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".jsp" />
     </bean>
 
-    <bean class="org.springframework.orm.hibernate4.HibernateTransactionManager" name="transactionManager">
-        <property name="sessionFactory" ref="factory" />
+    <bean id="bookWiseDAOImpl" class="com.bookWise.dao.impl.BookWiseDAOImpl">
+        <property name="sessionFactory" ref="mainSessionFactory" />
     </bean>
 
     <mvc:resources mapping="/resources/**" location="/resources/" />

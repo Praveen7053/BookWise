@@ -1,25 +1,35 @@
 package com.bookWise.controller;
 
+import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookWiseUser;
-import com.bookWise.dao.BookWiseDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/register")
 public class SignUpController {
 
     @Autowired
-    private BookWiseDAO bookWiseDAO;
+    private BookWiseDAOImpl bookWiseDAO;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String registerUser(BookWiseUser bookWiseUser) {
+    @Transactional
+    @RequestMapping(value = "/signUpUser", method = RequestMethod.POST)
+    public String registerUser(HttpServletRequest request) {
         try {
-            // Your logic to save the user using bookWiseDAO
-            bookWiseDAO.save(bookWiseUser);
-            System.out.println("User registered successfully");
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String password = request.getParameter("pass");
+            String rePassword = request.getParameter("re_pass");
+            BookWiseUser bookWiseUser = new BookWiseUser();
+            bookWiseUser.setUserName(name);
+            bookWiseUser.setUserEmail(email);
+            bookWiseUser.setUserPassword(password);
+            bookWiseDAO.saveOrUpdate(bookWiseUser);
         } catch (Exception e) {
             e.printStackTrace();
             // Handle the exception or redirect to an error page
@@ -27,6 +37,6 @@ public class SignUpController {
         }
 
         // Redirect to a success page or login page
-        return "redirect:/login"; // Change the URL based on your application
+        return "redirect:/Login"; // Change the URL based on your application
     }
 }

@@ -1,37 +1,36 @@
 package com.bookWise.dao;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-
 public interface BaseDAO {
 
-    public void delete(Object obj);
+    void delete(Object obj);
 
-    public void deleteAll(Collection collection);
+    void deleteAll(Collection collection);
 
-    public Serializable save(Object obj);
+    Serializable save(Object obj);
 
-    public void saveOrUpdate(Object obj);
+    void saveOrUpdate(Object obj);
 
-    public void saveOrUpdateAll(Collection<? extends AbstractBaseDomain> collection);
+    void saveOrUpdateAll(Collection collection);
 
-    public void merge(Object obj);
+    void merge(Object obj);
 
-    public void evict(Object obj);
+    void evict(Object obj);
 
-    public Object find(Class clazz, Serializable id);
+    Object find(Class clazz, Serializable id);
 
-    public <T> List<T> findAll(Class clazz);
+    <T> List<T> findAll(Class clazz);
 
-    public <T> List<T> findBy(String hsql) ;
+    <T> List<T> findBy(String hsql);
 
-    public Object load(Class clazz, Serializable id) ;
+    Object load(Class clazz, Serializable id);
 
-    public void flush();
+    void flush();
 
-    public void refresh(Object obj);
+    void refresh(Object obj);
 
-    public <T extends Object> T get(Class<T> clazz, Serializable id);
-
+    <T> T get(Class<T> clazz, Serializable id);
 }

@@ -22,4 +22,7 @@ public class BookWiseUser {
 
     @Column(name = "USER_PASSWORD")
     private String userPassword;
+
+    @Column(name = "USER_EMAIL")
+    private String userEmail;
 }

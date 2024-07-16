@@ -16,7 +16,7 @@
                 <div class="signup-content">
                     <div class="signup-form">
                         <h3 class="form-title">Book Wise Sign Up</h3>
-                        <form method="POST" class="register-form" id="register-form">
+                        <form action="${pageContext.request.contextPath}/register/signUpUser" method="POST" class="register-form" id="register-form">
                             <div class="form-group">
                                 <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                 <input type="text" name="name" id="name" placeholder="Your Name"/>
