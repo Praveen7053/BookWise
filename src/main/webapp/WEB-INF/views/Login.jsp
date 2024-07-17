@@ -14,12 +14,12 @@
                     <div class="signin-content">
                         <div class="signin-image">
                             <figure><img src="resources/images/signin-image.jpg" alt="sing up image"></figure>
-                            <a href="${pageContext.request.contextPath}/registerNewUser" class="signup-image-link">Create an account</a>
+                            <a href="${pageContext.request.contextPath}/userSignUpPage" class="signup-image-link">Create an account</a>
                         </div>
 
                         <div class="signin-form">
                             <h3 class="form-title">Book Wise Log In</h3>
-                            <form method="POST" class="register-form" id="login-form">
+                            <form action="${pageContext.request.contextPath}/userSignupNLogin/loginRegisteredUser" method="POST" class="register-form" id="login-form">
                                 <div class="form-group">
                                     <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                     <input type="text" name="your_name" id="your_name" placeholder="Your Name"/>

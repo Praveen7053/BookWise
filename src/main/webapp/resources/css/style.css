@@ -481,3 +481,19 @@ label.valid {
     margin-bottom: 10px; } }
 
 /*# sourceMappingURL=style.css.map */
+
+.msgTop {
+    display: flex;
+    align-items: center;
+    color: green;
+    font-size: 14px;
+    line-height: 23px;
+}
+
+.msgIcon {
+    margin-right: 8px;
+}
+
+.msgText {
+    margin-left: 8px;
+}

@@ -25,4 +25,7 @@ public class BookWiseUser {
 
     @Column(name = "USER_EMAIL")
     private String userEmail;
+
+    @Column(name = "USER_PHONE_NUMBER")
+    private String userPhoneNumber;
 }
