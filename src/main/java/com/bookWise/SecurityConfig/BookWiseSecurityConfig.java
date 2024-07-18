@@ -7,9 +7,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -41,9 +43,10 @@ public class BookWiseSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().ignoringAntMatchers("/userSignupNLogin/loginRegisteredUser", "/userSignupNLogin/registerNewUser") // Disable CSRF for these endpoints
-            .and()
-            .authorizeRequests(authorizeRequests ->
+                .csrf().ignoringAntMatchers("/userSignupNLogin/loginRegisteredUser", "/userSignupNLogin/registerNewUser") // Disable CSRF for these endpoints
+               // .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Enable CSRF with tokens in cookies
+                .and()
+                .authorizeRequests(authorizeRequests ->
                 authorizeRequests
                     .antMatchers("/home").hasRole("USER")
                     .antMatchers("/UserSignUp.jsp").permitAll()
@@ -60,10 +63,19 @@ public class BookWiseSecurityConfig {
             )
             .logout(logout ->
                 logout
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/login") // Redirect to login page after logout
                     .permitAll()
+                    .invalidateHttpSession(true) // Invalidate session
+                    .deleteCookies("JSESSIONID") // Delete cookies
             );
 
         return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/resources/**");
     }
 
 }

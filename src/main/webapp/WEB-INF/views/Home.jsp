@@ -4,6 +4,7 @@
 <head>
     <title>Home Page</title>
     <%@include file="./base.jsp" %>
+    <%@include file="/WEB-INF/views/fragments/header.jsp" %>
 </head>
 <body>
     <div class="home-content">
