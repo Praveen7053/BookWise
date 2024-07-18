@@ -1,4 +1,3 @@
-// Example User entity class
 package com.bookWise.model;
 
 import lombok.Getter;
@@ -28,4 +27,7 @@ public class BookWiseUser {
 
     @Column(name = "USER_PHONE_NUMBER")
     private String userPhoneNumber;
+
+    @Column(name = "AUTHORITIES")
+    private String authorities;
 }

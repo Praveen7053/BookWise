@@ -37,7 +37,7 @@
                                 <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password"/>
                             </div>
                             <div class="form-group form-button">
-                                <input type="button" id="signup" class="form-submit" value="Register"/>
+                                <input type="submit" id="signup" class="form-submit" value="Register"/>
                             </div>
                         </form>
                     </div>
@@ -52,7 +52,8 @@
 
     <script>
         $(document).ready(function() {
-            $('#signup').click(function() {
+            $('#register-form').submit(function(event) {
+                event.preventDefault();
                 $.ajax({
                     type: 'POST',
                     url: '${pageContext.request.contextPath}/userSignupNLogin/registerNewUser',

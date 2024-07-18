@@ -1,15 +1,18 @@
 package com.bookWise.controller;
 
-import com.bookWise.SecurityConfig.BoolWiseSecurityConfig;
+import com.bookWise.SecurityConfig.BookWiseSecurityConfig;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookWiseUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -24,10 +27,14 @@ public class LoginSignUpController {
     private BookWiseDAOImpl bookWiseDAO;
 
     @Autowired
-    private BoolWiseSecurityConfig boolWiseSecurityConfig;
+    private BookWiseSecurityConfig bookWiseSecurityConfig;
+
+    @Autowired
+    @Qualifier("authenticationManagerBean")
+    private AuthenticationManager authenticationManager;
 
     @Transactional
-    @RequestMapping(value = "/registerNewUser", method = RequestMethod.POST)
+    @PostMapping("/registerNewUser")
     @ResponseBody
     public Map<String, Object> registerUser(HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
@@ -59,7 +66,7 @@ public class LoginSignUpController {
             }
 
             // Encode the password
-            String encodedPassword = boolWiseSecurityConfig.passwordEncoder().encode(password);
+            String encodedPassword = bookWiseSecurityConfig.passwordEncoder().encode(password);
 
             // Create and save the new user
             BookWiseUser bookWiseUser = new BookWiseUser();
@@ -79,10 +86,45 @@ public class LoginSignUpController {
         return response;
     }
 
-    @Transactional
-    @RequestMapping(value = "/loginRegisteredUser", method = RequestMethod.POST)
-    public String loginRegisteredUser(){
-        System.out.println("called login");
-        return "";
+    @PostMapping("/loginRegisteredUser")
+    @ResponseBody
+    public Map<String, Object> loginRegisteredUser(
+            @RequestParam("your_name") String name,
+            @RequestParam("your_pass") String password) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<BookWiseUser> userList = bookWiseDAO.findBy("from BookWiseUser where userEmail = '"+name+"' ");
+            BookWiseUser user = null;
+            if(userList != null && userList.size() > 0){
+                user = userList.get(0);
+            }
+
+            if (user == null) {
+                response.put("success", false);
+                response.put("message", "User not found.");
+                return response;
+            }
+
+            // Check if the password matches
+            if (!bookWiseSecurityConfig.passwordEncoder().matches(password, user.getUserPassword())) {
+                response.put("success", false);
+                response.put("message", "Invalid password.");
+                return response;
+            }
+
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(name, password));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            response.put("success", true);
+            response.put("message", "Login successful.");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "An error occurred. Please try again.");
+        }
+
+        return response;
     }
 }

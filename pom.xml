@@ -7,7 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>bookWise</name>
     <properties>
-        <spring.version>4.3.25.RELEASE</spring.version> <!-- Updated to latest compatible 4.x version -->
+        <spring.version>5.3.20</spring.version> <!-- Updated to latest compatible 4.x version -->
         <hibernate.version>5.6.15.Final</hibernate.version> <!-- Updated to the latest Hibernate 5.x version -->
         <ehcache-version>3.11.9</ehcache-version> <!-- Updated to latest version -->
         <jstl.version>1.2</jstl.version>
@@ -56,6 +56,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
         <dependency>
