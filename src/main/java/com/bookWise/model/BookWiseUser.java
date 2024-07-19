@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,6 +29,14 @@ public class BookWiseUser {
     @Column(name = "USER_PHONE_NUMBER")
     private String userPhoneNumber;
 
-    @Column(name = "AUTHORITIES")
-    private String authorities;
+    @Column(name = "USER_TYPE")
+    private String userType;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USER_AUTHORITY",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "AUTHORITY_ID")
+    )
+    private Set<Authority> authorities;
 }

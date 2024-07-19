@@ -497,3 +497,11 @@ label.valid {
 .msgText {
     margin-left: 8px;
 }
+
+.pull_left{
+    flot:left;
+}
+
+.pull_right{
+    flot:right;
+}

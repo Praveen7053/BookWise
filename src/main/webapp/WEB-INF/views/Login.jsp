@@ -21,8 +21,8 @@
                         <h3 class="form-title">Book Wise Log In</h3>
                         <form id="login-form">
                             <div class="form-group">
-                                <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="your_name" id="your_name" placeholder="Your Name"/>
+                                <label for="userLoginId"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="userLoginId" id="userLoginId" placeholder="Email / Phone Number"/>
                             </div>
                             <div class="form-group">
                                 <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
@@ -62,10 +62,8 @@
                     success: function(response) {
                         clearAlerts();
                         if (response.success) {
-                            showSuccessAlert(response.message);
-                            setTimeout(function() {
-                                window.location.href = '${pageContext.request.contextPath}/home';  // Redirect to the home page after successful login
-                            }, 2000);
+                            //showSuccessAlert(response.message);
+                            window.location.href = '${pageContext.request.contextPath}/home';  // Redirect to the home page after successful login
                         } else {
                             showErrorAlert(response.message);
                         }

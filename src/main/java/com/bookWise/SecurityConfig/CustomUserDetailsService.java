@@ -1,15 +1,19 @@
 package com.bookWise.SecurityConfig;
 
+import com.bookWise.SecurityConfig.loginUserConfig.BookWiseLoginUser;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookWiseUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User.UserBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -18,21 +22,17 @@ public class CustomUserDetailsService implements UserDetailsService {
     private BookWiseDAOImpl bookWiseDAO;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<BookWiseUser> userList = bookWiseDAO.findBy("from BookWiseUser where userEmail = '" + username + "'");
-        BookWiseUser user = null;
-        if (userList != null && userList.size() > 0) {
-            user = userList.get(0);
-        }
+    public UserDetails loadUserByUsername(String userLoginId) throws UsernameNotFoundException {
+        List<BookWiseUser> userList = bookWiseDAO.findBy("from BookWiseUser where userEmail = '"+userLoginId+"' or userPhoneNumber = '"+userLoginId+"' ");
+        BookWiseUser user = userList.stream().findFirst()
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
+        Set<GrantedAuthority> authorities = user.getAuthorities().stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
+                .collect(Collectors.toSet());
 
-        UserBuilder userBuilder = org.springframework.security.core.userdetails.User.withUsername(username);
-        userBuilder.password(user.getUserPassword());
-        userBuilder.roles("USER");
-
-        return userBuilder.build();
+        return new BookWiseLoginUser(user.getUserId(), user.getUserName(), user.getUserEmail(),
+                user.getUserPhoneNumber(), user.getUserType(), user.getUserPassword(), authorities,
+                true, true, true, true);
     }
 }

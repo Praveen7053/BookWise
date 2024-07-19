@@ -58,7 +58,7 @@ public class LoginSignUpController {
             }
 
             // Check if the user already exists
-            List<BookWiseUser> bookWiseUsersList = bookWiseDAO.findBy("from BookWiseUser obj where obj.userPhoneNumber = '" + phone + "' and obj.userEmail='" + email + "'");
+            List<BookWiseUser> bookWiseUsersList = bookWiseDAO.findBy("from BookWiseUser obj where obj.userEmail='" + email + "' and obj.userPhoneNumber = '" + phone + "' ");
             if (bookWiseUsersList != null && !bookWiseUsersList.isEmpty()) {
                 response.put("success", false);
                 response.put("message", "You are already registered. Please log in.");
@@ -89,13 +89,26 @@ public class LoginSignUpController {
     @PostMapping("/loginRegisteredUser")
     @ResponseBody
     public Map<String, Object> loginRegisteredUser(
-            @RequestParam("your_name") String name,
+            @RequestParam("userLoginId") String userLoginId,
             @RequestParam("your_pass") String password) {
 
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<BookWiseUser> userList = bookWiseDAO.findBy("from BookWiseUser where userEmail = '"+name+"' ");
+
+            if(StringUtils.isBlank(userLoginId)){
+                response.put("success", false);
+                response.put("message", "Login id cannot be blank.");
+                return response;
+            }
+
+            if(StringUtils.isBlank(password)){
+                response.put("success", false);
+                response.put("message", "Password cannot be blank.");
+                return response;
+            }
+
+            List<BookWiseUser> userList = bookWiseDAO.findBy("from BookWiseUser where userEmail = '"+userLoginId+"' or userPhoneNumber = '"+userLoginId+"' ");
             BookWiseUser user = null;
             if(userList != null && userList.size() > 0){
                 user = userList.get(0);
@@ -115,12 +128,13 @@ public class LoginSignUpController {
             }
 
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(name, password));
+                    new UsernamePasswordAuthenticationToken(userLoginId, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             response.put("success", true);
             response.put("message", "Login successful.");
         } catch (Exception e) {
+            e.printStackTrace();
             response.put("success", false);
             response.put("message", "An error occurred. Please try again.");
         }

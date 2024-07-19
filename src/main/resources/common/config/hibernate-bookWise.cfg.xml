@@ -5,6 +5,7 @@
     <session-factory name="">
 
         <mapping class="com.bookWise.model.BookWiseUser"/>
+        <mapping class="com.bookWise.model.Authority"/>
 
     </session-factory>
 </hibernate-configuration>
