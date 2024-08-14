@@ -160,7 +160,7 @@ public class LoginSignUpController {
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
         if (hasUserRole && hasAdminRole) {
-            redirectUrl = "/home";
+            redirectUrl = "/sellerHome";
         } else if (hasUserRole) {
             redirectUrl = "/home";
         } else if (hasAdminRole) {

@@ -21,9 +21,11 @@ public class HomeController {
 
     @GetMapping("/sellerHome")
     public String sellerHome(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("userName", auth.getName());
-        return "sellerHome"; // Assuming this view is directly under /WEB-INF/views
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
+        model.addAttribute("userEmail", user.getUserEmail()); // Add the username to the model
+        model.addAttribute("userName", user.getUsername()); // Add the username to the model
+        return "sellerHome";
     }
 
 }

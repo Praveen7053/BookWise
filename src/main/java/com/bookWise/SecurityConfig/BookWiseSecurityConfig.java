@@ -20,9 +20,6 @@ public class BookWiseSecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -62,7 +59,6 @@ public class BookWiseSecurityConfig {
             .formLogin(formLogin ->
                 formLogin
                     .loginPage("/login")
-                    .successHandler(customAuthenticationSuccessHandler)
                     .permitAll()
             )
             .logout(logout ->

@@ -532,3 +532,26 @@ label.valid {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.flex-nowrap {
+    display: flex;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.card-body {
+    overflow-y: auto;
+}
+
+#mainListDivContainer {
+    max-height: 1000px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
