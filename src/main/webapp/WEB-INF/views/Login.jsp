@@ -55,12 +55,16 @@
         $(document).ready(function() {
             $('#login-form').submit(function(event) {
                 event.preventDefault();
+                showProgressBar("progressBarDiv", "bodyDiv");
+
                 $.ajax({
                     type: 'POST',
                     url: '${pageContext.request.contextPath}/userSignupNLogin/loginRegisteredUser',
                     data: $('#login-form').serialize(),
                     success: function(response) {
                         clearAlerts();
+                        closeProgressBar("progressBarDiv", "bodyDiv");
+
                         if (response.success) {
                             showSuccessAlert(response.message);
                             window.location.href = response.redirectUrl;
@@ -70,6 +74,7 @@
                         }
                     },
                     error: function() {
+                        closeProgressBar("progressBarDiv", "bodyDiv");
                         showErrorAlert('An error occurred. Please try again.');
                     }
                 });

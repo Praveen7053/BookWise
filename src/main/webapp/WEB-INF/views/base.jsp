@@ -17,3 +17,10 @@
 
 
 <div id="common-alert-placeholder-div" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+<!-- Progress Bar Div -->
+<div id="progressBarDiv" style="display: none;">
+    <div class="progress-bar-overlay">
+        <div class="progress-bar-spinner"></div>
+    </div>
+</div>

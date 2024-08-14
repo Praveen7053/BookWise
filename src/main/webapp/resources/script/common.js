@@ -41,3 +41,31 @@ function clearAlerts() {
     const alertPlaceholder = document.getElementById('common-alert-placeholder-div');
     alertPlaceholder.innerHTML = '';
 }
+
+function showProgressBar(progressBarId, bodyDivId) {
+    var progressBarDiv = document.getElementById(progressBarId);
+    var bodyDiv = document.getElementById(bodyDivId);
+
+    if (progressBarDiv) {
+        progressBarDiv.style.display = "block";
+    }
+
+    if (bodyDiv) {
+        bodyDiv.style.pointerEvents = "none"; // Disable interaction with the background
+        bodyDiv.style.opacity = "0.5"; // Optional: dim the background
+    }
+}
+
+function closeProgressBar(progressBarId, bodyDivId) {
+    var progressBarDiv = document.getElementById(progressBarId);
+    var bodyDiv = document.getElementById(bodyDivId);
+
+    if (progressBarDiv) {
+        progressBarDiv.style.display = "none";
+    }
+
+    if (bodyDiv) {
+        bodyDiv.style.pointerEvents = "auto"; // Re-enable interaction with the background
+        bodyDiv.style.opacity = "1"; // Restore background opacity
+    }
+}
