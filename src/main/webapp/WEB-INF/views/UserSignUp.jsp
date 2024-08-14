@@ -54,18 +54,21 @@
         $(document).ready(function() {
             $('#register-form').submit(function(event) {
                 event.preventDefault();
+                showProgressBar("progressBarDiv", "bodyDiv");
                 $.ajax({
                     type: 'POST',
                     url: '${pageContext.request.contextPath}/userSignupNLogin/registerNewUser',
                     data: $('#register-form').serialize(),
                     success: function(response) {
                         clearAlerts();
+                        closeProgressBar("progressBarDiv", "bodyDiv");
                         if (response.success) {
                             showSuccessAlert(response.message);
                             setTimeout(function() {
                                 window.location.href = '${pageContext.request.contextPath}/Login';
                             }, 2000);
                         } else {
+                            closeProgressBar("progressBarDiv", "bodyDiv");
                             showErrorAlert(response.message);
                         }
                     },
