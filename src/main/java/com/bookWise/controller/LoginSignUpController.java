@@ -2,6 +2,7 @@ package com.bookWise.controller;
 
 import com.bookWise.SecurityConfig.BookWiseSecurityConfig;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
+import com.bookWise.model.Authority;
 import com.bookWise.model.BookWiseUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +10,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/userSignupNLogin")
@@ -67,9 +67,12 @@ public class LoginSignUpController {
 
             // Encode the password
             String encodedPassword = bookWiseSecurityConfig.passwordEncoder().encode(password);
+            // Assigning the default role USER_ROLE
+            Authority userRole = (Authority) bookWiseDAO.find(Authority.class, 1);
 
             // Create and save the new user
             BookWiseUser bookWiseUser = new BookWiseUser();
+            bookWiseUser.setAuthorities(Collections.singleton(userRole));
             bookWiseUser.setUserName(name);
             bookWiseUser.setUserEmail(email);
             bookWiseUser.setUserPassword(encodedPassword);
@@ -90,7 +93,7 @@ public class LoginSignUpController {
     @ResponseBody
     public Map<String, Object> loginRegisteredUser(
             @RequestParam("userLoginId") String userLoginId,
-            @RequestParam("your_pass") String password) {
+            @RequestParam("your_pass") String password, HttpServletRequest request) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -133,6 +136,7 @@ public class LoginSignUpController {
 
             response.put("success", true);
             response.put("message", "Login successful.");
+            response.put("redirectUrl", request.getContextPath() + determineRedirectUrlBasedOnRole(authentication)); // Implement this method to get URL based on role
         } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
@@ -140,5 +144,29 @@ public class LoginSignUpController {
         }
 
         return response;
+    }
+
+
+    // Example method to determine redirect URL based on user role
+    public String determineRedirectUrlBasedOnRole(Authentication authentication) {
+        String redirectUrl = "/default"; // Default URL if no roles match
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+        boolean hasUserRole = authorities.stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"));
+
+        boolean hasAdminRole = authorities.stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (hasUserRole && hasAdminRole) {
+            redirectUrl = "/home";
+        } else if (hasUserRole) {
+            redirectUrl = "/home";
+        } else if (hasAdminRole) {
+            redirectUrl = "/sellerHome";
+        }
+
+        return redirectUrl;
     }
 }

@@ -19,4 +19,11 @@ public class HomeController {
         return "Home"; // Return the home view
     }
 
+    @GetMapping("/sellerHome")
+    public String sellerHome(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("userName", auth.getName());
+        return "sellerHome"; // Assuming this view is directly under /WEB-INF/views
+    }
+
 }

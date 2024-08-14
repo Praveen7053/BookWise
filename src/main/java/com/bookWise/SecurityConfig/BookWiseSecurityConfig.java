@@ -20,6 +20,9 @@ public class BookWiseSecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -49,6 +52,7 @@ public class BookWiseSecurityConfig {
                 .authorizeRequests(authorizeRequests ->
                 authorizeRequests
                     .antMatchers("/home").hasRole("USER")
+                    .antMatchers("/sellerHome").hasRole("ADMIN")
                     .antMatchers("/UserSignUp.jsp").permitAll()
                     .antMatchers("/userSignUpPage").permitAll()
                     .antMatchers("/userSignupNLogin/loginRegisteredUser").permitAll()
@@ -58,7 +62,7 @@ public class BookWiseSecurityConfig {
             .formLogin(formLogin ->
                 formLogin
                     .loginPage("/login")
-                    .defaultSuccessUrl("/home")
+                    .successHandler(customAuthenticationSuccessHandler)
                     .permitAll()
             )
             .logout(logout ->

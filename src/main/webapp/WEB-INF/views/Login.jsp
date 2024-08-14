@@ -62,8 +62,9 @@
                     success: function(response) {
                         clearAlerts();
                         if (response.success) {
-                            //showSuccessAlert(response.message);
-                            window.location.href = '${pageContext.request.contextPath}/home';  // Redirect to the home page after successful login
+                            showSuccessAlert(response.message);
+                            window.location.href = response.redirectUrl;
+                            console.log('response.redirectUrl :: '+response.redirectUrl);
                         } else {
                             showErrorAlert(response.message);
                         }
