@@ -1,7 +1,7 @@
 <!-- sidebar.jsp -->
 <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <a class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
             <i class="fas fa-bars me-2"></i> <!-- Font Awesome icon for menu -->
             <span class="fs-5 d-none d-sm-inline">Menu</span>
         </a>
@@ -14,29 +14,36 @@
             </li>
             <li>
                 <a onclick="changeModulePage('uploadBooks');" class="nav-link px-0 align-middle">
-                    <i class="fas fa-shopping-cart fs-4"></i> <!-- Font Awesome icon for orders -->
+                    <i class="fas fa-upload fs-4"></i> <!-- Font Awesome icon for upload -->
                     <span class="ms-1 d-none d-sm-inline">Upload Book</span>
                 </a>
             </li>
             <li>
                 <a onclick="changeModulePage('booksList');" class="nav-link px-0 align-middle">
-                    <i class="fas fa-users fs-4"></i> <!-- Font Awesome icon for customers -->
+                    <i class="fas fa-list fs-4"></i> <!-- Font Awesome icon for book list -->
                     <span class="ms-1 d-none d-sm-inline">Book List</span>
                 </a>
             </li>
         </ul>
         <hr>
-        <div class="dropdown pb-4">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                <span class="d-none d-sm-inline mx-1">loser</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
-            </ul>
-        </div>
+        <!-- Dropdown -->
+    <!-- Dropdown -->
+    <div class="dropdown pb-4" style="position: relative;">
+        <a id="dropdownToggle" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="Profile Picture" width="30" height="30" class="rounded-circle">
+            <span class="d-none d-sm-inline mx-1">loser</span>
+        </a>
+        <ul id="dropdownMenu" class="dropdown-menu text-small shadow">
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form action="${pageContext.request.contextPath}/logout" method="post" class="d-inline">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    <button class="dropdown-item" type="submit">Sign out</button>
+                </form>
+            </li>
+        </ul>
+    </div>
     </div>
 </div>
 

@@ -579,3 +579,20 @@ label.valid {
 #sidebarNav, #sidebarDropdown {
     transition: opacity 0.3s;
 }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    bottom: 100%; /* Position above the dropdown toggle */
+    left: 0;
+    margin-bottom: 5px; /* Space between toggle and menu */
+    z-index: 1000; /* Ensure the dropdown is above other content */
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
