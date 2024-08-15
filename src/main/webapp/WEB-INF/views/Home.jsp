@@ -4,10 +4,9 @@
 <head>
     <title>Home Page</title>
     <%@include file="./base.jsp" %>
-    <%@include file="/WEB-INF/views/fragments/header.jsp" %>
 </head>
 <body>
-    <div class="home-content">
+    <div class="home-content" id="mainHomePageMainDIV">
         <h1>Welcome to BookWise</h1>
         <p>This is the home page.</p>
     </div>

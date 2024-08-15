@@ -555,3 +555,27 @@ label.valid {
     overflow-y: auto;
     scroll-behavior: smooth;
 }
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.content {
+    margin-left: 280px; /* Match the width of the sidebar */
+    padding: 20px;
+}
+
+/* Example CSS for transitions */
+#sidebar {
+    transition: width 0.3s;
+}
+
+#sidebarNav, #sidebarDropdown {
+    transition: opacity 0.3s;
+}
