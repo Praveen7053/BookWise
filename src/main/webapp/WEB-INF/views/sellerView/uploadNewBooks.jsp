@@ -1,4 +1,4 @@
-<div class="container py-4 uploadBookContainer" id="mainUploadNewBooksPageMainDIV" style="display:none;">
+<div class="container py-4 uploadBookContainer mx-auto" id="mainUploadNewBooksPageMainDIV" style="display:none;">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
             <div class="card shadow-sm border-0 rounded">
