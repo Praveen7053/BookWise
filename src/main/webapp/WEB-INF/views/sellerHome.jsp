@@ -18,6 +18,7 @@
                 <jsp:include page="Home.jsp" />
                 <jsp:include page="sellerView/uploadNewBooks.jsp" />
                 <jsp:include page="sellerView/uploadedBooks.jsp" />
+                <jsp:include page="userProfile/userProfile.jsp" />
             </div>
 
         </div>
