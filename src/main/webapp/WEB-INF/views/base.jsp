@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <title><c:out value="${title}">Login Page</c:out></title>
 
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/commonStyle.css"/>
 <script src="${pageContext.request.contextPath}/resources/script/common.js"></script>
 
 

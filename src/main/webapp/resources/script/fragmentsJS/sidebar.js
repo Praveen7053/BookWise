@@ -19,7 +19,7 @@ function defaultModulePageDisplay(){
     document.getElementById("mainUserProfilePageMainDIV").style.display = "none";
 }
 
-document.getElementById('dropdownToggle').addEventListener('click', function () {
+document.getElementById('userProfileDropdownToggle').addEventListener('click', function () {
     const menu = document.getElementById('dropdownMenu');
     const isExpanded = this.getAttribute('aria-expanded') === 'true';
 

@@ -1,0 +1,132 @@
+
+.content {
+    margin-left: 280px; /* Match the width of the sidebar */
+    padding: 20px;
+}
+
+/* Example CSS for transitions */
+#sidebar {
+    transition: width 0.3s;
+}
+
+#sidebarNav, #sidebarDropdown {
+    transition: opacity 0.3s;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    bottom: 100%; /* Position above the dropdown toggle */
+    left: 0;
+    margin-bottom: 5px; /* Space between toggle and menu */
+    z-index: 1000; /* Ensure the dropdown is above other content */
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.nav-link {
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link i {
+    color: white;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: #0056b3;
+    color: white;
+}
+
+.nav-link.active i {
+    color: white;
+}
+
+#userProfileDropdownToggle:hover {
+    color: #0056b3;
+}
+
+#dropdownMenu {
+    background-color: #343a40;
+}
+
+#dropdownMenu .dropdown-item {
+    color: white;
+}
+
+#dropdownMenu .dropdown-item:hover {
+    background-color: #0056b3;
+}
+
+.rounded-circle {
+    border: 2px solid white;
+}
+
+.uploadBookCol.py-3 {
+    overflow-x: hidden;  /* Prevent horizontal scrolling */
+    overflow-y: auto;    /* Enable vertical scrolling if content overflows */
+    min-height: 100vh;   /* Ensure the content area covers the full height */
+}
+
+.uploadBookForm-control, .uploadBookForm-select {
+    border-radius: 5px;
+    box-shadow: none;
+    border: 1px solid #ced4da;
+}
+
+.uploadBookForm-control:focus, .uploadBookForm-select:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border-color: #80bdff;
+}
+
+.uploadBookCard-header {
+    background-color: #007bff;
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0;
+}
+
+.uploadBookCard-body {
+    padding: 20px;
+}
+
+.uploadBookBtn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.uploadBookBtn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.uploadBookContainer {
+    margin: 20px 20px 0 20px;
+}
+
+.uploadBookRow > .col-md-6, .uploadBookRow > .col-md-4 {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.uploadBookForm-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#mainUploadNewBooksPageMainDIV {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .uploadBookRow > .col-md-6, .uploadBookRow > .col-md-4 {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}

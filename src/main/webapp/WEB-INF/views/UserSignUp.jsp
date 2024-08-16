@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Sign Up Page</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/loginNSignupStyle.css"/>
     <%@include file="./base.jsp" %>
 </head>
 <body>

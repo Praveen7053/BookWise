@@ -14,15 +14,14 @@
             <jsp:include page="fragments/sidebar.jsp" />
 
             <!-- Content Area -->
-            <div class="col py-3">
+            <div class="col py-3" style="flex: 1; overflow-y: auto; height: 100vh;">
                 <jsp:include page="Home.jsp" />
                 <jsp:include page="sellerView/uploadNewBooks.jsp" />
                 <jsp:include page="sellerView/uploadedBooks.jsp" />
                 <jsp:include page="userProfile/userProfile.jsp" />
             </div>
-
         </div>
     </div>
-    <script src="resources\script\sellerHome.js"></script>
+    <script src="resources/script/sellerHome.js"></script>
 </body>
 </html>
