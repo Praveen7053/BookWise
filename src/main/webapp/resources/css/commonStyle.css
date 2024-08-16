@@ -164,3 +164,89 @@
     border-color: #007bff;
     color: white;
 }
+
+/* Ensure the container takes the full width */
+#mainUploadListViewPageMainDIV {
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Hide any overflow to prevent scrollbars */
+}
+
+/* Ensure the column takes the full height of its parent */
+.col.py-3 {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent scrolling in this container */
+}
+
+/* Ensure the content area scrolls within the column */
+.col.py-3 > .content-area {
+    flex: 1; /* Allow it to expand and fill the available space */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Ensure the book list wrapper takes the available height */
+.book-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 85px); /* Fill the available height */
+}
+
+/* Book List Header styles */
+.book-list-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1rem;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    padding: 0.5rem;
+    border-bottom: 1px solid #dee2e6; /* Optional border for separation */
+}
+
+/* Book List Content styles */
+.book-list-content {
+    flex: 1; /* Take up the remaining space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 0.5rem;
+    height: calc(100vh - 80px); /* Adjust based on header and footer heights */
+    border: 1px solid #dee2e6; /* Add border */
+    border-radius: 0.25rem; /* Optional: rounded corners */
+}
+
+/* Book List Item styles */
+.book-list-item {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    padding: 0.5rem;
+    background-color: #ffffff;
+}
+
+.book-list-item:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .book-list-header, .book-list-item {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+    }
+
+    .book-list-header > div:nth-child(7),
+    .book-list-item > div:nth-child(7) {
+        display: none; /* Hide actions on small screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .book-list-header, .book-list-item {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.paginationMainDIV{
+    margin-top: 8px;
+}
