@@ -16,8 +16,14 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/commonStyle.css"/>
 <script src="${pageContext.request.contextPath}/resources/script/common.js"></script>
 
+<script src="${pageContext.request.contextPath}/resources/script/fragmentsJS/ajaxUtility.js"></script>
+
 
 <div id="common-alert-placeholder-div" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+<meta name="context-path" content="${pageContext.request.contextPath}" />
+<meta name="csrf-token" content="${_csrf.token}" />
+
 
 <!-- Progress Bar Div -->
 <div id="progressBarDiv" style="display: none;">

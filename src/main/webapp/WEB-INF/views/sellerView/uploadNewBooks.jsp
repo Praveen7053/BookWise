@@ -6,17 +6,18 @@
                     <h3 class="mb-0">Upload New Book</h3>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form id="uploadBookForm" >
+                        <meta name="csrf-token" content="${_csrf.token}"/>
                         <!-- Book Title and Author Name -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <input type="text" class="form-control" id="bookTitle" placeholder="Enter book title" required>
+                                    <input type="text" class="form-control" id="bookTitle" placeholder="Enter book title">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <input type="text" class="form-control" id="authorName" placeholder="Enter author name" required>
+                                    <input type="text" class="form-control" id="authorName" placeholder="Enter author name">
                                 </div>
                             </div>
                         </div>
@@ -25,17 +26,17 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <input type="text" class="form-control" id="isbnNumber" placeholder="Enter ISBN number" required>
+                                    <input type="text" class="form-control" id="isbnNumber" placeholder="Enter ISBN number">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <input type="number" class="form-control" id="bookPrice" placeholder="Enter book price" required>
+                                    <input type="number" class="form-control" id="bookPrice" placeholder="Enter book price">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <select class="form-select" id="bookCategory" required>
+                                    <select class="form-select" id="bookCategory">
                                         <option value="" disabled selected>Select category</option>
                                         <option value="fiction">Fiction</option>
                                         <option value="nonfiction">Non-Fiction</option>
@@ -52,17 +53,17 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <input type="number" class="form-control" id="numberOfPages" placeholder="Enter number of pages" required>
+                                    <input type="number" class="form-control" id="numberOfPages" placeholder="Enter number of pages">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <input type="date" class="form-control" id="publicationDate" required>
+                                    <input type="date" class="form-control" id="publicationDate">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <select class="form-select" id="bookLanguage" required>
+                                    <select class="form-select" id="bookLanguage">
                                         <option value="" disabled selected>Select language</option>
                                         <option value="english">English</option>
                                         <option value="spanish">Spanish</option>
@@ -79,13 +80,13 @@
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="bookCover" class="form-label">Book Cover Image</label>
-                                    <input type="file" class="form-control" id="bookCover" accept="image/*" required>
+                                    <input type="file" class="form-control" id="bookCover" accept="image/*" >
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="bookPdf" class="form-label">Upload Book PDF</label>
-                                    <input type="file" class="form-control" id="bookPdf" accept="application/pdf" required>
+                                    <input type="file" class="form-control" id="bookPdf" accept="application/pdf" >
                                 </div>
                             </div>
                         </div>
@@ -93,7 +94,7 @@
 
                         <!-- Book Description -->
                         <div class="form-group mb-3">
-                            <textarea class="form-control" id="bookDescription" rows="4" placeholder="Enter book description" required></textarea>
+                            <textarea class="form-control" id="bookDescription" rows="4" placeholder="Enter book description" ></textarea>
                         </div>
 
                         <!-- Upload Button -->
@@ -106,3 +107,5 @@
         </div>
     </div>
 </div>
+
+<script src="resources/script/uploadNewBooks.js"></script>

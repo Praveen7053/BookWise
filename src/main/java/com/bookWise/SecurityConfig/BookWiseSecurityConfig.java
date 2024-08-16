@@ -43,7 +43,7 @@ public class BookWiseSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().ignoringAntMatchers("/userSignupNLogin/loginRegisteredUser", "/userSignupNLogin/registerNewUser") // Disable CSRF for these endpoints
+                .csrf().ignoringAntMatchers("/userSignupNLogin/loginRegisteredUser", "/userSignupNLogin/registerNewUser", "/api/**") // Disable CSRF for these endpoints
                // .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Enable CSRF with tokens in cookies
                 .and()
                 .authorizeRequests(authorizeRequests ->
