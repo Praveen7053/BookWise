@@ -2,6 +2,7 @@ package com.bookWise.Impl;
 
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookEncounter;
+import com.bookWise.util.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class BookWiseRestControllerImpl {
     private BookWiseDAOImpl bookWiseDAO;
 
     @Transactional
-    public  Map<String, Object> saveUpdateNewBooks(String bookDataJson){
+    public Map<String, Object> saveUpdateNewBooks(String bookDataJson) {
         Map<String, Object> response = new HashMap<>();
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -33,11 +34,28 @@ public class BookWiseRestControllerImpl {
             String publicationDate = (String) bookData.getOrDefault("publicationDate", "");
             String bookLanguage = (String) bookData.getOrDefault("bookLanguage", "");
             String bookDescription = (String) bookData.getOrDefault("bookDescription", "");
+            String bookCoverBase64 = (String) bookData.getOrDefault("bookCover", "");
+            String bookPdfBase64 = (String) bookData.getOrDefault("bookPdf", "");
+
+            // Handle bookCover and bookPdf if they are not empty
+            String bookCoverPath = null;
+            String bookPdfPath = null;
+            if (StringUtils.isNotEmpty(bookCoverBase64)) {
+                bookCoverPath = FileUtils.saveBase64ToFile(bookCoverBase64, "BookUpload", bookTitle);
+            }
+
+            if (StringUtils.isNotEmpty(bookPdfBase64)) {
+                bookPdfPath = FileUtils.saveBase64ToFile(bookPdfBase64, "BookUpload", bookTitle);
+            }else {
+                response.put("success", false);
+                response.put("message", "Book pdf should not blank.");
+                return response;
+            }
 
             BookEncounter bookEncounter = null;
-            if(StringUtils.isNoneBlank(bookEncounterId) && Integer.parseInt(bookEncounterId) > 0){
+            if (StringUtils.isNoneBlank(bookEncounterId) && Integer.parseInt(bookEncounterId) > 0) {
                 bookEncounter = (BookEncounter) bookWiseDAO.find(BookEncounter.class, bookEncounterId);
-            }else {
+            } else {
                 bookEncounter = new BookEncounter();
             }
 
@@ -49,11 +67,13 @@ public class BookWiseRestControllerImpl {
             bookEncounter.setPublicationDate(publicationDate);
             bookEncounter.setBookLanguage(bookLanguage);
             bookEncounter.setBookDescription(bookDescription);
+            bookEncounter.setFrontPageImagePath(bookCoverPath);
+            bookEncounter.setPdfPath(bookPdfPath);
             bookWiseDAO.saveOrUpdate(bookEncounter);
 
             response.put("success", true);
             response.put("message", "Books saved or updated successfully.");
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
             response.put("message", "Error while saving or updating books.");
@@ -61,4 +81,5 @@ public class BookWiseRestControllerImpl {
         }
         return response;
     }
+
 }
