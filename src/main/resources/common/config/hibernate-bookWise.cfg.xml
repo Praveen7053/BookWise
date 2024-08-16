@@ -6,6 +6,7 @@
 
         <mapping class="com.bookWise.model.BookWiseUser"/>
         <mapping class="com.bookWise.model.Authority"/>
+        <mapping class="com.bookWise.model.BookEncounter"/>
 
     </session-factory>
 </hibernate-configuration>
