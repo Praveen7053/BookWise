@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -35,7 +36,7 @@ public class BookEncounter {
     private String bookCategory;
 
     @Column(name = "PUBLICATION_DATE")
-    private String publicationDate;
+    private Timestamp publicationDate;
 
     @Column(name = "BOOK_LANGUAGE")
     private String bookLanguage;
@@ -48,4 +49,13 @@ public class BookEncounter {
 
     @Column(name = "FRONT_PAGE_IMAGE_PATH")
     private String frontPageImagePath;
+
+    @Column(name = "UPLOADED_BY_NAME")
+    private String uploadedByName;
+
+    @Column(name = "UPDATED_BY_ID")
+    private String updatedById;
+
+    @Column(name = "UPLOADED_TIME")
+    private Timestamp uploadedTime;
 }

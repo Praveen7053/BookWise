@@ -143,3 +143,24 @@
         padding-left: 0;
     }
 }
+
+/* Add a prefix to ensure styles apply only to this page */
+#mainUploadListViewPageMainDIV .table th,
+#mainUploadListViewPageMainDIV .table td {
+    text-align: center;
+}
+
+#mainUploadListViewPageMainDIV .table .btn {
+    margin-right: 5px;
+}
+
+/* Example for pagination styling */
+#mainUploadListViewPageMainDIV .pagination .page-item .page-link {
+    border-radius: 5px;
+}
+
+#mainUploadListViewPageMainDIV .pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}

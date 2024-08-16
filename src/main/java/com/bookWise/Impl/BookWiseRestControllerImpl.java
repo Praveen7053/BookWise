@@ -1,14 +1,19 @@
 package com.bookWise.Impl;
 
+import com.bookWise.SecurityConfig.loginUserConfig.BookWiseLoginUser;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookEncounter;
 import com.bookWise.util.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +27,9 @@ public class BookWiseRestControllerImpl {
     public Map<String, Object> saveUpdateNewBooks(String bookDataJson) {
         Map<String, Object> response = new HashMap<>();
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
+
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> bookData = mapper.readValue(bookDataJson, Map.class);
 
@@ -64,11 +72,14 @@ public class BookWiseRestControllerImpl {
             bookEncounter.setBookIsbnNumber(isbnNumber);
             bookEncounter.setBookCategory(bookCategory);
             bookEncounter.setBookPrice(bookPrice);
-            bookEncounter.setPublicationDate(publicationDate);
+            bookEncounter.setPublicationDate(Timestamp.valueOf(publicationDate));
             bookEncounter.setBookLanguage(bookLanguage);
             bookEncounter.setBookDescription(bookDescription);
             bookEncounter.setFrontPageImagePath(bookCoverPath);
             bookEncounter.setPdfPath(bookPdfPath);
+            bookEncounter.setUpdatedById(String.valueOf(user.getUserId()));
+            bookEncounter.setUploadedByName(user.getUserName());
+            bookEncounter.setUploadedTime(new Timestamp(new Date().getTime()));
             bookWiseDAO.saveOrUpdate(bookEncounter);
 
             response.put("success", true);
