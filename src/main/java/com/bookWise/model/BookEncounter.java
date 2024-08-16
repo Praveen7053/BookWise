@@ -28,6 +28,9 @@ public class BookEncounter {
     @Column(name = "BOOK_PRICE")
     private String bookPrice;
 
+    @Column(name = "BOOK_PAGE_NUMBER")
+    private String bookPageNumber;
+
     @Column(name = "BOOK_CATEGORY")
     private String bookCategory;
 
