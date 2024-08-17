@@ -31,7 +31,7 @@ public class FileUtils {
         return name.replaceAll("[^a-zA-Z0-9._-]", "_");
     }
 
-    public static String saveBase64ToFile(String base64Data, String mainDir, String bookTitle) throws IOException {
+    public static String saveBase64ToFile(String base64Data, String mainDir, String bookTitle, String uniqueSuffix) throws IOException {
         // Extract MIME type from the base64 string
         String[] parts = base64Data.split(",");
         if (parts.length < 2) {
@@ -49,7 +49,7 @@ public class FileUtils {
         byte[] data = Base64.getDecoder().decode(parts[1]);
 
         // Sanitize the book title
-        String sanitizedBookTitle = sanitizeFileName(bookTitle);
+        String sanitizedBookTitle = sanitizeFileName(bookTitle + "_" + uniqueSuffix);
 
         // Create the main directory if it does not exist
         File mainDirFile = new File(BASE_UPLOAD_DIR + mainDir);
@@ -74,21 +74,18 @@ public class FileUtils {
         return file.getAbsolutePath(); // Return the full path of the file
     }
 
-    public static void deleteFolder(String subFolderName, String targetFolderName) {
-        if (StringUtils.isNotBlank(targetFolderName)) {
-            String sanitizedFolderName = sanitizeFileName(targetFolderName);
-            File targetFolder = new File(BASE_UPLOAD_DIR, subFolderName + File.separator + sanitizedFolderName);
+    public static void deleteFolder(String filePath) {
+        if (StringUtils.isNotBlank(filePath)) {
+            File file = new File(filePath);
+            File targetFolder = file.getParentFile(); // Get the parent directory of the file
 
             // Check if the target folder exists and is a directory
             if (targetFolder.exists() && targetFolder.isDirectory()) {
-                // Delete the directory and its contents
                 deleteDirectoryRecursively(targetFolder);
                 boolean deleted = targetFolder.delete();
-            } else {
-                System.out.println("Directory does not exist or is not a directory: " + targetFolder.getAbsolutePath());
             }
         } else {
-            System.out.println("Target folder name is blank");
+            System.out.println("File path is blank");
         }
     }
 

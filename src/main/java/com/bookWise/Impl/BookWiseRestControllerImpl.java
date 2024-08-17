@@ -54,12 +54,13 @@ public class BookWiseRestControllerImpl {
             // Handle bookCover and bookPdf if they are not empty
             String bookCoverPath = null;
             String bookPdfPath = null;
+            String uniqueSuffix = String.valueOf(System.currentTimeMillis()); // Unique suffix based on current timestamp
             if (StringUtils.isNotEmpty(bookCoverBase64)) {
-                bookCoverPath = FileUtils.saveBase64ToFile(bookCoverBase64, "BookUpload", bookTitle);
+                bookCoverPath = FileUtils.saveBase64ToFile(bookCoverBase64, "BookUpload", bookTitle, uniqueSuffix);
             }
 
             if (StringUtils.isNotEmpty(bookPdfBase64)) {
-                bookPdfPath = FileUtils.saveBase64ToFile(bookPdfBase64, "BookUpload", bookTitle);
+                bookPdfPath = FileUtils.saveBase64ToFile(bookPdfBase64, "BookUpload", bookTitle, uniqueSuffix);
             }else {
                 response.put("success", false);
                 response.put("message", "Book pdf should not blank.");
@@ -145,8 +146,12 @@ public class BookWiseRestControllerImpl {
                 String frontPageImagePath = bookEncounter.getFrontPageImagePath();
                 String pdfPath = bookEncounter.getPdfPath();
 
-                if ((frontPageImagePath != null && !frontPageImagePath.isEmpty()) || (pdfPath != null && !pdfPath.isEmpty())) {
-                    FileUtils.deleteFolder("BookUpload", bookEncounter.getBookTitle());
+                if (frontPageImagePath != null && !frontPageImagePath.isEmpty()) {
+                    FileUtils.deleteFolder(frontPageImagePath);
+                }
+
+                if(pdfPath != null && !pdfPath.isEmpty()){
+                    FileUtils.deleteFolder(pdfPath);
                 }
 
                 response.put("success", true);
