@@ -196,7 +196,7 @@
 /* Book List Header styles */
 .book-list-header {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: 5% 20% 15% 15% 7% 10% 20%; /* Adjust column widths */
     gap: 1rem;
     font-weight: bold;
     background-color: #f8f9fa;
@@ -209,15 +209,14 @@
     flex: 1; /* Take up the remaining space */
     overflow-y: auto; /* Enable vertical scrolling */
     padding: 0.5rem;
+    border: 1px solid #dee2e6; /* Add border around the content */
     height: calc(100vh - 80px); /* Adjust based on header and footer heights */
-    border: 1px solid #dee2e6; /* Add border */
-    border-radius: 0.25rem; /* Optional: rounded corners */
 }
 
 /* Book List Item styles */
 .book-list-item {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: 4% 21% 14% 16% 7% 10% 20%; /* Adjust column widths */
     gap: 1rem;
     border-bottom: 1px solid #dee2e6;
     padding: 0.5rem;
@@ -226,6 +225,15 @@
 
 .book-list-item:nth-child(even) {
     background-color: #f8f9fa;
+}
+
+/* Adjustments for narrow columns */
+.col-number {
+    text-align: center; /* Center align number */
+}
+
+.col-actions {
+    text-align: center; /* Center align icons */
 }
 
 /* Responsive adjustments */

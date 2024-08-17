@@ -19,7 +19,7 @@
                 </a>
             </li>
             <li class="nav-item w-100">
-                <a id="listTab" onclick="selectMenuTabs('listTab'); changeModulePage('booksList');" class="nav-link align-middle text-white w-100">
+                <a id="listTab" onclick="selectMenuTabs('listTab'); changeModulePage('booksList'); getUploadedBooks();" class="nav-link align-middle text-white w-100">
                     <i class="fas fa-list fs-5"></i> <!-- Smaller icon for Book List -->
                     <span class="ms-1 d-none d-sm-inline">Book List</span>
                 </a>

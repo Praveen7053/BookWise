@@ -3,7 +3,7 @@ function getData(url,dataType,callbackFunction){
    $.ajax({
        type: "GET",
        url: url,
-       dataType: "text",
+       dataType: dataType,
        crossDomain:true,
 
        //if received a response from the server

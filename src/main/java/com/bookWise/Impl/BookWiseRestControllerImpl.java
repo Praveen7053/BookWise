@@ -7,6 +7,8 @@ import com.bookWise.util.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -92,5 +95,32 @@ public class BookWiseRestControllerImpl {
         }
         return response;
     }
+
+public ResponseEntity<Map<String, Object>> getSellerUploadedBooks() {
+    Map<String, Object> response = new HashMap<>();
+    try {
+        ObjectMapper mapper = new ObjectMapper();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
+
+        if (user != null) {
+            List<BookEncounter> bookEncounters = bookWiseDAO.findBy("from BookEncounter where updatedById = " + user.getUserId());
+            response.put("success", true);
+            response.put("books", bookEncounters);
+        } else {
+            response.put("success", false);
+            response.put("message", "User logged out. Please Sign in again!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.put("success", false);
+        response.put("message", "Error while getting seller books.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    return ResponseEntity.ok(response);
+}
+
 
 }
