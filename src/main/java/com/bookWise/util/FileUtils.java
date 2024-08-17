@@ -1,5 +1,7 @@
 package com.bookWise.util;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,6 +26,11 @@ public class FileUtils {
         // Add more MIME types as needed
     }
 
+    private static String sanitizeFileName(String name) {
+        // Replace spaces and other special characters with underscores
+        return name.replaceAll("[^a-zA-Z0-9._-]", "_");
+    }
+
     public static String saveBase64ToFile(String base64Data, String mainDir, String bookTitle) throws IOException {
         // Extract MIME type from the base64 string
         String[] parts = base64Data.split(",");
@@ -41,14 +48,17 @@ public class FileUtils {
         // Decode the base64 data
         byte[] data = Base64.getDecoder().decode(parts[1]);
 
+        // Sanitize the book title
+        String sanitizedBookTitle = sanitizeFileName(bookTitle);
+
         // Create the main directory if it does not exist
         File mainDirFile = new File(BASE_UPLOAD_DIR + mainDir);
         if (!mainDirFile.exists()) {
             mainDirFile.mkdirs();
         }
 
-        // Create a subdirectory named after the book title if it does not exist
-        File bookDirFile = new File(mainDirFile, bookTitle);
+        // Create a subdirectory named after the sanitized book title if it does not exist
+        File bookDirFile = new File(mainDirFile, sanitizedBookTitle);
         if (!bookDirFile.exists()) {
             bookDirFile.mkdirs();
         }
@@ -63,4 +73,43 @@ public class FileUtils {
         }
         return file.getAbsolutePath(); // Return the full path of the file
     }
+
+    public static void deleteFolder(String subFolderName, String targetFolderName) {
+        if (StringUtils.isNotBlank(targetFolderName)) {
+            String sanitizedFolderName = sanitizeFileName(targetFolderName);
+            File targetFolder = new File(BASE_UPLOAD_DIR, subFolderName + File.separator + sanitizedFolderName);
+
+            // Check if the target folder exists and is a directory
+            if (targetFolder.exists() && targetFolder.isDirectory()) {
+                // Delete the directory and its contents
+                deleteDirectoryRecursively(targetFolder);
+                boolean deleted = targetFolder.delete();
+            } else {
+                System.out.println("Directory does not exist or is not a directory: " + targetFolder.getAbsolutePath());
+            }
+        } else {
+            System.out.println("Target folder name is blank");
+        }
+    }
+
+    private static void deleteDirectoryRecursively(File directory) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDirectoryRecursively(file); // Recursively delete subdirectories
+                } else {
+                    boolean deleted = file.delete();
+                    if (!deleted) {
+                        System.out.println("Failed to delete file: " + file.getAbsolutePath());
+                    }
+                }
+            }
+        }
+        boolean deleted = directory.delete();
+        if (!deleted) {
+            System.out.println("Failed to delete directory: " + directory.getAbsolutePath());
+        }
+    }
+
 }

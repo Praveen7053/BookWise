@@ -3,6 +3,7 @@ package com.bookWise.Impl;
 import com.bookWise.SecurityConfig.loginUserConfig.BookWiseLoginUser;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookEncounter;
+import com.bookWise.util.DateConstant;
 import com.bookWise.util.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +34,7 @@ public class BookWiseRestControllerImpl {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
+            SimpleDateFormat dateFormat = new SimpleDateFormat(DateConstant.DATE_FORMAT_YYYY_MM_DD);
 
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> bookData = mapper.readValue(bookDataJson, Map.class);
@@ -42,7 +45,7 @@ public class BookWiseRestControllerImpl {
             String isbnNumber = (String) bookData.getOrDefault("isbnNumber", "");
             String bookPrice = (String) bookData.getOrDefault("bookPrice", "");
             String bookCategory = (String) bookData.getOrDefault("bookCategory", "");
-            String publicationDate = (String) bookData.getOrDefault("publicationDate", "");
+            String publicationDateStr = (String) bookData.getOrDefault("publicationDate", "");
             String bookLanguage = (String) bookData.getOrDefault("bookLanguage", "");
             String bookDescription = (String) bookData.getOrDefault("bookDescription", "");
             String bookCoverBase64 = (String) bookData.getOrDefault("bookCover", "");
@@ -75,11 +78,16 @@ public class BookWiseRestControllerImpl {
             bookEncounter.setBookIsbnNumber(isbnNumber);
             bookEncounter.setBookCategory(bookCategory);
             bookEncounter.setBookPrice(bookPrice);
-            bookEncounter.setPublicationDate(Timestamp.valueOf(publicationDate));
             bookEncounter.setBookLanguage(bookLanguage);
             bookEncounter.setBookDescription(bookDescription);
             bookEncounter.setFrontPageImagePath(bookCoverPath);
             bookEncounter.setPdfPath(bookPdfPath);
+
+            if(StringUtils.isNotBlank(publicationDateStr)){
+                Date publicationDate = dateFormat.parse(publicationDateStr);
+                bookEncounter.setPublicationDate(new Timestamp(publicationDate.getTime()));
+            }
+
             bookEncounter.setUpdatedById(String.valueOf(user.getUserId()));
             bookEncounter.setUploadedByName(user.getUserName());
             bookEncounter.setUploadedTime(new Timestamp(new Date().getTime()));
@@ -96,31 +104,64 @@ public class BookWiseRestControllerImpl {
         return response;
     }
 
-public ResponseEntity<Map<String, Object>> getSellerUploadedBooks() {
-    Map<String, Object> response = new HashMap<>();
-    try {
-        ObjectMapper mapper = new ObjectMapper();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
+    public ResponseEntity<Map<String, Object>> getSellerUploadedBooks() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
 
-        if (user != null) {
-            List<BookEncounter> bookEncounters = bookWiseDAO.findBy("from BookEncounter where updatedById = " + user.getUserId());
-            response.put("success", true);
-            response.put("books", bookEncounters);
-        } else {
+            if (user != null) {
+                List<BookEncounter> bookEncounters = bookWiseDAO.findBy("from BookEncounter where updatedById = " + user.getUserId());
+                response.put("success", true);
+                response.put("books", bookEncounters);
+            } else {
+                response.put("success", false);
+                response.put("message", "User logged out. Please Sign in again!");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             response.put("success", false);
-            response.put("message", "User logged out. Please Sign in again!");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            response.put("message", "Error while getting seller books.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        response.put("success", false);
-        response.put("message", "Error while getting seller books.");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+
+        return ResponseEntity.ok(response);
     }
 
-    return ResponseEntity.ok(response);
-}
+    @Transactional
+    public Map<String, Object> deleteUploadedBooks(String json) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> bookData = mapper.readValue(json, Map.class);
+            int bookID = (int) bookData.getOrDefault("bookId", "");
 
+            BookEncounter bookEncounter = (BookEncounter) bookWiseDAO.find(BookEncounter.class, bookID);
+            if (bookEncounter != null) {
+                bookWiseDAO.delete(bookEncounter);
+
+                String frontPageImagePath = bookEncounter.getFrontPageImagePath();
+                String pdfPath = bookEncounter.getPdfPath();
+
+                if ((frontPageImagePath != null && !frontPageImagePath.isEmpty()) || (pdfPath != null && !pdfPath.isEmpty())) {
+                    FileUtils.deleteFolder("BookUpload", bookEncounter.getBookTitle());
+                }
+
+                response.put("success", true);
+                response.put("message", "Book and associated files deleted successfully.");
+            } else {
+                response.put("success", false);
+                response.put("message", "Book not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("message", "Error while deleting book and files.");
+        }
+
+        return response;
+    }
 
 }

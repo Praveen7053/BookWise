@@ -31,3 +31,17 @@
         <div class="progress-bar-spinner"></div>
     </div>
 </div>
+
+<!-- Custom Confirmation Popup -->
+<div id="jConfirmModal" class="jConfirm-modal">
+    <div class="jConfirm-modal-content">
+        <div class="jConfirm-modal-body" id="jConfirmMessage">
+            <!-- Message will be inserted here -->
+        </div>
+        <div class="jConfirm-modal-footer">
+            <button type="button" class="jConfirm-btn jConfirm-cancel">No</button>
+            <button type="button" class="jConfirm-btn jConfirm-confirm">Yes</button>
+        </div>
+    </div>
+</div>
+

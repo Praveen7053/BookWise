@@ -258,3 +258,54 @@
 .paginationMainDIV{
     margin-top: 8px;
 }
+
+/* Styles for custom jConfirm modal */
+.jConfirm-modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    align-items: center;
+    justify-content: center;
+    z-index: 1050; /* Ensure it’s above other content */
+}
+
+.jConfirm-modal-content {
+    background: #fff;
+    border-radius: 0.3rem;
+    padding: 1rem;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+.jConfirm-modal-body {
+    margin-bottom: 1rem;
+}
+
+.jConfirm-modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.jConfirm-btn {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+.jConfirm-cancel {
+    background: #6c757d;
+}
+
+.jConfirm-confirm {
+    background: #007bff;
+}
+

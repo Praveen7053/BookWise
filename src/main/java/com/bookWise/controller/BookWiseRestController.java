@@ -28,4 +28,8 @@ public class BookWiseRestController {
         return bookWiseRestControllerImpl.getSellerUploadedBooks();
     }
 
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteUploadedBooks")
+    public Map<String, Object> deleteUploadedBooks(@RequestBody String json) {
+        return bookWiseRestControllerImpl.deleteUploadedBooks(json);
+    }
 }

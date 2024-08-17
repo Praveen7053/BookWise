@@ -69,3 +69,35 @@ function closeProgressBar(progressBarId, bodyDivId) {
         bodyDiv.style.opacity = "1"; // Restore background opacity
     }
 }
+
+function jConfirm(message, onConfirm, onCancel) {
+    var modal = document.getElementById('jConfirmModal');
+    var messageElement = document.getElementById('jConfirmMessage');
+    var confirmButton = document.querySelector('.jConfirm-confirm');
+    var cancelButton = document.querySelector('.jConfirm-cancel');
+
+    // Set the message and display the modal
+    messageElement.textContent = message;
+    modal.style.display = 'flex';
+
+    // Handle the 'Yes' button click
+    confirmButton.onclick = function() {
+        modal.style.display = 'none';
+        if (typeof onConfirm === 'function') onConfirm();
+    };
+
+    // Handle the 'No' button click
+    cancelButton.onclick = function() {
+        modal.style.display = 'none';
+        if (typeof onCancel === 'function') onCancel();
+    };
+
+    // Optionally handle clicks outside the modal to close it
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            if (typeof onCancel === 'function') onCancel();
+        }
+    };
+}
+

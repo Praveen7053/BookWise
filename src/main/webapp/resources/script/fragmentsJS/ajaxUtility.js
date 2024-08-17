@@ -38,24 +38,18 @@ function getData(url,dataType,callbackFunction){
    });
 }
 
-function deleteData(url,data,callbackFunction){
+function deleteData(url, data, dataType, callbackFunction){
     $.ajax({
         type: "DELETE",
         url: url,
         data:data,
         crossDomain:true,
-        dataType: "text",
+        dataType: dataType,
         contentType: "application/json",
-        /*headers: {
-            'personID': personID,
-            'mednetOAuthKey': mednetOAuthKey,
-            'companyID': companyID
-        },*/
 
         //if received a response from the server
         success: (data, textStatus, jqXHR) => {
             if(jqXHR.status == 200){
-            alert("Success","Message");
                 callbackFunction(data);
             }else{
                 alert("Something went wrong with"+getContextPath(url)+" , ","Error!");
