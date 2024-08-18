@@ -71,12 +71,17 @@ public class FileUtils {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(data);
         }
-        return file.getAbsolutePath(); // Return the full path of the file
+        // Return the relative path of the file
+        return new File(mainDirFile, sanitizedBookTitle + File.separator + fileName).getPath()
+                .replace(BASE_UPLOAD_DIR, ""); // Remove the base directory part
     }
 
-    public static void deleteFolder(String filePath) {
-        if (StringUtils.isNotBlank(filePath)) {
-            File file = new File(filePath);
+
+    public static void deleteFolder(String relativeFilePath) {
+        if (StringUtils.isNotBlank(relativeFilePath)) {
+            // Construct the absolute file path
+            String absoluteFilePath = BASE_UPLOAD_DIR + relativeFilePath;
+            File file = new File(absoluteFilePath);
             File targetFolder = file.getParentFile(); // Get the parent directory of the file
 
             // Check if the target folder exists and is a directory

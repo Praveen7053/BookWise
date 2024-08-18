@@ -39,6 +39,7 @@ $(document).ready(function() {
 
         Promise.all([coverPromise, pdfPromise]).then(([coverData, pdfData]) => {
             var jsonData = {
+                bookEncounterId: $('#bookEncounterIdHidden').val(),
                 bookTitle: $('#bookTitle').val(),
                 authorName: $('#authorName').val(),
                 isbnNumber: $('#isbnNumber').val(),
@@ -63,5 +64,58 @@ $(document).ready(function() {
             });
         });
     });
+});
+
+
+// Preview Book Cover Image
+document.getElementById('bookCover').addEventListener('change', function(event) {
+    const image = document.getElementById('currentCoverImage');
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            image.src = e.target.result;
+            image.style.width = '100px';
+            image.style.height = 'auto';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Preview First Page of Book PDF
+document.getElementById('bookPdf').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+
+    if (file && file.type === 'application/pdf') {
+        const fileReader = new FileReader();
+
+        fileReader.onload = function() {
+            const pdfData = new Uint8Array(this.result);
+            const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+
+            loadingTask.promise.then(function(pdf) {
+                // Fetch the first page
+                pdf.getPage(1).then(function(page) {
+                    const scale = 1;
+                    const viewport = page.getViewport({ scale: scale });
+
+                    // Prepare canvas using PDF page dimensions
+                    const canvas = document.getElementById('pdfCanvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    // Render PDF page into canvas context
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            });
+        };
+        fileReader.readAsArrayBuffer(file);
+    }
 });
 

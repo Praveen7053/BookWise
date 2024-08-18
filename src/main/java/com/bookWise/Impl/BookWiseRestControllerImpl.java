@@ -39,7 +39,7 @@ public class BookWiseRestControllerImpl {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> bookData = mapper.readValue(bookDataJson, Map.class);
 
-            String bookEncounterId = (String) bookData.getOrDefault("bookEncounterId", "");
+            String bookEncounterId = (String) bookData.getOrDefault("bookEncounterId", "0");
             String bookTitle = (String) bookData.getOrDefault("bookTitle", "");
             String authorName = (String) bookData.getOrDefault("authorName", "");
             String isbnNumber = (String) bookData.getOrDefault("isbnNumber", "");
@@ -50,6 +50,7 @@ public class BookWiseRestControllerImpl {
             String bookDescription = (String) bookData.getOrDefault("bookDescription", "");
             String bookCoverBase64 = (String) bookData.getOrDefault("bookCover", "");
             String bookPdfBase64 = (String) bookData.getOrDefault("bookPdf", "");
+            String numberOfPages = (String) bookData.getOrDefault("numberOfPages", "");
 
             // Handle bookCover and bookPdf if they are not empty
             String bookCoverPath = null;
@@ -69,7 +70,7 @@ public class BookWiseRestControllerImpl {
 
             BookEncounter bookEncounter = null;
             if (StringUtils.isNoneBlank(bookEncounterId) && Integer.parseInt(bookEncounterId) > 0) {
-                bookEncounter = (BookEncounter) bookWiseDAO.find(BookEncounter.class, bookEncounterId);
+                bookEncounter = (BookEncounter) bookWiseDAO.find(BookEncounter.class, Integer.parseInt(bookEncounterId));
             } else {
                 bookEncounter = new BookEncounter();
             }
@@ -83,6 +84,7 @@ public class BookWiseRestControllerImpl {
             bookEncounter.setBookDescription(bookDescription);
             bookEncounter.setFrontPageImagePath(bookCoverPath);
             bookEncounter.setPdfPath(bookPdfPath);
+            bookEncounter.setBookPageNumber(numberOfPages);
 
             if(StringUtils.isNotBlank(publicationDateStr)){
                 Date publicationDate = dateFormat.parse(publicationDateStr);

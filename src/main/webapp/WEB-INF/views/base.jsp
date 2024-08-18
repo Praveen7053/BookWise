@@ -17,6 +17,7 @@
 <script src="${pageContext.request.contextPath}/resources/script/common.js"></script>
 
 <script src="${pageContext.request.contextPath}/resources/script/fragmentsJS/ajaxUtility.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.6.172/pdf.min.js"></script>
 
 
 <div id="common-alert-placeholder-div" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>

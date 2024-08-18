@@ -8,6 +8,7 @@
                 <div class="card-body">
                     <form id="uploadBookForm" >
                         <meta name="csrf-token" content="${_csrf.token}"/>
+                        <input type="hidden" id="bookEncounterIdHidden" value="0">
                         <!-- Book Title and Author Name -->
                         <div class="row">
                             <div class="col-md-6">
@@ -31,7 +32,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <input type="number" class="form-control" id="bookPrice" placeholder="Enter book price">
+                                    <input type="text" class="form-control" id="bookPrice" placeholder="Enter book price">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -53,7 +54,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <input type="number" class="form-control" id="numberOfPages" placeholder="Enter number of pages">
+                                    <input type="text" class="form-control" id="numberOfPages" placeholder="Enter number of pages">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -77,16 +78,22 @@
 
                         <!-- Book Cover and Book PDF (Side by Side) -->
                         <div class="row">
+                            <!-- Book Cover Image -->
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="bookCover" class="form-label">Book Cover Image</label>
-                                    <input type="file" class="form-control" id="bookCover" accept="image/*" >
+                                    <input type="file" class="form-control" id="bookCover" accept="image/*">
+                                    <img id="currentCoverImage" src="resources/images/defaultImage.png" alt="Current Cover Image" style="width: 100px; height: auto; display: block;">
                                 </div>
                             </div>
+
+                            <!-- Book PDF -->
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="bookPdf" class="form-label">Upload Book PDF</label>
-                                    <input type="file" class="form-control" id="bookPdf" accept="application/pdf" >
+                                    <input type="file" class="form-control" id="bookPdf" accept="application/pdf">
+                                    <a id="pdfLink" href="#" target="_blank" style="display: none;">View PDF</a>
+                                    <canvas id="pdfCanvas" style="width: 100px; height: auto; display: block;"></canvas>
                                 </div>
                             </div>
                         </div>
