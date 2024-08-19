@@ -6,6 +6,25 @@
 
 	<display-name>BookWise</display-name>
 
+	<!-- Configure DefaultServlet to serve static content -->
+	<servlet>
+		<servlet-name>default</servlet-name>
+		<servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
+		<init-param>
+			<param-name>resourceBase</param-name>
+			<param-value>C:/usr/local/bookWiseFile/BookUpload/</param-value>
+		</init-param>
+		<init-param>
+			<param-name>dirAllowed</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/bookWiseFile/*</url-pattern>
+	</servlet-mapping>
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

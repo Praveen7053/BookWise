@@ -101,3 +101,16 @@ function jConfirm(message, onConfirm, onCancel) {
     };
 }
 
+function formatDate(timestamp) {
+    // Convert the timestamp to a date object
+    const date = new Date(parseInt(timestamp));
+
+    // Extract the year, month, and day from the date object
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Adding 1 to month because getMonth() returns 0-11
+    const day = ('0' + date.getDate()).slice(-2);
+
+    // Return the date in YYYY-MM-DD format
+    return `${year}-${month}-${day}`;
+}
+

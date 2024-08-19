@@ -57,6 +57,7 @@ $(document).ready(function() {
             postData(url, JSON.stringify(jsonData), 'json', function(response) {
                 if (response.success) {
                     showSuccessAlert(response.message);
+                    clearUploadedNewBookFields();
                 } else {
                     closeProgressBar("progressBarDiv", "bodyDiv");
                     showErrorAlert(response.message);
@@ -118,4 +119,18 @@ document.getElementById('bookPdf').addEventListener('change', function(event) {
         fileReader.readAsArrayBuffer(file);
     }
 });
+
+function clearUploadedNewBookFields() {
+    document.getElementById('bookEncounterIdHidden').value = '0';
+    document.getElementById('bookTitle').value = '';
+    document.getElementById('authorName').value = '';
+    document.getElementById('isbnNumber').value = '';
+    document.getElementById('bookPrice').value = '';
+    document.getElementById('bookCategory').value = '';
+    document.getElementById('numberOfPages').value = '';
+
+    document.getElementById('publicationDate').value = '';
+    document.getElementById('bookLanguage').value = '';
+    document.getElementById('bookDescription').value = '';
+}
 

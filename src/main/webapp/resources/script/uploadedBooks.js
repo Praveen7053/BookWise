@@ -118,7 +118,7 @@ function editUploadedBooks(bookEncounterId, bookTitle, bookAuthor, bookIsbnNumbe
     document.getElementById('bookCategory').value = decodeURIComponent(bookCategory);
     document.getElementById('numberOfPages').value = decodeURIComponent(bookPageNumber);
 
-    document.getElementById('publicationDate').value = decodeURIComponent(publicationDate);
+    document.getElementById('publicationDate').value = formatDate(publicationDate);
     document.getElementById('bookLanguage').value = decodeURIComponent(bookLanguage);
     document.getElementById('bookDescription').value = decodeURIComponent(bookDescription);
 

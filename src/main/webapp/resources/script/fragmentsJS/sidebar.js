@@ -1,6 +1,7 @@
 
 function changeModulePage(pageName){
     defaultModulePageDisplay();
+    clearUploadedNewBookFields();
     if(pageName === "homePage"){
         document.getElementById("mainHomePageMainDIV").style.display = "block";
     }else if(pageName === "uploadBooks"){
