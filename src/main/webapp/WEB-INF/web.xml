@@ -58,4 +58,25 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<filter>
+		<display-name>WebService Authenticaton Filter</display-name>
+		<filter-name>webServiceAuthenticationFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>webServiceAuthenticationFilter</filter-name>
+		<url-pattern>/api/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>RestCorsFilter</filter-name>
+		<filter-class>com.bookWise.SecurityConfig.RestCorsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>RestCorsFilter</filter-name>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
+
 </web-app>

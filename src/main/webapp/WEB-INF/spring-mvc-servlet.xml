@@ -68,6 +68,9 @@
         <property name="sessionFactory" ref="mainSessionFactory" />
     </bean>
 
+    <bean id="webServiceAuthenticationFilter" class="com.bookWise.SecurityConfig.WebServiceAuthenticationFilter">
+    </bean>
+
     <mvc:resources mapping="/bookWiseFile/**" location="file:${user.home}/bookWiseFile/" />
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
