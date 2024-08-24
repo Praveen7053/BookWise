@@ -8,11 +8,11 @@ function getData(url,dataType,callbackFunction){
 
        //if received a response from the server
        success: (data, textStatus, jqXHR) => {
-           if(jqXHR.status == 200){
+           if (jqXHR.status >= 200 && jqXHR.status < 300) {
                callbackFunction(data);
            }else{
                //error
-               alert("Something went wrong with "+getContextPath(url)+",","Error IN ELSE!");
+               alert("Something went wrong,","Error IN ELSE!");
            }
        },
 
@@ -21,7 +21,7 @@ function getData(url,dataType,callbackFunction){
 
            closeProgressBar("progressBarDIV");
 
-           alert(errorThrown != '' ? errorThrown : "Something went wrong with "+getContextPath(url)+" ,","Error3!");
+           alert(errorThrown != '' ? errorThrown : "Something went wrong,","Error3!");
            //error message
        },
 
@@ -49,17 +49,17 @@ function deleteData(url, data, dataType, callbackFunction){
 
         //if received a response from the server
         success: (data, textStatus, jqXHR) => {
-            if(jqXHR.status == 200){
+            if (jqXHR.status >= 200 && jqXHR.status < 300) {
                 callbackFunction(data);
             }else{
-                alert("Something went wrong with"+getContextPath(url)+" , ","Error!");
+                alert("Something went wrong","Error!");
             }
         },
 
         //If there was no response from the server
         error: (jqXHR, textStatus, errorThrown) => {
             closeProgressBar("progressBarDIV");
-            alert(errorThrown != '' ? errorThrown : "Something went wrong with"+getContextPath(url)+" , ","Error!");
+            alert(errorThrown != '' ? errorThrown : "Something went wrong","Error!");
         },
 
         //capture the request before it was sent to server
@@ -87,10 +87,10 @@ function postData(url,data,dataType,callbackFunction){
 
         //if received a response from the server
         success: (data, textStatus, jqXHR) => {
-            if(jqXHR.status == 200){
+            if (jqXHR.status >= 200 && jqXHR.status < 300) {
                 callbackFunction(data);
             }else{
-                alert("Something went wrong with "+getContextPath(url)+" , ","Error!");
+                alert("Something went wrong ","Error!");
 
             }
         },
@@ -99,7 +99,7 @@ function postData(url,data,dataType,callbackFunction){
         error: (jqXHR, textStatus, errorThrown) => {
             closeProgressBar("progressBarDIV");
             //error message
-            alert(errorThrown != '' ? errorThrown : "Something went wrong with "+getContextPath(url)+" , ","Error!");
+            alert(errorThrown != '' ? errorThrown : "Something went wrong ","Error!");
         },
 
         //capture the request before it was sent to server

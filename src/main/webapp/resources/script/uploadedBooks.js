@@ -52,7 +52,7 @@ function populateUploadedSellerBooks(response) {
                     '<div>' + decodeURIComponent(bookPrice) + '</div>' +
                     '<div>' + decodeURIComponent(bookCategory) + '</div>' +
                     '<div class="col-actions">' +
-                        '<a class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>' +
+                        '<a class="btn btn-info btn-sm" onclick="previewBookPdf(\'' +encodeURIComponent(book.pdfPath)+ '\');"><i class="fa fa-eye"></i></a>' +
                         '<a onclick="editUploadedBooks(' +
                             book.bookEncounterId + ',\'' +
                             bookTitle + '\',\'' +
@@ -122,4 +122,62 @@ function editUploadedBooks(bookEncounterId, bookTitle, bookAuthor, bookIsbnNumbe
     document.getElementById('bookLanguage').value = decodeURIComponent(bookLanguage);
     document.getElementById('bookDescription').value = decodeURIComponent(bookDescription);
 
+}
+
+function previewBookPdf(pdfPath) {
+    var decodePdfPath = decodeURIComponent(pdfPath);
+
+    console.log('pdfPath :: ' + pdfPath);
+    console.log('decodePdfPath :: ' + decodePdfPath);
+    var contextPath = $('meta[name="context-path"]').attr('content');
+    var url = contextPath + '/api/files/preview';
+
+    var data = {
+        pdfPath: decodePdfPath,
+        imagePath: null
+    };
+
+    postData(url, JSON.stringify(data), 'json', function(response) {
+        if (response && response.fileContent) {
+            console.log('response :: ', response);
+
+            // Decode the Base64 encoded PDF content
+            var byteCharacters = atob(response.fileContent);
+            var byteArrays = [];
+
+            for (var offset = 0; offset < byteCharacters.length; offset += 512) {
+                var slice = byteCharacters.slice(offset, offset + 512);
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+
+            var blob = new Blob(byteArrays, { type: 'application/pdf' });
+            var fileUrl = URL.createObjectURL(blob);
+            showPdfInModal(fileUrl);
+        } else {
+            showErrorAlert("Failed to load PDF");
+        }
+    });
+}
+
+function showPdfInModal(fileUrl) {
+    var modalHtml = `
+        <div id="pdfModal" class="modal" style="display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000;">
+            <div class="modal-content" style="position: relative; margin: auto; padding: 20px; width: 80%; height: 80%; background: white;">
+                <span class="close" style="position: absolute; top: 10px; right: 25px; font-size: 35px; font-weight: bold; cursor: pointer;">&times;</span>
+                <iframe src="${fileUrl}" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    document.querySelector('#pdfModal .close').addEventListener('click', function() {
+        document.getElementById('pdfModal').remove();
+        URL.revokeObjectURL(fileUrl); // Clean up the object URL
+    });
 }
