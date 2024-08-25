@@ -12,7 +12,6 @@
 
         // Example: Function to call a method on the BookFacade
         function callFacadeMethod(bookId) {
-            console.log('called');
         }
     </script>
 </head>

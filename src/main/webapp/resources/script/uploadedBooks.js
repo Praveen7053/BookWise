@@ -42,8 +42,6 @@ function populateUploadedSellerBooks(response) {
                 const bookLanguage = book.bookLanguage ? encodeURIComponent(book.bookLanguage) : '';
                 const bookDescription = book.bookDescription ? encodeURIComponent(book.bookDescription) : '';
 
-                console.log('bookPageNumber :: '+bookPageNumber);
-
                 bookItem += '<div class="book-list-item">' +
                     '<div class="col-number">' + (book.bookEncounterId || '') + '</div>' +
                     '<div>' + decodeURIComponent(bookTitle) + '</div>' +
@@ -193,7 +191,6 @@ function previewBookPdf(pdfPath) {
 
     postData(url, JSON.stringify(data), 'json', function(response) {
         if (response && response.fileContent) {
-            console.log('response :: ', response);
 
             // Decode the Base64 encoded PDF content
             var byteCharacters = atob(response.fileContent);

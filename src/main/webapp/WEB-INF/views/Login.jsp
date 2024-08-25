@@ -69,7 +69,6 @@
                         if (response.success) {
                             showSuccessAlert(response.message);
                             window.location.href = response.redirectUrl;
-                            console.log('response.redirectUrl :: '+response.redirectUrl);
                         } else {
                             showErrorAlert(response.message);
                         }
