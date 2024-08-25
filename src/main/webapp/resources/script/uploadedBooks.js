@@ -93,7 +93,6 @@ function deleteUploadedBooks(bookId) {
 
         // Assuming deleteData is your AJAX function
         deleteData(url, JSON.stringify(jsonData), 'json', function(response) {
-            console.log(response);
             if (response.success) {
                 showSuccessAlert(response.message);
                 getUploadedBooks();
@@ -117,18 +116,73 @@ function editUploadedBooks(bookEncounterId, bookTitle, bookAuthor, bookIsbnNumbe
     document.getElementById('bookPrice').value = decodeURIComponent(bookPrice);
     document.getElementById('bookCategory').value = decodeURIComponent(bookCategory);
     document.getElementById('numberOfPages').value = decodeURIComponent(bookPageNumber);
-
     document.getElementById('publicationDate').value = formatDate(publicationDate);
     document.getElementById('bookLanguage').value = decodeURIComponent(bookLanguage);
     document.getElementById('bookDescription').value = decodeURIComponent(bookDescription);
 
+    editImageNBookPDf(pdfPath, frontPageImagePath);
+}
+
+function editImageNBookPDf(pdfPath, frontPageImagePath) {
+    const fileRequest = {
+        imagePath: decodeURIComponent(frontPageImagePath),
+        pdfPath: decodeURIComponent(pdfPath)
+    };
+
+    var contextPath = $('meta[name="context-path"]').attr('content');
+    var url = contextPath + "/api/files/getBookImageNPdf";
+
+    showProgressBar("progressBarDiv", "bodyDiv");
+    postData(url, JSON.stringify(fileRequest), 'json', function(response) {
+        // Handle image response
+        if (response.imageMimeType && response.imageMimeType.startsWith('image/')) {
+            const currentCoverImage = document.getElementById('currentCoverImage');
+            currentCoverImage.src = 'data:' + response.imageMimeType + ';base64,' + response.imageContent;
+            currentCoverImage.style.display = 'block';
+        }
+
+        // Handle PDF response
+        if (response.pdfMimeType === 'application/pdf') {
+            renderPdfFromBase64(response.pdfContent);
+        }
+
+        closeProgressBar("progressBarDiv", "bodyDiv");
+    });
+}
+
+
+function renderPdfFromBase64(base64String) {
+    const pdfData = atob(base64String);
+    const pdfCanvas = document.getElementById('pdfCanvas');
+    const pdfContext = pdfCanvas.getContext('2d');
+
+    pdfjsLib.getDocument({ data: pdfData }).promise.then(pdf => {
+        pdf.getPage(1).then(page => {
+            const viewport = page.getViewport({ scale: 1 });
+            pdfCanvas.width = viewport.width;
+            pdfCanvas.height = viewport.height;
+
+            const renderContext = {
+                canvasContext: pdfContext,
+                viewport: viewport
+            };
+            page.render(renderContext);
+        });
+    }).catch(error => {
+        console.error('Error rendering PDF: ', error);
+        clearPdfCanvas();
+    });
+}
+
+function clearPdfCanvas() {
+    const pdfCanvas = document.getElementById('pdfCanvas');
+    const pdfContext = pdfCanvas.getContext('2d');
+    pdfContext.clearRect(0, 0, pdfCanvas.width, pdfCanvas.height);
 }
 
 function previewBookPdf(pdfPath) {
     var decodePdfPath = decodeURIComponent(pdfPath);
 
-    console.log('pdfPath :: ' + pdfPath);
-    console.log('decodePdfPath :: ' + decodePdfPath);
     var contextPath = $('meta[name="context-path"]').attr('content');
     var url = contextPath + '/api/files/preview';
 

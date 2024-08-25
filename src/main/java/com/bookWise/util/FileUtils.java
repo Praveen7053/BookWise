@@ -114,4 +114,25 @@ public class FileUtils {
         }
     }
 
+    public static String getMimeTypeFromExtension(String extension) {
+        if (extension.equalsIgnoreCase("png")) {
+            return "image/png";
+        } else if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg")) {
+            return "image/jpeg";
+        } else if (extension.equalsIgnoreCase("gif")) {
+            return "image/gif";
+        } else if (extension.equalsIgnoreCase("webp")) {
+            return "image/webp";
+        } else if (extension.equalsIgnoreCase("pdf")) {
+            return "application/pdf";
+        } else {
+            return null;
+        }
+    }
+
+    public static String getFileExtension(String filePathStr) {
+        int lastDotIndex = filePathStr.lastIndexOf('.');
+        return (lastDotIndex != -1) ? filePathStr.substring(lastDotIndex + 1) : "";
+    }
+
 }

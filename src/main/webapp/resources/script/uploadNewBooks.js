@@ -121,6 +121,7 @@ document.getElementById('bookPdf').addEventListener('change', function(event) {
 });
 
 function clearUploadedNewBookFields() {
+    // Clear form fields
     document.getElementById('bookEncounterIdHidden').value = '0';
     document.getElementById('bookTitle').value = '';
     document.getElementById('authorName').value = '';
@@ -128,9 +129,26 @@ function clearUploadedNewBookFields() {
     document.getElementById('bookPrice').value = '';
     document.getElementById('bookCategory').value = '';
     document.getElementById('numberOfPages').value = '';
-
     document.getElementById('publicationDate').value = '';
     document.getElementById('bookLanguage').value = '';
     document.getElementById('bookDescription').value = '';
+
+    // Clear book cover image field and reset the preview
+    document.getElementById('bookCover').value = '';
+    document.getElementById('currentCoverImage').src = 'resources/images/defaultImage.png';
+
+    // Clear book PDF field and reset the preview
+    document.getElementById('bookPdf').value = '';
+    document.getElementById('pdfLink').style.display = 'none';
+    clearPdfEditedCanvas();
 }
+
+// Helper function to clear the PDF canvas
+function clearPdfEditedCanvas() {
+    const pdfCanvas = document.getElementById('pdfCanvas');
+    const pdfContext = pdfCanvas.getContext('2d');
+    pdfContext.clearRect(0, 0, pdfCanvas.width, pdfCanvas.height);
+    pdfCanvas.style.display = 'none'; // Hide the canvas
+}
+
 
