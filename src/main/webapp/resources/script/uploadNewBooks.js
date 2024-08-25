@@ -148,7 +148,29 @@ function clearPdfEditedCanvas() {
     const pdfCanvas = document.getElementById('pdfCanvas');
     const pdfContext = pdfCanvas.getContext('2d');
     pdfContext.clearRect(0, 0, pdfCanvas.width, pdfCanvas.height);
-    pdfCanvas.style.display = 'none'; // Hide the canvas
+    //pdfCanvas.style.display = 'none';
 }
+
+$(document).ready(function() {
+    // Handle full-screen image view
+    $('#currentCoverImage').on('click', function() {
+        const fullScreenImage = $('#fullScreenImage');
+        fullScreenImage.attr('src', $(this).attr('src'));
+        $('#imageModal').modal('show');
+    });
+
+    // Handle full-screen PDF view
+    $('#pdfCanvas').on('click', function() {
+        const canvas = $('#fullScreenPdfCanvas')[0];
+        const context = canvas.getContext('2d');
+
+        // Copy the canvas content from the preview to the full-screen canvas
+        canvas.width = this.width;
+        canvas.height = this.height;
+        context.drawImage(this, 0, 0, this.width, this.height);
+
+        $('#pdfModal').modal('show');
+    });
+});
 
 

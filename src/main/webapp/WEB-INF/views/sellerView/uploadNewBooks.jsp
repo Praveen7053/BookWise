@@ -98,6 +98,27 @@
                             </div>
                         </div>
 
+                        <!-- Image Modal -->
+                        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <img id="fullScreenImage" src="" alt="Full Screen Image" style="width: 100%; height: auto;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PDF Modal -->
+                        <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <canvas id="fullScreenPdfCanvas" style="width: 100%; height: auto;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Book Description -->
                         <div class="form-group mb-3">

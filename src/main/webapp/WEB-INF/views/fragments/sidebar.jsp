@@ -13,7 +13,7 @@
                 </a>
             </li>
             <li class="nav-item w-100">
-                <a id="uploadTab" onclick="selectMenuTabs('uploadTab'); changeModulePage('uploadBooks');" class="nav-link align-middle text-white w-100">
+                <a id="uploadTab" onclick="selectMenuTabs('uploadTab'); changeModulePage('uploadBooks'); clearUploadedNewBookFields();" class="nav-link align-middle text-white w-100">
                     <i class="fas fa-upload fs-5"></i> <!-- Smaller icon for Upload Book -->
                     <span class="ms-1 d-none d-sm-inline">Upload Book</span>
                 </a>
