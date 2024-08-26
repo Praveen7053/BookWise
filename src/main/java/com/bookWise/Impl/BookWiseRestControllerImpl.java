@@ -7,6 +7,7 @@ import com.bookWise.util.DateConstant;
 import com.bookWise.util.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -107,7 +108,7 @@ public class BookWiseRestControllerImpl {
         return response;
     }
 
-    public ResponseEntity<Map<String, Object>> getSellerUploadedBooks() {
+    public ResponseEntity<Map<String, Object>> getSellerUploadedBooks(int page, int size) {
         Map<String, Object> response = new HashMap<>();
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -115,9 +116,17 @@ public class BookWiseRestControllerImpl {
             BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
 
             if (user != null) {
-                List<BookEncounter> bookEncounters = bookWiseDAO.findBy("from BookEncounter where updatedById = " + user.getUserId());
+                int start = (page - 1) * size;
+                List<BookEncounter> bookEncounters = findBooksByUser(user.getUserId(), start, size);
+                long totalBooks = countBooksByUser(user.getUserId());
+
+                int totalPages = (int) Math.ceil((double) totalBooks / size);
+
                 response.put("success", true);
                 response.put("books", bookEncounters);
+                response.put("currentPage", page);
+                response.put("totalPages", totalPages);
+                response.put("totalItems", totalBooks);
             } else {
                 response.put("success", false);
                 response.put("message", "User logged out. Please Sign in again!");
@@ -131,6 +140,45 @@ public class BookWiseRestControllerImpl {
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    @Transactional
+    public List<BookEncounter> findBooksByUser(int userId, int start, int size) {
+        Session session = null;
+        try {
+            session = bookWiseDAO.openSesstion();
+            String query = "FROM BookEncounter WHERE updatedById = :userId";
+            return session.createQuery(query, BookEncounter.class)
+                    .setParameter("userId", String.valueOf(userId))
+                    .setFirstResult(start)
+                    .setMaxResults(size)
+                    .list();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    @Transactional
+    public long countBooksByUser(int userId) {
+        Session session = null;
+        try {
+            session = bookWiseDAO.openSesstion();
+
+            String query = "SELECT COUNT(*) FROM BookEncounter WHERE updatedById = :userId";
+            return (Long) session.createQuery(query)
+                    .setParameter("userId", String.valueOf(userId))
+                    .uniqueResult();
+        }catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
+        return 0;
     }
 
     @Transactional

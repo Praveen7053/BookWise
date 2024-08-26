@@ -23,9 +23,11 @@ public class BookWiseRestController {
         return bookWiseRestControllerImpl.saveUpdateNewBooks(bookDataJson);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getSellerUploadedBooks")
-    public ResponseEntity<Map<String, Object>> getSellerUploadedBooks() {
-        return bookWiseRestControllerImpl.getSellerUploadedBooks();
+    @RequestMapping(method = RequestMethod.POST, value = "/getSellerUploadedBooks")
+    public ResponseEntity<Map<String, Object>> getSellerUploadedBooks(@RequestBody Map<String, Integer> paginationParams) {
+        int page = paginationParams.getOrDefault("page", 1);
+        int size = paginationParams.getOrDefault("size", 10);
+        return bookWiseRestControllerImpl.getSellerUploadedBooks(page, size);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteUploadedBooks")

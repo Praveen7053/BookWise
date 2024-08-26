@@ -6,11 +6,11 @@ import org.hibernate.Session;
 
 public class BookWiseDAOImpl extends AbstractHibernateDAO implements BookWiseDAO {
 
-    public Session getSession() {
+    public Session getSesstion() {
         return getHibernateTemplate().getSessionFactory().getCurrentSession();
     }
 
-    public Session openSession() {
+    public Session openSesstion() {
         return getHibernateTemplate().getSessionFactory().openSession();
     }
 }

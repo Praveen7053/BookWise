@@ -8,6 +8,9 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class AbstractHibernateDAO extends HibernateDaoSupport implements BaseDAO {
+    public AbstractHibernateDAO (){
+
+    }
 
     public void delete(Object obj) {
         getHibernateTemplate().delete(obj);

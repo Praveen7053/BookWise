@@ -1,15 +1,22 @@
 
-function getUploadedBooks(){
+function getUploadedBooks(page = 1, size = 10) {
     event.preventDefault();
     var contextPath = $('meta[name="context-path"]').attr('content');
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
     var url = contextPath + '/api/book/actions/getSellerUploadedBooks';
 
-    // Send GET request
+    // Data to send
+    var data = JSON.stringify({
+        page: page,
+        size: size
+    });
+
+    // Send POST request
     showProgressBar("progressBarDiv", "bodyDiv");
-    getData(url, 'json', function(response) {
+    postData(url, data, 'json', function(response) {
         if (response.success) {
             populateUploadedSellerBooks(response);
+            populatePagination(response.currentPage, response.totalPages);
             closeProgressBar("progressBarDiv", "bodyDiv");
         } else {
             closeProgressBar("progressBarDiv", "bodyDiv");
@@ -17,6 +24,41 @@ function getUploadedBooks(){
         }
     });
 }
+
+
+function populatePagination(currentPage, totalPages) {
+    const paginationContainer = document.querySelector('.paginationMainDIV ul.pagination');
+    paginationContainer.innerHTML = '';
+
+    // Previous page link
+    if (currentPage > 1) {
+        paginationContainer.innerHTML += `
+            <li class="page-item">
+                <a class="page-link" href="javascript:void(0);" onclick="getUploadedBooks(${currentPage - 1})" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>`;
+    }
+
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        paginationContainer.innerHTML += `
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" href="javascript:void(0);" onclick="getUploadedBooks(${i})">${i}</a>
+            </li>`;
+    }
+
+    // Next page link
+    if (currentPage < totalPages) {
+        paginationContainer.innerHTML += `
+            <li class="page-item">
+                <a class="page-link" href="javascript:void(0);" onclick="getUploadedBooks(${currentPage + 1})" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>`;
+    }
+}
+
 
 function populateUploadedSellerBooks(response) {
     if (typeof response === 'object' && response.success) {
