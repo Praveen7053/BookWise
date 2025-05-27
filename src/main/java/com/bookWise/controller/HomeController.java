@@ -16,6 +16,7 @@ public class HomeController {
         BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
         model.addAttribute("userName", user.getUsername()); // Add the username to the model
         model.addAttribute("userEmail", user.getUserEmail()); // Add the username to the model
+        model.addAttribute("userId", user.getUserId()); // Add the username to the model
         return "Home"; // Return the home view
     }
 
@@ -25,6 +26,7 @@ public class HomeController {
         BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
         model.addAttribute("userEmail", user.getUserEmail()); // Add the username to the model
         model.addAttribute("userName", user.getUsername()); // Add the username to the model
+        model.addAttribute("userId", user.getUserId()); // Add the username to the model
         return "sellerHome";
     }
 

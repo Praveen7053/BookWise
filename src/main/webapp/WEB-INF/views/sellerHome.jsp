@@ -11,6 +11,7 @@
 <body>
     <input type="hidden" id="userNameHidden" value="<sec:authentication property='principal.username' />"/>
     <input type="hidden" id="userEmailHidden" value="<sec:authentication property='principal.userEmail' />"/>
+    <input type="hidden" id="loggedInUserId" value="<sec:authentication property='principal.userId' />"/>
 
     <div class="container-fluid">
         <div class="row flex-nowrap">

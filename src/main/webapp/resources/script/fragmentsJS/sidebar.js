@@ -54,4 +54,7 @@ function selectMenuTabs(tabId) {
         element.classList.remove('active');
     });
     document.getElementById(tabId).classList.add('active');
+    if(tabId == 'userProfileTab') {
+        loadUserProfile();
+    }
 }
