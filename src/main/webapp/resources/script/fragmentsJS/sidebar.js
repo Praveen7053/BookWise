@@ -1,4 +1,19 @@
 
+$(document).ready(function() {
+    try {
+        const userName = document.getElementById('userNameHidden').value;
+        const userEmail = document.getElementById('userEmailHidden').value;
+
+        // Update the username in the sidebar dropdown if it exists
+        const userNameSpan = document.querySelector('#userProfileDropdownToggle span');
+        if (userNameSpan) {
+            userNameSpan.textContent = userName;
+        }
+    } catch (error) {
+        console.error('Error accessing user information:', error);
+    }
+});
+
 function changeModulePage(pageName){
     defaultModulePageDisplay();
     if(pageName === "homePage"){
