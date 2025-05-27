@@ -138,8 +138,8 @@ function clearUploadedNewBookFields() {
     document.getElementById('currentCoverImage').src = 'resources/images/defaultImage.png';
 
     // Clear book PDF field and reset the preview
-    document.getElementById('bookPdf').value = '';
-    document.getElementById('pdfLink').style.display = 'none';
+    document.getElementById('bookCoverFileName').value = '';
+    document.getElementById('bookPdfFileName').value = '';
     clearPdfEditedCanvas();
 }
 

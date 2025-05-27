@@ -41,6 +41,23 @@ public class BookWiseRestControllerImpl {
             Map<String, Object> bookData = mapper.readValue(bookDataJson, Map.class);
 
             String bookEncounterId = (String) bookData.getOrDefault("bookEncounterId", "0");
+            BookEncounter bookEncounter = null;
+            boolean isNewBook = true;
+
+            // Load existing book if editing
+            if (StringUtils.isNoneBlank(bookEncounterId) && Integer.parseInt(bookEncounterId) > 0) {
+                bookEncounter = (BookEncounter) bookWiseDAO.find(BookEncounter.class, Integer.parseInt(bookEncounterId));
+                if (bookEncounter == null) {
+                    response.put("success", false);
+                    response.put("message", "Book not found for editing.");
+                    return response;
+                }
+                isNewBook = false;
+            } else {
+                bookEncounter = new BookEncounter();
+            }
+
+            // Extract data from request
             String bookTitle = (String) bookData.getOrDefault("bookTitle", "");
             String authorName = (String) bookData.getOrDefault("authorName", "");
             String isbnNumber = (String) bookData.getOrDefault("isbnNumber", "");
@@ -53,29 +70,27 @@ public class BookWiseRestControllerImpl {
             String bookPdfBase64 = (String) bookData.getOrDefault("bookPdf", "");
             String numberOfPages = (String) bookData.getOrDefault("numberOfPages", "");
 
-            // Handle bookCover and bookPdf if they are not empty
-            String bookCoverPath = null;
-            String bookPdfPath = null;
-            String uniqueSuffix = String.valueOf(System.currentTimeMillis()); // Unique suffix based on current timestamp
+            // Handle file paths
+            String bookCoverPath = bookEncounter.getFrontPageImagePath(); // Preserve existing cover path
+            String bookPdfPath = bookEncounter.getPdfPath(); // Preserve existing PDF path
+            String uniqueSuffix = String.valueOf(System.currentTimeMillis());
+
+            // Handle cover image if new one provided
             if (StringUtils.isNotEmpty(bookCoverBase64)) {
                 bookCoverPath = FileUtils.saveBase64ToFile(bookCoverBase64, "BookUpload", bookTitle, uniqueSuffix);
             }
 
+            // Handle PDF file
             if (StringUtils.isNotEmpty(bookPdfBase64)) {
                 bookPdfPath = FileUtils.saveBase64ToFile(bookPdfBase64, "BookUpload", bookTitle, uniqueSuffix);
-            }else {
+            } else if (isNewBook) {
+                // Require PDF only for new books
                 response.put("success", false);
-                response.put("message", "Book pdf should not blank.");
+                response.put("message", "Book PDF is required for new books.");
                 return response;
             }
 
-            BookEncounter bookEncounter = null;
-            if (StringUtils.isNoneBlank(bookEncounterId) && Integer.parseInt(bookEncounterId) > 0) {
-                bookEncounter = (BookEncounter) bookWiseDAO.find(BookEncounter.class, Integer.parseInt(bookEncounterId));
-            } else {
-                bookEncounter = new BookEncounter();
-            }
-
+            // Update book fields
             bookEncounter.setBookTitle(bookTitle);
             bookEncounter.setBookAuthor(authorName);
             bookEncounter.setBookIsbnNumber(isbnNumber);
@@ -87,23 +102,27 @@ public class BookWiseRestControllerImpl {
             bookEncounter.setPdfPath(bookPdfPath);
             bookEncounter.setBookPageNumber(numberOfPages);
 
-            if(StringUtils.isNotBlank(publicationDateStr)){
+            // Handle publication date
+            if (StringUtils.isNotBlank(publicationDateStr)) {
                 Date publicationDate = dateFormat.parse(publicationDateStr);
                 bookEncounter.setPublicationDate(new Timestamp(publicationDate.getTime()));
             }
 
+            // Update metadata
             bookEncounter.setUpdatedById(String.valueOf(user.getUserId()));
             bookEncounter.setUploadedByName(user.getUserName());
             bookEncounter.setUploadedTime(new Timestamp(new Date().getTime()));
+
+            // Save or update the book
             bookWiseDAO.saveOrUpdate(bookEncounter);
 
             response.put("success", true);
-            response.put("message", "Books saved or updated successfully.");
+            response.put("message", "Book " + (isNewBook ? "saved" : "updated") + " successfully.");
+
         } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
-            response.put("message", "Error while saving or updating books.");
-            return response;
+            response.put("message", "Error while saving or updating book: " + e.getMessage());
         }
         return response;
     }

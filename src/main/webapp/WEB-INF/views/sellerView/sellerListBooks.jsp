@@ -26,4 +26,4 @@
     <jsp:include page="/WEB-INF/views/fragments/pagination.jsp" />
 </div>
 
-<script src="resources/script/uploadedBooks.js"></script>
+<script src="resources/script/sellerListBooks.js"></script>

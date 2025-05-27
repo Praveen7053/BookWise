@@ -164,9 +164,13 @@ function editUploadedBooks(bookEncounterId, bookTitle, bookAuthor, bookIsbnNumbe
 }
 
 function editImageNBookPDf(pdfPath, frontPageImagePath) {
+    // Ensure these variables are defined before being used
+    const decodedImagePath = decodeURIComponent(frontPageImagePath).replace(/\\/g, '/');
+    const decodedPdfPath = decodeURIComponent(pdfPath).replace(/\\/g, '/');
+
     const fileRequest = {
-        imagePath: decodeURIComponent(frontPageImagePath),
-        pdfPath: decodeURIComponent(pdfPath)
+        imagePath: decodedImagePath,
+        pdfPath: decodedPdfPath
     };
 
     var contextPath = $('meta[name="context-path"]').attr('content');
@@ -179,16 +183,37 @@ function editImageNBookPDf(pdfPath, frontPageImagePath) {
             const currentCoverImage = document.getElementById('currentCoverImage');
             currentCoverImage.src = 'data:' + response.imageMimeType + ';base64,' + response.imageContent;
             currentCoverImage.style.display = 'block';
+
+            // Set the image file name in the span element
+            const imageFileName = decodedImagePath.split('/').pop();
+            document.getElementById('bookCoverFileName').textContent = imageFileName;
         }
 
-        // Handle PDF response
         if (response.pdfMimeType === 'application/pdf') {
             renderPdfFromBase64(response.pdfContent);
+
+            // Store the PDF path for later use
+            const pdfCanvas = document.getElementById('pdfCanvas');
+            pdfCanvas.setAttribute('data-pdf-path', decodedPdfPath);
+
+            // Set the PDF file name
+            const pdfFileName = decodedPdfPath.split('/').pop();
+            document.getElementById('bookPdfFileName').textContent = pdfFileName;
         }
 
         closeProgressBar("progressBarDiv", "bodyDiv");
     });
 }
+
+document.getElementById('bookCover').addEventListener('change', function() {
+    const fileName = this.files[0].name;
+    document.getElementById('bookCoverFileName').textContent = fileName;
+});
+
+document.getElementById('bookPdf').addEventListener('change', function() {
+    const fileName = this.files[0].name;
+    document.getElementById('bookPdfFileName').textContent = fileName;
+});
 
 
 function renderPdfFromBase64(base64String) {
@@ -260,8 +285,8 @@ function previewBookPdf(pdfPath) {
 function showPdfInModal(fileUrl) {
     var modalHtml = `
         <div id="pdfModal" class="modal" style="display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000;">
-            <div class="modal-content" style="position: relative; margin: auto; padding: 20px; width: 80%; height: 80%; background: white;">
-                <span class="close" style="position: absolute; top: 10px; right: 25px; font-size: 35px; font-weight: bold; cursor: pointer;">&times;</span>
+            <div class="modal-content" style="position: relative; margin: auto; width: 80%; height: 80%; background: white; margin-top:70px; padding-top:50px;">
+                <span class="close" style="position: absolute; top: -5px; right: 15px; font-size: 35px; font-weight: bold; cursor: pointer;">&times;</span>
                 <iframe src="${fileUrl}" style="width: 100%; height: 100%;" frameborder="0"></iframe>
             </div>
         </div>

@@ -84,6 +84,7 @@
                                     <label for="bookCover" class="form-label">Book Cover Image</label>
                                     <input type="file" class="form-control" id="bookCover" accept="image/*">
                                     <img id="currentCoverImage" src="resources/images/defaultImage.png" alt="Current Cover Image" style="width: 100px; height: auto; display: block;">
+                                    <span id="bookCoverFileName"></span> <!-- Display the image file name here -->
                                 </div>
                             </div>
 
@@ -92,8 +93,8 @@
                                 <div class="form-group mb-3">
                                     <label for="bookPdf" class="form-label">Upload Book PDF</label>
                                     <input type="file" class="form-control" id="bookPdf" accept="application/pdf">
-                                    <a id="pdfLink" href="#" target="_blank" style="display: none;">View PDF</a>
                                     <canvas id="pdfCanvas" style="width: 100px; height: auto; display: block;"></canvas>
+                                    <span id="bookPdfFileName"></span>
                                 </div>
                             </div>
                         </div>
