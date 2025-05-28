@@ -1,6 +1,7 @@
 package com.bookWise.Impl.userProfile;
 
 import com.bookWise.SecurityConfig.loginUserConfig.BookWiseLoginUser;
+import com.bookWise.common.dto.ImageResponse;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookWiseUser;
 import com.bookWise.util.FileUtils;
@@ -45,6 +46,14 @@ public class UserProfileRestControllerImpl {
             String loggedInUserId = (String) userData.getOrDefault("loggedInUserId", "0");
 
             BookWiseUser bookWiseUser = (BookWiseUser) bookWiseDAO.find(BookWiseUser.class, Integer.parseInt(loggedInUserId));
+            if (bookWiseUser != null && StringUtils.isNotBlank(bookWiseUser.getProfilePicturePath())) {
+                ImageResponse imageResponse = FileUtils.getImageContentAndMimeType(bookWiseUser.getProfilePicturePath(),"UserProfile");
+
+                if (imageResponse != null) {
+                    response.put("imageContent", imageResponse.getImageContent());
+                    response.put("imageMimeType", imageResponse.getImageMimeType());
+                }
+            }
 
             if (bookWiseUser != null) {
                 response.put("data", mapper.writeValueAsString(bookWiseUser));

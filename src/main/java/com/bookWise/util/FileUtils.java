@@ -1,10 +1,14 @@
 package com.bookWise.util;
 
+import com.bookWise.common.dto.ImageResponse;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -134,5 +138,43 @@ public class FileUtils {
         int lastDotIndex = filePathStr.lastIndexOf('.');
         return (lastDotIndex != -1) ? filePathStr.substring(lastDotIndex + 1) : "";
     }
+
+    public static ImageResponse getImageContentAndMimeType(String relativePath, String folderName) {
+        try {
+            if (StringUtils.isBlank(relativePath)) {
+                return null;
+            }
+
+            // Ensure the folder exists
+            File folder = new File(BASE_UPLOAD_DIR + folderName);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            // Construct the full path
+            Path imagePath = Paths.get(BASE_UPLOAD_DIR).resolve(relativePath).normalize();
+
+            // Security check to prevent directory traversal
+            if (!imagePath.startsWith(Paths.get(BASE_UPLOAD_DIR))) {
+                throw new SecurityException("Access to file outside base directory is not allowed");
+            }
+
+            // Get file extension and mime type
+            String imageExtension = getFileExtension(relativePath);
+            String imageMimeType = getMimeTypeFromExtension(imageExtension);
+
+            if (imageMimeType != null && Files.exists(imagePath)) {
+                byte[] imageContent = Files.readAllBytes(imagePath);
+                String encodedImageContent = Base64.getEncoder().encodeToString(imageContent);
+                return new ImageResponse(encodedImageContent, imageMimeType);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

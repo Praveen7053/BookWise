@@ -24,6 +24,19 @@ function loadUserProfile() {
             document.getElementById("age").value = userData.age || '';
             document.getElementById("gender").value = userData.gender || '';
             document.getElementById("mainLanguage").value = userData.mainLanguage || '';
+
+            // Handle profile image
+            const profileImage = document.getElementById('userProfileImage');
+            if (response.imageContent && response.imageMimeType) {
+                profileImage.src = 'data:' + response.imageMimeType + ';base64,' + response.imageContent;
+            } else {
+                profileImage.src = contextPath + '/resources/images/default-user.png';
+            }
+
+            // Add error handler for the default image
+            profileImage.onerror = function() {
+                this.src = contextPath + '/resources/images/default-user.png';
+            };
         } else {
             // Handle error
             showErrorAlert(response.message);
