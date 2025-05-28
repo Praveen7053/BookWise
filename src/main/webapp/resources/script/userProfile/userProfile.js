@@ -74,3 +74,87 @@ document.querySelector('#profileCameraIcon').parentElement.addEventListener('mou
 document.querySelector('#profileCameraIcon').parentElement.addEventListener('mouseleave', function() {
     this.style.backgroundColor = '#0d6efd';  // Return to original color
 });
+
+function saveUserProfileInfo() {
+    // Get form values
+    const profileData = {
+        userName: document.getElementById("userName").value.trim(),
+        userEmail: document.getElementById("userEmail").value.trim(),
+        userPhoneNumber: document.getElementById("userPhone").value.trim(),
+        age: document.getElementById("age").value.trim(),
+        gender: document.getElementById("gender").value,
+        mainLanguage: document.getElementById("mainLanguage").value
+    };
+
+    // Validation
+    if (!profileData.userName) {
+        showErrorAlert("Please enter your name");
+        return;
+    }
+
+    if (!profileData.userEmail) {
+        showErrorAlert("Please enter your email");
+        return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(profileData.userEmail)) {
+        showErrorAlert("Please enter a valid email address");
+        return;
+    }
+
+    // Phone validation (optional field)
+    if (profileData.userPhoneNumber) {
+        const phoneRegex = /^\+?[\d\s-]{8,}$/;
+        if (!phoneRegex.test(profileData.userPhoneNumber)) {
+            showErrorAlert("Please enter a valid phone number");
+            return;
+        }
+    }
+
+    // Age validation (optional field)
+    if (profileData.age) {
+        const age = parseInt(profileData.age);
+        if (isNaN(age) || age < 0 || age > 150) {
+            showErrorAlert("Please enter a valid age");
+            return;
+        }
+    }
+
+    // Convert profile image to base64 if it exists
+    const profileImageInput = document.getElementById('profileImageInput');
+    if (profileImageInput && profileImageInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            profileData.profileImage = e.target.result;
+            sendProfileData(profileData);
+        };
+        reader.readAsDataURL(profileImageInput.files[0]);
+    } else {
+        sendProfileData(profileData);
+    }
+}
+
+function sendProfileData(profileData) {
+    const contextPath = $('meta[name="context-path"]').attr('content');
+    const url = contextPath + '/api/user/profile/saveUserProfileInfo';
+
+    showProgressBar("progressBarDiv", "bodyDiv");
+
+    postData(url, JSON.stringify(profileData), 'json', function(response) {
+        closeProgressBar("progressBarDiv", "bodyDiv");
+        if (response.success) {
+            showSuccessAlert("Profile updated successfully!");
+            if (response.data) {
+                // Update profile image if new one was uploaded
+                const profileImg = document.getElementById('userProfileImage');
+                if (profileImg && response.data.profileImagePath) {
+                    profileImg.src = contextPath + response.data.profileImagePath;
+                }
+            }
+        } else {
+            showErrorAlert(response.message || "Failed to update profile");
+        }
+    });
+}

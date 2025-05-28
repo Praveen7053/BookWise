@@ -21,4 +21,9 @@ public class UserProfileRestController {
     public Map<String, Object> getUserProfileInfo(@RequestBody String json) {
         return userProfileRestControllerImpl.getUserProfileInfo(json);
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/saveUserProfileInfo")
+    public Map<String, Object> saveUserProfileInfo(@RequestBody String json) {
+        return userProfileRestControllerImpl.saveUserProfileInfo(json);
+    }
 }

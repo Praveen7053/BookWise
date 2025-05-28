@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Set;
 
 @Getter
@@ -43,6 +44,12 @@ public class BookWiseUser {
 
     @Column(name = "PROFILE_PICTURE_PATH")
     private String profilePicturePath;
+
+    @Column(name = "MODIFIED_DATE")
+    private Timestamp modifiedDate;
+
+    @Column(name = "MODIFIED_BY")
+    private String modifiedBy;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

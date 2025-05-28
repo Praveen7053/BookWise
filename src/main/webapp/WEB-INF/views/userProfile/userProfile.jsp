@@ -22,64 +22,62 @@
                     </div>
 
                     <!-- Profile Form -->
-                    <form id="userProfileForm" class="needs-validation" novalidate>
-                        <div class="row g-3">
-                            <!-- Full Name -->
-                            <div class="col-12">
-                                <label for="userName" class="form-label">Full Name</label>
-                                <input type="text" class="form-control form-control-lg" id="userName" required>
-                            </div>
-
-                            <!-- Email -->
-                            <div class="col-12">
-                                <label for="userEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control form-control-lg" id="userEmail" required>
-                            </div>
-
-                            <!-- Phone -->
-                            <div class="col-12 col-md-6">
-                                <label for="userPhone" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control form-control-lg" id="userPhone">
-                            </div>
-
-                            <!-- Language -->
-                            <div class="col-12 col-md-6">
-                                <label for="mainLanguage" class="form-label">Main Language</label>
-                                <select class="form-select form-select-lg" id="mainLanguage">
-                                    <option value="english">English</option>
-                                    <option value="spanish">Spanish</option>
-                                    <option value="french">French</option>
-                                    <option value="german">German</option>
-                                    <option value="chinese">Chinese</option>
-                                    <option value="japanese">Japanese</option>
-                                </select>
-                            </div>
-
-                            <!-- Gender -->
-                            <div class="col-12 col-sm-6">
-                                <label for="gender" class="form-label">Gender</label>
-                                <select class="form-select form-select-lg" id="gender">
-                                    <option value="">Select Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-
-                            <!-- Age -->
-                            <div class="col-12 col-sm-6">
-                                <label for="age" class="form-label">Age</label>
-                                <input type="number" class="form-control form-control-lg" id="age" min="1" max="120">
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="col-12 mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg w-100">
-                                    Save Changes
-                                </button>
-                            </div>
+                    <div class="row g-3">
+                        <!-- Full Name -->
+                        <div class="col-12">
+                            <label for="userName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control form-control-lg" id="userName" required>
                         </div>
-                    </form>
+
+                        <!-- Email -->
+                        <div class="col-12">
+                            <label for="userEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control form-control-lg" id="userEmail" required>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-12 col-md-6">
+                            <label for="userPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control form-control-lg" id="userPhone">
+                        </div>
+
+                        <!-- Language -->
+                        <div class="col-12 col-md-6">
+                            <label for="mainLanguage" class="form-label">Main Language</label>
+                            <select class="form-select form-select-lg" id="mainLanguage">
+                                <option value="english">English</option>
+                                <option value="spanish">Spanish</option>
+                                <option value="french">French</option>
+                                <option value="german">German</option>
+                                <option value="chinese">Chinese</option>
+                                <option value="japanese">Japanese</option>
+                            </select>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="col-12 col-sm-6">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select form-select-lg" id="gender">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Age -->
+                        <div class="col-12 col-sm-6">
+                            <label for="age" class="form-label">Age</label>
+                            <input type="number" class="form-control form-control-lg" id="age" min="1" max="120">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12 mt-4">
+                            <button type="submit" onclick="saveUserProfileInfo();" class="btn btn-primary btn-lg w-100">
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
