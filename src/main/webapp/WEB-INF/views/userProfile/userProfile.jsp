@@ -13,8 +13,8 @@
                                  style="width: 120px; height: 120px; object-fit: cover;
                                         @media (min-width: 768px) { width: 150px; height: 150px; }">
                             <div class="position-absolute bottom-0 end-0">
-                                <label for="profileImageInput" class="btn btn-sm btn-primary rounded-circle p-2">
-                                    <i class="fas fa-camera"></i>
+                                <label for="profileImageInput" class="btn btn-sm btn-primary rounded-circle p-2" onclick="triggerImageUpload();">
+                                    <i id="profileCameraIcon" class="fas fa-camera"></i>
                                 </label>
                                 <input type="file" id="profileImageInput" hidden accept="image/*">
                             </div>
@@ -151,4 +151,24 @@
         transform: translateY(-1px);
         box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.15);
     }
+
+    /* Style for the camera icon button */
+    .btn-sm.btn-primary.rounded-circle {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .fa-camera {
+        font-size: 14px;
+    }
+
+    /* Optional: Add a subtle overlay effect when hovering over the profile image */
+    .position-relative:hover #userProfileImage {
+        filter: brightness(0.95);
+    }
+
 </style>

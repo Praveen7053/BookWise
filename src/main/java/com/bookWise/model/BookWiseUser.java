@@ -23,6 +23,15 @@ public class BookWiseUser {
     @Column(name = "USER_PASSWORD")
     private String userPassword;
 
+    @Column(name = "AGE")
+    private Integer age;
+
+    @Column(name = "GENDER")
+    private String gender;
+
+    @Column(name = "MAIN_LANGUAGE")
+    private String mainLanguage;
+
     @Column(name = "USER_EMAIL")
     private String userEmail;
 
@@ -31,6 +40,9 @@ public class BookWiseUser {
 
     @Column(name = "USER_TYPE")
     private String userType;
+
+    @Column(name = "PROFILE_PICTURE_PATH")
+    private String profilePicturePath;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
