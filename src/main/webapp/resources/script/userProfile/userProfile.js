@@ -166,6 +166,7 @@ function sendProfileData(profileData) {
                     profileImg.src = contextPath + response.data.profileImagePath;
                 }
             }
+            loadSidebarProfileImage();
         } else {
             showErrorAlert(response.message || "Failed to update profile");
         }

@@ -29,7 +29,7 @@
         <!-- Dropdown -->
         <div class="dropdown pb-4" style="position: relative;">
             <a id="userProfileDropdownToggle" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="Profile Picture" width="30" height="30" class="rounded-circle">
+                <img id="sidebarProfileImage" src="${pageContext.request.contextPath}/resources/images/default-user.png" alt="Profile Picture" width="30" height="30" class="rounded-circle">
                 <span class="d-none d-sm-inline mx-1"></span>
             </a>
             <ul id="dropdownMenu" class="dropdown-menu text-small shadow">

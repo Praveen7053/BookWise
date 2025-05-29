@@ -9,6 +9,8 @@ $(document).ready(function() {
         if (userNameSpan) {
             userNameSpan.textContent = userName;
         }
+
+        loadSidebarProfileImage();
     } catch (error) {
         console.error('Error accessing user information:', error);
     }
@@ -58,3 +60,38 @@ function selectMenuTabs(tabId) {
         loadUserProfile();
     }
 }
+
+function loadSidebarProfileImage() {
+    const loggedInUserId = $('#loggedInUserId').val();
+    const contextPath = $('meta[name="context-path"]').attr('content');
+    const url = contextPath + '/api/user/profile/getUserProfileInfo';
+    const jsonData = { loggedInUserId: loggedInUserId };
+
+    postData(url, JSON.stringify(jsonData), 'json', function(response) {
+        if (response.success && response.imageContent && response.imageMimeType) {
+            const profileImage = document.getElementById('sidebarProfileImage');
+            profileImage.src = 'data:' + response.imageMimeType + ';base64,' + response.imageContent;
+
+            // Add error handler for fallback to default image
+            profileImage.onerror = function() {
+                this.src = contextPath + '/resources/images/default-user.png';
+            };
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownToggle = document.getElementById('userProfileDropdownToggle');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    document.addEventListener('click', function(event) {
+        if (!dropdownToggle.contains(event.target)) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
+
+    dropdownToggle.addEventListener('click', function(event) {
+        event.stopPropagation();
+        dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
+    });
+});
