@@ -27,6 +27,7 @@ public class FileUtils {
         MIME_TYPE_MAP.put("image/gif", "gif");
         MIME_TYPE_MAP.put("image/webp", "webp"); // Added WebP support
         MIME_TYPE_MAP.put("application/pdf", "pdf");
+        MIME_TYPE_MAP.put("image/avif", "avif");  // Add AVIF support
         // Add more MIME types as needed
     }
 
@@ -127,6 +128,8 @@ public class FileUtils {
             return "image/gif";
         } else if (extension.equalsIgnoreCase("webp")) {
             return "image/webp";
+        } else if (extension.equalsIgnoreCase("avif")) {
+            return "image/avif";
         } else if (extension.equalsIgnoreCase("pdf")) {
             return "application/pdf";
         } else {
