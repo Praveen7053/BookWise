@@ -1,4 +1,4 @@
-<!-- sidebar.jsp -->
+<!-- sellerSidebar.jsp -->
 <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
         <a class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
@@ -7,7 +7,7 @@
         </a>
         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
             <li class="nav-item w-100">
-                <a id="homeTab" onclick="selectMenuTabs('homeTab'); changeModulePage('homePage');" class="nav-link align-middle text-white w-100 active">
+                <a id="homeTab" onclick="selectMenuTabs('homeTab'); changeModulePage('sellerHomePage');" class="nav-link align-middle text-white w-100 active">
                     <i class="fas fa-home fs-5"></i> <!-- Smaller icon for Home -->
                     <span class="ms-1 d-none d-sm-inline">Home</span>
                 </a>
@@ -47,4 +47,4 @@
 </div>
 
 
-<script src="resources/script/fragmentsJS/sidebar.js"></script>
+<script src="resources/script/sellerHome/sellerSidebar.js"></script>

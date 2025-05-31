@@ -3,10 +3,7 @@ package com.bookWise.controller;
 import com.bookWise.Impl.BookWiseRestControllerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -33,5 +30,10 @@ public class BookWiseRestController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteUploadedBooks")
     public Map<String, Object> deleteUploadedBooks(@RequestBody String json) {
         return bookWiseRestControllerImpl.deleteUploadedBooks(json);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/getSellerBooks")
+    public ResponseEntity<Map<String, Object>> getSellerBooks(@RequestBody String json) {
+        return bookWiseRestControllerImpl.getSellerBooks(json);
     }
 }

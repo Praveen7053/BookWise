@@ -17,17 +17,25 @@
         <div class="row flex-nowrap">
 
             <!-- Include the Sidebar -->
-            <jsp:include page="fragments/sidebar.jsp" />
+            <jsp:include page="fragments/sellerSidebar.jsp" />
 
             <!-- Content Area -->
-            <div class="col py-3" style="flex: 1; overflow-y: auto; height: 100vh;">
-                <jsp:include page="Home.jsp" />
+            <div class="col py-3" style="flex: 1; height: 100vh;">
+                <jsp:include page="sellerView/sellerHomeRightSection.jsp" />
                 <jsp:include page="sellerView/uploadNewBooks.jsp" />
                 <jsp:include page="sellerView/sellerListBooks.jsp" />
                 <jsp:include page="userProfile/userProfile.jsp" />
             </div>
         </div>
     </div>
-    <script src="resources/script/sellerHome.js"></script>
+
 </body>
 </html>
+
+<script>
+
+$(document).ready(function() {
+    searchUserBook();
+});
+
+</script>

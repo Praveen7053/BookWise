@@ -137,4 +137,4 @@
     </div>
 </div>
 
-<script src="resources/script/uploadNewBooks.js"></script>
+<script src="resources/script/sellerHome/uploadNewBooks.js"></script>
