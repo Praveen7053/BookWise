@@ -13,7 +13,7 @@ function fetchSellerBooks(page = 1) {
         timeFilter: document.getElementById("timeFilter").value,
         sortBy: document.getElementById("sortBy").value,
         page: page,
-        size: 8,
+        size: 40,
         uploadedByName: ''
     };
 
