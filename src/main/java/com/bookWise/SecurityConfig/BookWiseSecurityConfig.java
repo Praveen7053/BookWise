@@ -48,6 +48,7 @@ public class BookWiseSecurityConfig {
                 .and()
                 .authorizeRequests(authorizeRequests ->
                 authorizeRequests
+                    .antMatchers("/superadmin/**").hasRole("SUPERADMIN")
                     .antMatchers("/home").hasRole("USER")
                     .antMatchers("/sellerHome").hasRole("ADMIN")
                     .antMatchers("/UserSignUp.jsp").permitAll()

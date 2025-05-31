@@ -146,27 +146,26 @@ public class LoginSignUpController {
         return response;
     }
 
-
-    // Example method to determine redirect URL based on user role
     public String determineRedirectUrlBasedOnRole(Authentication authentication) {
-        String redirectUrl = "/default"; // Default URL if no roles match
-
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
         boolean hasUserRole = authorities.stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"));
-
         boolean hasAdminRole = authorities.stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        boolean hasSuperAdminRole = authorities.stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_SUPERADMIN"));
 
-        if (hasUserRole && hasAdminRole) {
-            redirectUrl = "/sellerHome";
+        if (hasSuperAdminRole) {
+            return "/superadmin/dashboard";
+        } else if (hasUserRole && hasAdminRole) {
+            return "/sellerHome";
         } else if (hasUserRole) {
-            redirectUrl = "/home";
+            return "/home";
         } else if (hasAdminRole) {
-            redirectUrl = "/sellerHome";
+            return "/sellerHome";
         }
 
-        return redirectUrl;
+        return "/default";
     }
 }
