@@ -109,13 +109,23 @@ function handleSaveRoles() {
     const userId = document.getElementById('editUserId').value;
     const roleValueMapping = {
         '1': 'ROLE_USER',
-        '2': 'ROLE_ADMIN',
-        '3': 'ROLE_SUPERADMIN'
+        '2': 'ROLE_ADMIN'
     };
 
     const selectedRoles = Array.from(document.querySelectorAll('#editUserForm input[type="checkbox"]:checked'))
         .map(checkbox => roleValueMapping[checkbox.value])
         .filter(role => role);
+
+    // Get existing roles for this user to preserve SUPERADMIN if it exists
+    const existingRoles = document.querySelector(`button[data-user-id="${userId}"]`)
+        .getAttribute('data-user-roles')
+        .split(',')
+        .map(role => role.trim());
+
+    // If user had SUPERADMIN role, preserve it
+    if (existingRoles.includes('ROLE_SUPERADMIN')) {
+        selectedRoles.push('ROLE_SUPERADMIN');
+    }
 
     const contextPath = $('meta[name="context-path"]').attr('content');
     const url = `${contextPath}/api/admin/user/saveRoles`;  // Modified URL
@@ -133,6 +143,7 @@ function handleSaveRoles() {
         if (response.success) {
             showSuccessAlert("User roles updated successfully!");
             closeAndRefreshModal();
+            loadUsers();
         } else {
             showErrorAlert(response.message || "Failed to update user roles");
         }

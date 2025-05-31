@@ -193,10 +193,6 @@
                                 <input class="form-check-input" type="checkbox" value="2" id="roleAdmin">
                                 <label class="form-check-label" for="roleAdmin">Admin</label>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="3" id="roleSuperAdmin">
-                                <label class="form-check-label" for="roleSuperAdmin">SuperAdmin</label>
-                            </div>
                         </div>
                     </form>
                 </div>
