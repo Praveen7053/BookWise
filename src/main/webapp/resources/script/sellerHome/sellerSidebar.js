@@ -22,7 +22,7 @@ function changeModulePage(pageName){
         document.getElementById("mainSellerHomeRightSectionPageMainDIV").style.display = "block";
         fetchSellerBooks();
     }else if(pageName === "uploadBooks"){
-        document.getElementById("mainUploadNewBooksPageMainDIV").style.display = "block";
+        $('#mainUploadNewBooksPageMainDIV').removeClass('d-none').addClass('d-flex');
     }else if(pageName === "booksList"){
         document.getElementById("mainUploadListViewPageMainDIV").style.display = "block";
     }else if(pageName === "userProfile"){
@@ -32,7 +32,7 @@ function changeModulePage(pageName){
 
 function defaultModulePageDisplay(){
     document.getElementById("mainSellerHomeRightSectionPageMainDIV").style.display = "none";
-    document.getElementById("mainUploadNewBooksPageMainDIV").style.display = "none";
+    $('#mainUploadNewBooksPageMainDIV').removeClass('d-flex').addClass('d-none');
     document.getElementById("mainUploadListViewPageMainDIV").style.display = "none";
     document.getElementById("mainUserProfilePageMainDIV").style.display = "none";
 }
