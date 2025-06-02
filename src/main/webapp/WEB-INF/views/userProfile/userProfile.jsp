@@ -1,7 +1,7 @@
-<div class="container-fluid px-3 px-md-5" id="mainUserProfilePageMainDIV" style="display:none;">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-10 col-lg-8 col-xl-7">
-            <div class="card shadow-sm">
+<div class="container-fluid vh-100 d-none justify-content-center align-items-center" id="mainUserProfilePageMainDIV" style="display:none;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+            <div class="card shadow-sm w-100">
                 <div class="card-body p-3 p-md-4">
                     <h3 class="card-title text-center mb-4">Profile Settings</h3>
 
@@ -9,9 +9,9 @@
                     <div class="text-center mb-4">
                         <div class="position-relative d-inline-block">
                             <img id="userProfileImage" src="${pageContext.request.contextPath}/resources/images/default-user.png"
-                                 class="rounded-circle shadow-sm" alt="Profile Picture"
-                                 style="width: 120px; height: 120px; object-fit: cover;
-                                        @media (min-width: 768px) { width: 150px; height: 150px; }">
+                                 class="rounded-circle shadow-sm"
+                                 alt="Profile Picture"
+                                 style="width: 120px; height: 120px; object-fit: cover;">
                             <div class="position-absolute bottom-0 end-0">
                                 <label for="profileImageInput" class="btn btn-sm btn-primary rounded-circle p-2" onclick="triggerImageUpload();">
                                     <i id="profileCameraIcon" class="fas fa-camera"></i>

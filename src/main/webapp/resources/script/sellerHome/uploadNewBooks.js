@@ -1,71 +1,115 @@
 
-$(document).ready(function() {
-    var contextPath = $('meta[name="context-path"]').attr('content');
-    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+function handleUploadBook() {
+    var fileInputCover = $('#bookCover')[0].files[0];
+    var fileInputPdf = $('#bookPdf')[0].files[0];
 
-    // Define URL for the API endpoint
-    var url = contextPath + '/api/book/actions/saveUpdateNewBooks';
+    var bookTitle = $('#bookTitle');
+    var authorName = $('#authorName');
+    var bookCategory = $('#bookCategory');
+    var numberOfPages = $('#numberOfPages');
 
-    $('#uploadBookForm').submit(function(event) {
-        event.preventDefault();
+    // Reset previous error styles
+    bookTitle.removeClass('input-error');
+    authorName.removeClass('input-error');
+    bookCategory.removeClass('input-error');
+    numberOfPages.removeClass('input-error');
+    $('#bookCover').removeClass('input-error');
+    $('#bookPdf').removeClass('input-error');
 
-        var fileInputCover = $('#bookCover')[0].files[0];
-        var fileInputPdf = $('#bookPdf')[0].files[0];
+    // Perform validation before reading files
+    var errorMessages = [];
 
-        var readerCover = fileInputCover ? new FileReader() : null;
-        var readerPdf = fileInputPdf ? new FileReader() : null;
+    if (!bookTitle.val()) {
+        errorMessages.push("Book title is required.");
+        bookTitle.addClass('input-error');
+    }
 
-        var coverPromise = new Promise((resolve) => {
-            if (readerCover) {
-                readerCover.onloadend = function() {
-                    resolve(readerCover.result);
-                };
-                readerCover.readAsDataURL(fileInputCover);
-            } else {
-                resolve(null); // No cover file, resolve with null
-            }
-        });
+    if (!authorName.val()) {
+        errorMessages.push("Author name is required.");
+        authorName.addClass('input-error');
+    }
 
-        var pdfPromise = new Promise((resolve) => {
-            if (readerPdf) {
-                readerPdf.onloadend = function() {
-                    resolve(readerPdf.result);
-                };
-                readerPdf.readAsDataURL(fileInputPdf);
-            } else {
-                resolve(null); // No PDF file, resolve with null
-            }
-        });
+    if (!bookCategory.val()) {
+        errorMessages.push("Book category is required.");
+        bookCategory.addClass('input-error');
+    }
 
-        Promise.all([coverPromise, pdfPromise]).then(([coverData, pdfData]) => {
-            var jsonData = {
-                bookEncounterId: $('#bookEncounterIdHidden').val(),
-                bookTitle: $('#bookTitle').val(),
-                authorName: $('#authorName').val(),
-                isbnNumber: $('#isbnNumber').val(),
-                bookPrice: $('#bookPrice').val(),
-                bookCategory: $('#bookCategory').val(),
-                numberOfPages: $('#numberOfPages').val(),
-                publicationDate: $('#publicationDate').val(),
-                bookLanguage: $('#bookLanguage').val(),
-                bookDescription: $('#bookDescription').val(),
-                bookCover: coverData,
-                bookPdf: pdfData
+    if (!numberOfPages.val()) {
+        errorMessages.push("Number of pages is required.");
+        numberOfPages.addClass('input-error');
+    }
+
+    if (!fileInputCover) {
+        errorMessages.push("Book cover must be selected.");
+        $('#bookCover').addClass('input-error');
+    }
+
+    if (!fileInputPdf) {
+        errorMessages.push("Book PDF must be selected.");
+        $('#bookPdf').addClass('input-error');
+    }
+
+    if (errorMessages.length > 0) {
+        showErrorAlert(errorMessages.join("<br>"));
+        return;
+    }
+
+    var readerCover = fileInputCover ? new FileReader() : null;
+    var readerPdf = fileInputPdf ? new FileReader() : null;
+
+    var coverPromise = new Promise((resolve) => {
+        if (readerCover) {
+            readerCover.onloadend = function() {
+                resolve(readerCover.result);
             };
+            readerCover.readAsDataURL(fileInputCover);
+        } else {
+            resolve(null); // No cover file, resolve with null
+        }
+    });
 
-            // Send POST request
-            postData(url, JSON.stringify(jsonData), 'json', function(response) {
-                if (response.success) {
-                    showSuccessAlert(response.message);
-                    clearUploadedNewBookFields();
-                } else {
-                    closeProgressBar("progressBarDiv", "bodyDiv");
-                    showErrorAlert(response.message);
-                }
-            });
+    var pdfPromise = new Promise((resolve) => {
+        if (readerPdf) {
+            readerPdf.onloadend = function() {
+                resolve(readerPdf.result);
+            };
+            readerPdf.readAsDataURL(fileInputPdf);
+        } else {
+            resolve(null); // No PDF file, resolve with null
+        }
+    });
+
+    Promise.all([coverPromise, pdfPromise]).then(([coverData, pdfData]) => {
+        var jsonData = {
+            bookEncounterId: $('#bookEncounterIdHidden').val(),
+            bookTitle: $('#bookTitle').val(),
+            authorName: $('#authorName').val(),
+            isbnNumber: $('#isbnNumber').val(),
+            bookPrice: $('#bookPrice').val(),
+            bookCategory: $('#bookCategory').val(),
+            numberOfPages: $('#numberOfPages').val(),
+            publicationDate: $('#publicationDate').val(),
+            bookLanguage: $('#bookLanguage').val(),
+            bookDescription: $('#bookDescription').val(),
+            bookCover: coverData,
+            bookPdf: pdfData
+        };
+
+        var contextPath = $('meta[name="context-path"]').attr('content');
+        var url = contextPath + '/api/book/actions/saveUpdateNewBooks';
+
+        // Send POST request
+        postData(url, JSON.stringify(jsonData), 'json', function(response) {
+            if (response.success) {
+                showSuccessAlert(response.message);
+                clearUploadedNewBookFields();
+            } else {
+                closeProgressBar("progressBarDiv", "bodyDiv");
+                showErrorAlert(response.message);
+            }
         });
     });
-});
+}
 
 
 // Preview Book Cover Image

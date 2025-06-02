@@ -73,6 +73,21 @@ public class BookWiseRestControllerImpl {
             String bookPdfBase64 = (String) bookData.getOrDefault("bookPdf", "");
             String numberOfPages = (String) bookData.getOrDefault("numberOfPages", "");
 
+            if(StringUtils.isBlank(bookTitle)){
+                response.put("success", false);
+                response.put("message", "Please enter book title.");
+            }
+
+            if(StringUtils.isBlank(authorName)){
+                response.put("success", false);
+                response.put("message", "Please enter book author name.");
+            }
+
+            if(StringUtils.isBlank(bookCategory)){
+                response.put("success", false);
+                response.put("message", "Please select book category.");
+            }
+
             // Handle file paths
             String bookCoverPath = bookEncounter.getFrontPageImagePath(); // Preserve existing cover path
             String bookPdfPath = bookEncounter.getPdfPath(); // Preserve existing PDF path

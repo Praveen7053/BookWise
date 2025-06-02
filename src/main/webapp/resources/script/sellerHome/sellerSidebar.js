@@ -26,7 +26,7 @@ function changeModulePage(pageName){
     }else if(pageName === "booksList"){
         document.getElementById("mainUploadListViewPageMainDIV").style.display = "block";
     }else if(pageName === "userProfile"){
-        document.getElementById("mainUserProfilePageMainDIV").style.display = "block";
+        $('#mainUserProfilePageMainDIV').removeClass('d-none').addClass('d-flex');
     }
 }
 
@@ -34,7 +34,7 @@ function defaultModulePageDisplay(){
     document.getElementById("mainSellerHomeRightSectionPageMainDIV").style.display = "none";
     $('#mainUploadNewBooksPageMainDIV').removeClass('d-flex').addClass('d-none');
     document.getElementById("mainUploadListViewPageMainDIV").style.display = "none";
-    document.getElementById("mainUserProfilePageMainDIV").style.display = "none";
+    $('#mainUserProfilePageMainDIV').removeClass('d-flex').addClass('d-none');
 }
 
 document.getElementById('userProfileDropdownToggle').addEventListener('click', function () {
