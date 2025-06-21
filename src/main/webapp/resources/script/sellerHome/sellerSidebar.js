@@ -5,9 +5,9 @@ $(document).ready(function() {
         const userEmail = document.getElementById('userEmailHidden').value;
 
         // Update the username in the sidebar dropdown if it exists
-        const userNameSpan = document.querySelector('#userProfileDropdownToggle span');
+        const userNameSpan = document.getElementById('sideBarLoginUserName');
         if (userNameSpan) {
-            userNameSpan.textContent = userName;
+            userNameSpan.innerHTML = userName;
         }
 
         loadSidebarProfileImage();
@@ -69,14 +69,22 @@ function loadSidebarProfileImage() {
     const jsonData = { loggedInUserId: loggedInUserId };
 
     postData(url, JSON.stringify(jsonData), 'json', function(response) {
-        if (response.success && response.imageContent && response.imageMimeType) {
-            const profileImage = document.getElementById('sidebarProfileImage');
-            profileImage.src = 'data:' + response.imageMimeType + ';base64,' + response.imageContent;
+        if (response.success) {
+            if(response.imageContent && response.imageMimeType){
+                const profileImage = document.getElementById('sidebarProfileImage');
+                profileImage.src = 'data:' + response.imageMimeType + ';base64,' + response.imageContent;
 
-            // Add error handler for fallback to default image
-            profileImage.onerror = function() {
-                this.src = contextPath + '/resources/images/default-user.png';
-            };
+                // Add error handler for fallback to default image
+                profileImage.onerror = function() {
+                    this.src = contextPath + '/resources/images/default-user.png';
+                };
+            }
+
+            if(response.data){
+                const userData = JSON.parse(response.data);
+                document.getElementById("sideBarLoginUserName").innerHTML = userData.userName || '';
+
+            }
         }
     });
 }

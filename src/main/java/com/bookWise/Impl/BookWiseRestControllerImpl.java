@@ -402,6 +402,11 @@ public class BookWiseRestControllerImpl {
         dto.put("uploadedByName", book.getUploadedByName());
         dto.put("uploadedTime", book.getUploadedTime().toString());
         dto.put("bookIsbnNumber", book.getBookIsbnNumber());
+        dto.put("bookDescription", book.getBookDescription());
+        dto.put("bookLanguage", book.getBookLanguage());
+        dto.put("publicationDate", book.getPublicationDate());
+        dto.put("bookPageNumber", book.getBookPageNumber());
+        dto.put("pdfPath", book.getPdfPath());
         dto.put("status", "ACTIVE"); // You might want to add actual status logic
 
         if (StringUtils.isNotBlank(book.getFrontPageImagePath())) {

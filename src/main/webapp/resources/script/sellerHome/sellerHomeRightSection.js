@@ -115,11 +115,40 @@ function handleBooksResponse(response) {
                     <img src="data:${book.coverImageMimeType};base64,${book.coverImageContent}"
                          class="book-cover card-img-top"
                          alt="${book.bookTitle}">
+
+                    <!-- STATUS BADGE TOP-RIGHT -->
                     <div class="book-status">
                         <span class="badge ${book.status === 'ACTIVE' ? 'bg-success' : 'bg-secondary'}">
                             ${book.status}
                         </span>
                     </div>
+
+                    <!-- EDIT & DELETE ICONS TOP-LEFT -->
+                    <div class="book-actions-top">
+                        <button class="btn btn-sm btn-warning me-1"
+                            onclick="editUploadedBooks(
+                                ${book.bookEncounterId},
+                                '${encodeURIComponent(book.bookTitle || '')}',
+                                '${encodeURIComponent(book.bookAuthor || '')}',
+                                '${encodeURIComponent(book.bookIsbnNumber || '')}',
+                                '${encodeURIComponent(book.bookPrice || '')}',
+                                '${encodeURIComponent(book.bookCategory || '')}',
+                                '${book.pdfPath ? encodeURIComponent(book.pdfPath) : ''}',
+                                '${book.frontPageImagePath ? encodeURIComponent(book.frontPageImagePath) : ''}',
+                                '${encodeURIComponent(book.bookPageNumber || '')}',
+                                '${book.publicationDate ? encodeURIComponent(book.publicationDate) : ''}',
+                                '${book.bookLanguage ? encodeURIComponent(book.bookLanguage) : ''}',
+                                '${book.bookDescription ? encodeURIComponent(book.bookDescription) : ''}'
+                            )">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger"
+                            onclick="deleteUploadedBooks(${book.bookEncounterId});">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+
+                    <!-- CARD BODY -->
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-truncate">${book.bookTitle}</h5>
                         <p class="card-text mb-1">By ${book.bookAuthor}</p>
@@ -128,16 +157,6 @@ function handleBooksResponse(response) {
                         <h6 class="card-text mt-auto mb-2">₹${book.bookPrice}</h6>
                         <div class="text-muted small">
                             <i class="far fa-clock"></i> ${formatDate(book.uploadedTime)}
-                        </div>
-                    </div>
-                    <div class="book-actions">
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-primary btn-sm" onclick="editBook(${book.bookEncounterId})">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteBook(${book.bookEncounterId})">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
                         </div>
                     </div>
                 </div>

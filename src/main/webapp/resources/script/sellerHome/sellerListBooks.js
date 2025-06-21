@@ -136,6 +136,7 @@ function deleteUploadedBooks(bookId) {
             if (response.success) {
                 showSuccessAlert(response.message);
                 getUploadedBooks();
+                fetchSellerBooks(1);
             } else {
                 showErrorAlert(response.message);
             }
