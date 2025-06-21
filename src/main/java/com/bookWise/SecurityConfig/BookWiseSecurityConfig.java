@@ -20,6 +20,12 @@ public class BookWiseSecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+    @Autowired
+    private CustomAuthenticationSuccessHandler successHandler;
+
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -60,6 +66,7 @@ public class BookWiseSecurityConfig {
             .formLogin(formLogin ->
                 formLogin
                     .loginPage("/login")
+                    .successHandler(successHandler)
                     .permitAll()
             )
             .logout(logout ->
@@ -69,6 +76,8 @@ public class BookWiseSecurityConfig {
                     .permitAll()
                     .invalidateHttpSession(true) // Invalidate session
                     .deleteCookies("JSESSIONID") // Delete cookies
+            ).exceptionHandling(exception -> exception
+                .accessDeniedHandler(accessDeniedHandler) // <-- This is important
             );
 
         return http.build();

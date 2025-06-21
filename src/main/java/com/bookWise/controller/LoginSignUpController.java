@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
@@ -93,29 +94,37 @@ public class LoginSignUpController {
     @ResponseBody
     public Map<String, Object> loginRegisteredUser(
             @RequestParam("userLoginId") String userLoginId,
-            @RequestParam("your_pass") String password, HttpServletRequest request) {
+            @RequestParam("your_pass") String password,
+            HttpServletRequest request) {
 
         Map<String, Object> response = new HashMap<>();
 
         try {
-
-            if(StringUtils.isBlank(userLoginId)){
+            if (StringUtils.isBlank(userLoginId)) {
                 response.put("success", false);
                 response.put("message", "Login id cannot be blank.");
                 return response;
             }
 
-            if(StringUtils.isBlank(password)){
+            if (StringUtils.isBlank(password)) {
                 response.put("success", false);
                 response.put("message", "Password cannot be blank.");
                 return response;
             }
 
-            List<BookWiseUser> userList = bookWiseDAO.findBy("from BookWiseUser where userEmail = '"+userLoginId+"' or userPhoneNumber = '"+userLoginId+"' ");
-            BookWiseUser user = null;
-            if(userList != null && userList.size() > 0){
-                user = userList.get(0);
+            // ✅ Invalidate old session and clear security context
+            HttpSession oldSession = request.getSession(false);
+            if (oldSession != null) {
+                oldSession.invalidate();
             }
+            SecurityContextHolder.clearContext();
+
+            // ✅ Create a fresh session
+            HttpSession newSession = request.getSession(true);
+
+            List<BookWiseUser> userList = bookWiseDAO.findBy(
+                    "from BookWiseUser where userEmail = '" + userLoginId + "' or userPhoneNumber = '" + userLoginId + "'");
+            BookWiseUser user = (userList != null && !userList.isEmpty()) ? userList.get(0) : null;
 
             if (user == null) {
                 response.put("success", false);
@@ -123,20 +132,24 @@ public class LoginSignUpController {
                 return response;
             }
 
-            // Check if the password matches
+            // ✅ Password match check
             if (!bookWiseSecurityConfig.passwordEncoder().matches(password, user.getUserPassword())) {
                 response.put("success", false);
                 response.put("message", "Invalid password.");
                 return response;
             }
 
+            // ✅ Authenticate user and set new context
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userLoginId, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            // ✅ Store authentication in session (required for Spring Security to persist it)
+            newSession.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
             response.put("success", true);
             response.put("message", "Login successful.");
-            response.put("redirectUrl", request.getContextPath() + determineRedirectUrlBasedOnRole(authentication)); // Implement this method to get URL based on role
+            response.put("redirectUrl", request.getContextPath() + determineRedirectUrlBasedOnRole(authentication));
         } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
