@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/home")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String home(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
@@ -22,6 +23,7 @@ public class HomeController {
     }
 
     @GetMapping("/sellerHome")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String sellerHome(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();

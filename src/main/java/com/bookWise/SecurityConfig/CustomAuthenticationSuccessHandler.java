@@ -35,7 +35,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (isSuperAdmin) {
             response.sendRedirect(request.getContextPath() + "/superadmin/dashboard");
         } else if (isUser && isAdmin) {
-            response.sendRedirect(request.getContextPath() + "/home");
+            response.sendRedirect(request.getContextPath() + "/sellerHome");
         } else if (isUser) {
             response.sendRedirect(request.getContextPath() + "/home");
         } else if (isAdmin) {

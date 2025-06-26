@@ -4,6 +4,8 @@ import com.bookWise.SecurityConfig.loginUserConfig.BookWiseLoginUser;
 import com.bookWise.common.dto.ImageResponse;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookEncounter;
+import com.bookWise.service.book.BookService;
+import com.bookWise.util.BookUtils;
 import com.bookWise.util.DateConstant;
 import com.bookWise.util.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +33,12 @@ public class BookWiseRestControllerImpl {
 
     @Autowired
     private BookWiseDAOImpl bookWiseDAO;
+
+    @Autowired
+    private BookUtils bookUtils;
+
+    @Autowired
+    private BookService bookService;
 
     @Transactional
     public Map<String, Object> saveUpdateNewBooks(String bookDataJson) {
@@ -154,8 +162,8 @@ public class BookWiseRestControllerImpl {
 
             if (user != null) {
                 int start = (page - 1) * size;
-                List<BookEncounter> bookEncounters = findBooksByUser(user.getUserId(), start, size, "", "", "", "");
-                long totalBooks = countBooksByUser(user.getUserId(), "", "", "");
+                List<BookEncounter> bookEncounters = bookService.loadAllBookEncounter(user.getUserId(), start, size, "", "", "", "");
+                long totalBooks = bookService.countBooks(user.getUserId(), "", "", "");
 
                 int totalPages = (int) Math.ceil((double) totalBooks / size);
 
@@ -177,105 +185,6 @@ public class BookWiseRestControllerImpl {
         }
 
         return ResponseEntity.ok(response);
-    }
-
-    @Transactional
-    public List<BookEncounter> findBooksByUser(int userId, int start, int size, String title, String bookId, String timeFilter, String sortBy) {
-        Session session = null;
-        try {
-            session = bookWiseDAO.openSesstion();
-            StringBuilder queryBuilder = new StringBuilder("FROM BookEncounter WHERE updatedById = :userId");
-            Map<String, Object> params = new HashMap<>();
-            params.put("userId", String.valueOf(userId));
-
-            // Add filters
-            if (StringUtils.isNotBlank(title)) {
-                queryBuilder.append(" AND LOWER(bookTitle) LIKE :title");
-                params.put("title", "%" + title.toLowerCase() + "%");
-            }
-
-            if (StringUtils.isNotBlank(bookId)) {
-                queryBuilder.append(" AND bookEncounterId = :bookId");
-                params.put("bookId", Integer.parseInt(bookId));
-            }
-
-            if (StringUtils.isNotBlank(timeFilter) && !StringUtils.equalsIgnoreCase(timeFilter, "all")) {
-                queryBuilder.append(" AND uploadedTime >= :timeStamp");
-                params.put("timeStamp", getFilterTimestamp(timeFilter));
-            }
-
-            // Add sorting
-            queryBuilder.append(" ORDER BY ");
-            if (StringUtils.isBlank(sortBy)) {
-                queryBuilder.append("uploadedTime DESC"); // Default sorting if sortBy is null or empty
-            } else {
-                switch (sortBy) {
-                    case "oldest":
-                        queryBuilder.append("uploadedTime ASC");
-                        break;
-                    case "title":
-                        queryBuilder.append("bookTitle ASC");
-                        break;
-                    case "price":
-                        queryBuilder.append("CAST(REPLACE(bookPrice, '$', '') AS double) ASC");
-                        break;
-                    default:
-                        queryBuilder.append("uploadedTime DESC");
-                        break;
-                }
-            }
-
-            var query = session.createQuery(queryBuilder.toString(), BookEncounter.class);
-            params.forEach(query::setParameter);
-
-            return query.setFirstResult(start)
-                    .setMaxResults(size)
-                    .list();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
-
-    @Transactional
-    public long countBooksByUser(int userId, String title, String bookId, String timeFilter) {
-        Session session = null;
-        try {
-            session = bookWiseDAO.openSesstion();
-            StringBuilder queryBuilder = new StringBuilder(
-                    "SELECT COUNT(*) FROM BookEncounter WHERE updatedById = :userId");
-            Map<String, Object> params = new HashMap<>();
-            params.put("userId", String.valueOf(userId));
-
-            // Add filters
-            if (StringUtils.isNotBlank(title)) {
-                queryBuilder.append(" AND LOWER(bookTitle) LIKE :title");
-                params.put("title", "%" + title.toLowerCase() + "%");
-            }
-
-            if (StringUtils.isNotBlank(bookId)) {
-                queryBuilder.append(" AND bookEncounterId = :bookId");
-                params.put("bookId", Integer.parseInt(bookId));
-            }
-
-            if (StringUtils.isNotBlank(timeFilter) && !StringUtils.equalsIgnoreCase(timeFilter, "all")) {
-                queryBuilder.append(" AND uploadedTime >= :timeStamp");
-                params.put("timeStamp", getFilterTimestamp(timeFilter));
-            }
-
-            var query = session.createQuery(queryBuilder.toString());
-            params.forEach(query::setParameter);
-
-            return (Long) query.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
     }
 
     @Transactional
@@ -338,11 +247,11 @@ public class BookWiseRestControllerImpl {
                 int start = (page - 1) * size;
 
                 // Get filtered and sorted books using existing method
-                List<BookEncounter> books = findBooksByUser(
+                List<BookEncounter> books = bookService.loadAllBookEncounter(
                         user.getUserId(), start, size, title, bookId, timeFilter, sortBy);
 
                 // Get total count using existing method
-                long totalBooks = countBooksByUser(
+                long totalBooks = bookService.countBooks(
                         user.getUserId(), title, bookId, timeFilter);
 
                 // Convert books to DTOs and add additional information
@@ -372,26 +281,7 @@ public class BookWiseRestControllerImpl {
         }
     }
 
-    private Timestamp getFilterTimestamp(String timeFilter) {
-        if (timeFilter == null) return null;
-
-        LocalDateTime now = LocalDateTime.now();
-
-        switch (timeFilter) {
-            case "today":
-                return Timestamp.valueOf(now.toLocalDate().atStartOfDay());
-            case "week":
-                return Timestamp.valueOf(now.minusWeeks(1));
-            case "month":
-                return Timestamp.valueOf(now.minusMonths(1));
-            case "year":
-                return Timestamp.valueOf(now.minusYears(1));
-            default:
-                return null;
-        }
-    }
-
-    private Map<String, Object> convertToBookDTO(BookEncounter book) {
+    public Map<String, Object> convertToBookDTO(BookEncounter book) {
         Map<String, Object> dto = new HashMap<>();
         dto.put("bookEncounterId", book.getBookEncounterId());
         dto.put("bookTitle", book.getBookTitle());
@@ -419,6 +309,4 @@ public class BookWiseRestControllerImpl {
 
         return dto;
     }
-
-
 }

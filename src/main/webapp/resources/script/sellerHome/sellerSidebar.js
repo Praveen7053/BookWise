@@ -16,27 +16,6 @@ $(document).ready(function() {
     }
 });
 
-function changeModulePage(pageName){
-    defaultModulePageDisplay();
-    if(pageName === "sellerHomePage"){
-        document.getElementById("mainSellerHomeRightSectionPageMainDIV").style.display = "block";
-        fetchSellerBooks();
-    }else if(pageName === "uploadBooks"){
-        $('#mainUploadNewBooksPageMainDIV').removeClass('d-none').addClass('d-flex');
-    }else if(pageName === "booksList"){
-        document.getElementById("mainUploadListViewPageMainDIV").style.display = "block";
-    }else if(pageName === "userProfile"){
-        $('#mainUserProfilePageMainDIV').removeClass('d-none').addClass('d-flex');
-    }
-}
-
-function defaultModulePageDisplay(){
-    document.getElementById("mainSellerHomeRightSectionPageMainDIV").style.display = "none";
-    $('#mainUploadNewBooksPageMainDIV').removeClass('d-flex').addClass('d-none');
-    document.getElementById("mainUploadListViewPageMainDIV").style.display = "none";
-    $('#mainUserProfilePageMainDIV').removeClass('d-flex').addClass('d-none');
-}
-
 document.getElementById('userProfileDropdownToggle').addEventListener('click', function () {
     const menu = document.getElementById('dropdownMenu');
     const isExpanded = this.getAttribute('aria-expanded') === 'true';
@@ -51,16 +30,6 @@ document.getElementById('userProfileDropdownToggle').addEventListener('click', f
         menu.classList.add('show');
     }
 });
-
-function selectMenuTabs(tabId) {
-    document.querySelectorAll('.nav-link').forEach(function (element) {
-        element.classList.remove('active');
-    });
-    document.getElementById(tabId).classList.add('active');
-    if(tabId == 'userProfileTab') {
-        loadUserProfile();
-    }
-}
 
 function loadSidebarProfileImage() {
     const loggedInUserId = $('#loggedInUserId').val();

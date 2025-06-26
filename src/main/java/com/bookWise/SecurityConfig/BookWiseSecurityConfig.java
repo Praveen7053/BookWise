@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -76,7 +78,14 @@ public class BookWiseSecurityConfig {
                     .permitAll()
                     .invalidateHttpSession(true) // Invalidate session
                     .deleteCookies("JSESSIONID") // Delete cookies
-            ).exceptionHandling(exception -> exception
+            )
+            .sessionManagement(session -> session
+                    .maximumSessions(1)
+                    .maxSessionsPreventsLogin(true)
+                    .expiredUrl("/login?error=sessionExpired")
+                    .sessionRegistry(sessionRegistry())
+            )
+            .exceptionHandling(exception -> exception
                 .accessDeniedHandler(accessDeniedHandler) // <-- This is important
             );
 
@@ -86,6 +95,16 @@ public class BookWiseSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers("/resources/**");
+    }
+
+    @Bean
+    public static org.springframework.security.web.session.HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new org.springframework.security.web.session.HttpSessionEventPublisher();
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
 }
