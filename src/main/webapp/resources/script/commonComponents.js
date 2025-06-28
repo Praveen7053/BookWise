@@ -4,7 +4,7 @@ function selectMenuTabs(tabId) {
         element.classList.remove('active');
     });
     document.getElementById(tabId).classList.add('active');
-    if(tabId == 'userProfileTab') {
+    if(tabId == 'userProfileTab' || tabId == 'userProfileReader') {
         loadUserProfile();
     }
 }

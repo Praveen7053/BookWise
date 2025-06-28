@@ -31,33 +31,6 @@ document.getElementById('userProfileDropdownToggle').addEventListener('click', f
     }
 });
 
-function loadSidebarProfileImage() {
-    const loggedInUserId = $('#loggedInUserId').val();
-    const contextPath = $('meta[name="context-path"]').attr('content');
-    const url = contextPath + '/api/user/profile/getUserProfileInfo';
-    const jsonData = { loggedInUserId: loggedInUserId };
-
-    postData(url, JSON.stringify(jsonData), 'json', function(response) {
-        if (response.success) {
-            if(response.imageContent && response.imageMimeType){
-                const profileImage = document.getElementById('sidebarProfileImage');
-                profileImage.src = 'data:' + response.imageMimeType + ';base64,' + response.imageContent;
-
-                // Add error handler for fallback to default image
-                profileImage.onerror = function() {
-                    this.src = contextPath + '/resources/images/default-user.png';
-                };
-            }
-
-            if(response.data){
-                const userData = JSON.parse(response.data);
-                document.getElementById("sideBarLoginUserName").innerHTML = userData.userName || '';
-
-            }
-        }
-    });
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     const dropdownToggle = document.getElementById('userProfileDropdownToggle');
     const dropdownMenu = document.getElementById('dropdownMenu');

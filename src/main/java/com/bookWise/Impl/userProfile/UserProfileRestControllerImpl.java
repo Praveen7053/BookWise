@@ -148,6 +148,26 @@ public class UserProfileRestControllerImpl {
                 existingUser.setMainLanguage((String) userData.get("mainLanguage"));
             }
 
+            if (userData.get("street") != null) {
+                existingUser.setStreet((String) userData.get("street"));
+            }
+
+            if (userData.get("city") != null) {
+                existingUser.setCity((String) userData.get("city"));
+            }
+
+            if (userData.get("state") != null) {
+                existingUser.setState((String) userData.get("state"));
+            }
+
+            if (userData.get("zip") != null) {
+                existingUser.setZipCode((String) userData.get("zip"));
+            }
+
+            if (userData.get("user_description") != null) {
+                existingUser.setDescription((String) userData.get("user_description"));
+            }
+
             // Update modification timestamp and modifier
             existingUser.setModifiedDate(new Timestamp(new Date().getTime()));
             existingUser.setModifiedBy(loggedInUserId.toString());

@@ -19,11 +19,19 @@ function loadUserProfile() {
 
             // Populate all form fields
             document.getElementById("userName").value = userData.userName || '';
+            document.getElementById("displayUserName").innerHTML = userData.userName || '';
             document.getElementById("userEmail").value = userData.userEmail || '';
+            document.getElementById("displayUserEmail").innerHTML = userData.userEmail || '';
             document.getElementById("userPhone").value = userData.userPhoneNumber || '';
             document.getElementById("age").value = userData.age || '';
             document.getElementById("gender").value = userData.gender || '';
             document.getElementById("mainLanguage").value = userData.mainLanguage || '';
+            document.getElementById("Street").value = userData.street || '';
+            document.getElementById("ciTy").value = userData.city || '';
+            document.getElementById("sTate").value = userData.state || '';
+            document.getElementById("zIp").value = userData.zipCode || '';
+            document.getElementById("user_description").value = userData.description || '';
+            document.getElementById("userDescriptionRead").innerHTML = userData.description || '';
 
             // Handle profile image
             const profileImage = document.getElementById('userProfileImage');
@@ -96,7 +104,12 @@ function saveUserProfileInfo() {
         userPhoneNumber: document.getElementById("userPhone").value.trim(),
         age: document.getElementById("age").value.trim(),
         gender: document.getElementById("gender").value,
-        mainLanguage: document.getElementById("mainLanguage").value
+        mainLanguage: document.getElementById("mainLanguage").value,
+        street: document.getElementById("Street").value,
+        city: document.getElementById("ciTy").value,
+        state: document.getElementById("sTate").value,
+        zip: document.getElementById("zIp").value,
+        user_description: document.getElementById("user_description").value
     };
 
     // Validation
@@ -166,9 +179,55 @@ function sendProfileData(profileData) {
                     profileImg.src = contextPath + response.data.profileImagePath;
                 }
             }
-            loadSidebarProfileImage();
+
+            if (typeof loadSidebarProfileImage === 'function') {
+                loadSidebarProfileImage();
+            }
+            loadUserProfile();
         } else {
             showErrorAlert(response.message || "Failed to update profile");
+        }
+    });
+}
+
+function loadSidebarProfileImage() {
+    const loggedInUserId = $('#loggedInUserId').val();
+    const contextPath = $('meta[name="context-path"]').attr('content');
+    const url = contextPath + '/api/user/profile/getUserProfileInfo';
+    const jsonData = { loggedInUserId: loggedInUserId };
+
+    postData(url, JSON.stringify(jsonData), 'json', function(response) {
+        if (response.success) {
+            if(response.imageContent && response.imageMimeType){
+                const profileImage = document.getElementById('sidebarProfileImage');
+                const readerProfileImage = document.getElementById('sidebarReaderProfileImage');
+                if(profileImage){
+                    profileImage.src = 'data:' + response.imageMimeType + ';base64,' + response.imageContent;
+                    // Add error handler for fallback to default image
+                    profileImage.onerror = function() {
+                        this.src = contextPath + '/resources/images/default-user.png';
+                    };
+                }
+
+                if(readerProfileImage){
+                    readerProfileImage.src = 'data:' + response.imageMimeType + ';base64,' + response.imageContent;
+                   // Add error handler for fallback to default image
+                    readerProfileImage.onerror = function() {
+                        this.src = contextPath + '/resources/images/default-user.png';
+                    };
+                }
+            }
+
+            if(response.data){
+                const userData = JSON.parse(response.data);
+                if(document.getElementById("sideBarLoginUserName")){
+                    document.getElementById("sideBarLoginUserName").innerHTML = userData.userName || '';
+                }
+                if(document.getElementById("sideBarLoginReaderUserName")){
+                    document.getElementById("sideBarLoginReaderUserName").innerHTML = userData.userName || '';
+                }
+
+            }
         }
     });
 }

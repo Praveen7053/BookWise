@@ -1,81 +1,137 @@
-<div class="container-fluid vh-100 d-none justify-content-center align-items-center" id="mainUserProfilePageMainDIV" style="display:none;">
-    <div class="row w-100 justify-content-center">
-        <div class="col-12 col-md-10 col-lg-8 col-xl-6">
-            <div class="card shadow-sm w-100">
-                <div class="card-body p-3 p-md-4">
-                    <h3 class="card-title text-center mb-4">Profile Settings</h3>
-
-                    <!-- Profile Image Section -->
-                    <div class="text-center mb-4">
-                        <div class="position-relative d-inline-block">
-                            <img id="userProfileImage" src="${pageContext.request.contextPath}/resources/images/default-user.png"
-                                 class="rounded-circle shadow-sm"
-                                 alt="Profile Picture"
-                                 style="width: 120px; height: 120px; object-fit: cover;">
-                            <div class="position-absolute bottom-0 end-0">
-                                <label for="profileImageInput" class="btn btn-sm btn-primary rounded-circle p-2" onclick="triggerImageUpload();">
-                                    <i id="profileCameraIcon" class="fas fa-camera"></i>
-                                </label>
-                                <input type="file" id="profileImageInput" hidden accept="image/*">
+<div class="container" id="mainUserProfilePageMainDIV" style="display:none;">
+    <div class="row gutters">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="account-settings">
+                        <div class="user-profile">
+                            <div class="user-avatar position-relative">
+                                <img id="userProfileImage" src="${pageContext.request.contextPath}/resources/images/default-user.png"
+                                     class="rounded-circle shadow-sm"
+                                     alt="Profile Picture"
+                                     style="width: 120px; height: 120px; object-fit: cover;">
+                                <div class="position-absolute end-0">
+                                    <label for="profileImageInput" class="btn btn-sm btn-primary rounded-circle p-2" onclick="triggerImageUpload();">
+                                        <i id="profileCameraIcon" class="fas fa-camera"></i>
+                                    </label>
+                                    <input type="file" id="profileImageInput" hidden accept="image/*">
+                                </div>                            </div>
+                                <h5 class="user-name" id="displayUserName" >Yuki Hayashi</h5>
+                                <h6 class="user-email" id="displayUserEmail">yuki@Maxwell.com</h6>
+                            </div>
+                            <div class="about">
+                                <h5>About</h5>
+                                <p id="userDescriptionRead" >I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful and human experiences.</p>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <h6 class="mb-2 text-primary">Personal Details</h6>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="userName">Full Name</label>
+                                <input type="text" class="form-control" id="userName" required placeholder="Enter full name">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="userEmail">Email</label>
+                                <input type="email" class="form-control" id="userEmail" required placeholder="Enter email ID">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="userPhone">Phone</label>
+                                <input type="text" class="form-control"  id="userPhone" placeholder="Enter phone number">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="mainLanguage" class="form-label">Main Language</label>
+                                <select class="form-select" id="mainLanguage">
+                                    <option value="english">English</option>
+                                    <option value="spanish">Spanish</option>
+                                    <option value="french">French</option>
+                                    <option value="german">German</option>
+                                    <option value="chinese">Chinese</option>
+                                    <option value="japanese">Japanese</option>
+                                </select>
+                            </div>
+                        </div>
 
-                    <!-- Profile Form -->
-                    <div class="row g-3">
-                        <!-- Full Name -->
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender">
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="age">Age</label>
+                                <input type="number" class="form-control"  id="age" placeholder="Enter age">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <h6 class="mt-3 mb-2 text-primary">Address</h6>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Street">Street</label>
+                                <input type="name" class="form-control" id="Street" placeholder="Enter Street">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="ciTy">City</label>
+                                <input type="name" class="form-control" id="ciTy" placeholder="Enter City">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="sTate">State</label>
+                                <input type="text" class="form-control" id="sTate" placeholder="Enter State">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="zIp">Zip Code</label>
+                                <input type="text" class="form-control" id="zIp" placeholder="Zip Code">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gutters mt-3">
                         <div class="col-12">
-                            <label for="userName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control form-control-lg" id="userName" required>
+                            <div class="form-group">
+                                <label for="user_description" class="form-label">About</label>
+                                <textarea
+                                    class="form-control"
+                                    id="user_description"
+                                    name="description"
+                                    rows="4"
+                                    placeholder="Tell us a bit about yourself"></textarea>
+                            </div>
                         </div>
-
-                        <!-- Email -->
-                        <div class="col-12">
-                            <label for="userEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control form-control-lg" id="userEmail" required>
-                        </div>
-
-                        <!-- Phone -->
-                        <div class="col-12 col-md-6">
-                            <label for="userPhone" class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control form-control-lg" id="userPhone">
-                        </div>
-
-                        <!-- Language -->
-                        <div class="col-12 col-md-6">
-                            <label for="mainLanguage" class="form-label">Main Language</label>
-                            <select class="form-select form-select-lg" id="mainLanguage">
-                                <option value="english">English</option>
-                                <option value="spanish">Spanish</option>
-                                <option value="french">French</option>
-                                <option value="german">German</option>
-                                <option value="chinese">Chinese</option>
-                                <option value="japanese">Japanese</option>
-                            </select>
-                        </div>
-
-                        <!-- Gender -->
-                        <div class="col-12 col-sm-6">
-                            <label for="gender" class="form-label">Gender</label>
-                            <select class="form-select form-select-lg" id="gender">
-                                <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-
-                        <!-- Age -->
-                        <div class="col-12 col-sm-6">
-                            <label for="age" class="form-label">Age</label>
-                            <input type="number" class="form-control form-control-lg" id="age" min="1" max="120">
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="col-12 mt-4">
-                            <button type="submit" onclick="saveUserProfileInfo();" class="btn btn-primary btn-lg w-100">
-                                Save Changes
-                            </button>
+                    </div>
+                    <div class="row gutters" style="margin-top:10px;">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="text-right">
+                                <button type="submit" onclick="saveUserProfileInfo();" class="btn btn-primary">Update</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,86 +143,58 @@
 <script src="resources/script/userProfile/userProfile.js"></script>
 
 <style>
-    #mainUserProfilePageMainDIV {
-        min-height: 100vh;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
+.account-settings .user-profile {
+    margin: 0 0 1rem 0;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+.account-settings .user-profile .user-avatar {
+    margin: 0 0 1rem 0;
+}
+.account-settings .user-profile .user-avatar img {
+    width: 90px;
+    height: 90px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
+}
+.account-settings .user-profile h5.user-name {
+    margin: 0 0 0.5rem 0;
+}
+.account-settings .user-profile h6.user-email {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #9fa8b9;
+}
+.account-settings .about {
+    margin: 2rem 0 0 0;
+    text-align: center;
+}
+.account-settings .about h5 {
+    margin: 0 0 15px 0;
+    color: #007ae1;
+}
+.account-settings .about p {
+    font-size: 0.825rem;
+}
+.form-control {
+    border: 1px solid #cfd1d8;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    font-size: .825rem;
+    background: #ffffff;
+    color: #2e323c;
+}
 
-    .form-label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-    }
-
-    .form-control, .form-select {
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        border-radius: 0.5rem;
-    }
-
-    .form-control:focus, .form-select:focus {
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
-    }
-
-    .btn-lg {
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-        border-radius: 0.5rem;
-    }
-
-    @media (max-width: 576px) {
-        .card-body {
-            padding: 1.25rem;
-        }
-
-        .form-control-lg, .form-select-lg, .btn-lg {
-            font-size: 1rem;
-            padding: 0.5rem 0.75rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        #userProfileImage {
-            width: 100px;
-            height: 100px;
-        }
-    }
-
-    /* Custom shadow effect */
-    .card {
-        border: none;
-        border-radius: 1rem;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
-    }
-
-    /* Smooth transitions */
-    .form-control, .form-select, .btn {
-        transition: all 0.2s ease-in-out;
-    }
-
-    /* Hover effects */
-    .btn-primary:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.15);
-    }
-
-    /* Style for the camera icon button */
-    .btn-sm.btn-primary.rounded-circle {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.2s ease-in-out;
-    }
-
-    .fa-camera {
-        font-size: 14px;
-    }
-
-    /* Optional: Add a subtle overlay effect when hovering over the profile image */
-    .position-relative:hover #userProfileImage {
-        filter: brightness(0.95);
-    }
+.card {
+    background: #ffffff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 0;
+    margin-bottom: 1rem;
+}
 
 </style>

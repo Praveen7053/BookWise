@@ -103,8 +103,8 @@
         <!-- User Dropdown -->
         <div class="dropdown sidebar-footer">
             <a class="nav-link text-white dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="resources/images/default-user.png" class="rounded-circle sidebar-profile-img me-2" alt="User">
-                <span>Hi, <c:out value="${userName}" /></span>
+                <img id="sidebarReaderProfileImage" src="resources/images/default-user.png" class="rounded-circle sidebar-profile-img me-2" alt="User">
+                <span id="sideBarLoginReaderUserName" class="d-none d-sm-inline mx-1"></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                 <li>

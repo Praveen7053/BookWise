@@ -51,6 +51,21 @@ public class BookWiseUser {
     @Column(name = "MODIFIED_BY")
     private String modifiedBy;
 
+    @Column(name = "STREET")
+    private String street;
+
+    @Column(name = "CITY")
+    private String city;
+
+    @Column(name = "STATE")
+    private String state;
+
+    @Column(name = "ZIP_CODE")
+    private String zipCode;
+
+    @Column(name = "DESCRIPTION")
+    private String description;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_AUTHORITY",
