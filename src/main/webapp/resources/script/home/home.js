@@ -60,7 +60,7 @@ function handleHomeBooksResponse(response) {
                         <p class="card-text small text-muted">By ${book.bookAuthor}</p>
                     </div>
                     <div class="card-footer text-end bg-light">
-                        <a href="#" class="btn btn-sm btn-primary rounded-pill">Read <i class="fas fa-arrow-right ms-1"></i></a>
+                        <a href="#" onclick="loadBookDetailsByID(${book.bookEncounterId});" class="btn btn-sm btn-primary rounded-pill">Read <i class="fas fa-arrow-right ms-1"></i></a>
                     </div>
                 </div>
             </div>

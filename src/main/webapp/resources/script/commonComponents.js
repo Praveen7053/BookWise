@@ -48,4 +48,7 @@ function defaultModulePageDisplay() {
 
     const readerHome = document.getElementById("readerHomeMainDiv");
     if (readerHome) readerHome.style.display = "none";
+
+    const bookDetailsSec = document.getElementById("bookDetailsSection");
+    if (bookDetailsSec) bookDetailsSec.style.display = "none";
 }

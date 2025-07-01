@@ -142,8 +142,10 @@
         </div>
     </div>
     <jsp:include page="userProfile/userProfile.jsp" />
+    <jsp:include page="book-details/bookDetails.jsp" />
 </div>
 
 <script src="resources/script/home/home.js"></script>
+<script src="${pageContext.request.contextPath}/resources/script/bookDetails/bookDetails.js"></script>
 </body>
 </html>
