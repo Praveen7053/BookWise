@@ -14,7 +14,7 @@
           <div class="col-lg-4">
             <div class="card shadow-sm">
               <img id="bd-cover"
-                   src="https://via.placeholder.com/400x600?text=Cover"
+                   src="resources/images/no_cover_available.png"
                    alt="Cover image"
                    class="card-img-top">
 

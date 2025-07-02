@@ -127,4 +127,14 @@ public class BookService {
             }
         }
     }
+
+    public BookEncounter loadBookEncounter(int bookEncounterId) {
+        try {
+            BookEncounter bookEncounter = (BookEncounter) bookWiseDAO.find(BookEncounter.class, bookEncounterId);
+            return bookEncounter;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

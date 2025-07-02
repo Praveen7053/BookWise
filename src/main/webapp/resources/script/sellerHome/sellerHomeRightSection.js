@@ -156,7 +156,7 @@ function handleBooksResponse(response) {
                         <p class="card-text mb-1">Category: ${book.bookCategory}</p>
                         <h6 class="card-text mt-auto mb-2">₹${book.bookPrice}</h6>
                         <div class="text-muted small">
-                            <i class="far fa-clock"></i> ${formatDate(book.uploadedTime)}
+                            <i class="far fa-clock"></i> ${formatDateMMMDDYYYYHHMMAM(book.uploadedTime)}
                         </div>
                     </div>
                 </div>
@@ -167,13 +167,4 @@ function handleBooksResponse(response) {
     });
 }
 
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
+
