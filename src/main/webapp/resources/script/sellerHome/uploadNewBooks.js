@@ -2,6 +2,7 @@
 function handleUploadBook() {
     var fileInputCover = $('#bookCover')[0].files[0];
     var fileInputPdf = $('#bookPdf')[0].files[0];
+    const isEdit = !!$('#bookEncounterIdHidden').val();
 
     var bookTitle = $('#bookTitle');
     var authorName = $('#authorName');
@@ -39,12 +40,12 @@ function handleUploadBook() {
         numberOfPages.addClass('input-error');
     }
 
-    if (!fileInputCover) {
+    if (!fileInputCover && !isEdit) {
         errorMessages.push("Book cover must be selected.");
         $('#bookCover').addClass('input-error');
     }
 
-    if (!fileInputPdf) {
+    if (!fileInputPdf && !isEdit) {
         errorMessages.push("Book PDF must be selected.");
         $('#bookPdf').addClass('input-error');
     }
