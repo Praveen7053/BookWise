@@ -94,9 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (deleteButton) {
                 e.preventDefault();
                 const commentId = deleteButton.dataset.commentId;
-                if (confirm('Are you sure you want to delete this comment?')) {
+                jConfirm('Are you sure you want to delete this comment?', function(response) {
                     handleDeleteComment(commentId, deleteButton);
-                }
+                });
             }
         });
     }
