@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -58,4 +59,13 @@ public class BookEncounter {
 
     @Column(name = "UPLOADED_TIME")
     private Timestamp uploadedTime;
+
+    @OneToMany(
+            mappedBy = "bookEncounter",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @OrderBy("createdAt DESC") // To get the newest comments first
+    private Set<BookComment> comments;
 }

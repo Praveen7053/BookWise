@@ -7,6 +7,7 @@
         <mapping class="com.bookWise.model.BookWiseUser"/>
         <mapping class="com.bookWise.model.Authority"/>
         <mapping class="com.bookWise.model.BookEncounter"/>
+        <mapping class="com.bookWise.model.BookComment"/>
 
     </session-factory>
 </hibernate-configuration>

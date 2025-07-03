@@ -55,8 +55,9 @@ public class UserProfileRestControllerImpl {
                 }
             }
 
+            com.bookWise.dto.UserProfileDTO userProfileData = new com.bookWise.dto.UserProfileDTO(bookWiseUser);
             if (bookWiseUser != null) {
-                response.put("data", mapper.writeValueAsString(bookWiseUser));
+                response.put("data", mapper.writeValueAsString(userProfileData));
                 response.put("success", true);
                 response.put("message", "User profile retrieved successfully");
             } else {

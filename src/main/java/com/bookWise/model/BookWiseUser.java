@@ -73,4 +73,12 @@ public class BookWiseUser {
             inverseJoinColumns = @JoinColumn(name = "AUTHORITY_ID")
     )
     private Set<Authority> authorities;
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private Set<BookComment> comments;
 }

@@ -1,5 +1,6 @@
 <!-- ================= BOOK DETAILS SECTION (initially hidden) ================ -->
 <div id="bookDetailsSection" class="container-fluid overflow-auto" style="display:none; max-height:100vh;">
+    <input type="hidden" id="bookDetails_bookEncounterIdHidden" value="0">
     <!-- Back to list -->
     <button onclick="hideBookDetails();" class="btn btn-link mb-3" id="backToGrid">
         <i class="fas fa-arrow-left me-1"></i> Back to list
