@@ -10,6 +10,7 @@ import com.bookWise.model.BookWiseUser;
 import com.bookWise.service.book.BookService;
 import com.bookWise.util.BookUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -75,12 +76,33 @@ public class BookCommentsRestImpl {
         return null;
     }
 
+    @Transactional
+    public void deleteComment(Long commentId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
+        if (user == null) {
+            throw new IllegalStateException("No authenticated user found. Cannot delete comment.");
+        }
+
+        BookComment comment = (BookComment) bookWiseDAO.find(BookComment.class, commentId);
+        if (comment == null) {
+            throw new IllegalArgumentException("Comment not found.");
+        }
+
+        if (comment.getUser().getUserId() != user.getUserId()) {
+            throw new AccessDeniedException("User is not authorized to delete this comment.");
+        }
+
+        bookWiseDAO.delete(comment);
+    }
+
     private BookCommentDTO convertToDto(BookComment comment) {
         return new BookCommentDTO(
                 comment.getCommentId(),
                 comment.getCommentText(),
                 comment.getUser().getUserName(),
-                comment.getCreatedAt()
+                comment.getCreatedAt(),
+                comment.getUser().getUserId()
         );
     }
 }

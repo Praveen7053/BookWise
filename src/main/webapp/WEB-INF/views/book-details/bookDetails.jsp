@@ -93,7 +93,7 @@
                 <div class="input-group mt-3">
                   <input id="bd-new-comment" type="text"
                          class="form-control"
-                         placeholder="Add a comment…">
+                         placeholder="Add a comment">
                   <button class="btn btn-primary" id="bd-post-comment">Post</button>
                 </div>
               </div>

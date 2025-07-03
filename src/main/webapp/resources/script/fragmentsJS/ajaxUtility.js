@@ -38,41 +38,24 @@ function getData(url,dataType,callbackFunction){
    });
 }
 
-function deleteData(url, data, dataType, callbackFunction){
+function deleteData(url, data, dataType, successCallback, errorCallback) {
     $.ajax({
         type: "DELETE",
         url: url,
-        data:data,
-        crossDomain:true,
+        data: data,
         dataType: dataType,
         contentType: "application/json",
-
-        //if received a response from the server
-        success: (data, textStatus, jqXHR) => {
-            if (jqXHR.status >= 200 && jqXHR.status < 300) {
-                callbackFunction(data);
-            }else{
-                alert("Something went wrong","Error!");
-            }
-        },
-
-        //If there was no response from the server
-        error: (jqXHR, textStatus, errorThrown) => {
+        crossDomain: true,
+        success: successCallback,
+        error: function(jqXHR, textStatus, errorThrown) {
             closeProgressBar("progressBarDIV");
-            alert(errorThrown != '' ? errorThrown : "Something went wrong","Error!");
-        },
-
-        //capture the request before it was sent to server
-        beforeSend: (jqXHR, settings) => {
-            //disable the button until we get the response
-        },
-
-        //this is called after the response or error functions are finished
-        //so that we can take some action
-        complete: (jqXHR, textStatus) => {
-            //enable the button
+            // If a custom error handler is provided, use it. Otherwise, use the default alert.
+            if (typeof errorCallback === 'function') {
+                errorCallback(jqXHR, textStatus, errorThrown);
+            } else {
+                alert(errorThrown || "Something went wrong", "Error!");
+            }
         }
-
     });
 }
 

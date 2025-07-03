@@ -14,4 +14,5 @@ public class BookCommentDTO {
     private String commentText;
     private String userName;
     private Timestamp createdAt;
+    private Integer userId;
 }

@@ -85,6 +85,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    const commentsContainer = document.getElementById('bd-comments');
+    if (commentsContainer) {
+        commentsContainer.addEventListener('click', function(e) {
+            // Check if a delete button was clicked
+            const deleteButton = e.target.closest('.btn-delete-comment');
+            if (deleteButton) {
+                e.preventDefault();
+                const commentId = deleteButton.dataset.commentId;
+                if (confirm('Are you sure you want to delete this comment?')) {
+                    handleDeleteComment(commentId, deleteButton);
+                }
+            }
+        });
+    }
+
 });
 
 function postNewComment() {
@@ -113,7 +129,6 @@ function postNewComment() {
     postButton.disabled = true;
     postData(url, data, 'json', function(newComment) {
         if (newComment) {
-            prependComment(newComment);
             commentInput.value = '';
             loadCommentsForBook(currentBookEncounterId);
         }
@@ -162,24 +177,58 @@ function prependComment(comment) {
 function createCommentElement(comment) {
     const div = document.createElement('div');
     div.className = 'mb-3';
+    div.setAttribute('data-comment-element-id', comment.commentId);
 
-    // Format the timestamp for display
-    const formattedDate = new Date(comment.createdAt).toLocaleString('en-US', {
-        month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit'
-    });
-
-    // Use a helper to escape HTML and prevent XSS attacks
+    const currentUserId = document.getElementById('loggedInUserId').value;
+    const formattedDate = new Date(comment.createdAt).toLocaleString(/* ... */);
     const safeUsername = escapeHtml(comment.userName);
     const safeCommentText = escapeHtml(comment.commentText);
+
+    // Conditionally add a delete button if the user IDs match
+    let deleteButtonHtml = '';
+    if (currentUserId && parseInt(currentUserId, 10) === comment.userId) {
+        deleteButtonHtml = `
+            <a href="#" class="text-danger small ms-3 btn-delete-comment" data-comment-id="${comment.commentId}">
+                Delete
+            </a>
+        `;
+    }
 
     div.innerHTML = `
         <div>
             <strong>${safeUsername}</strong>
             <span class="text-muted small ms-2">${formattedDate}</span>
+            ${deleteButtonHtml}
         </div>
         <span class="small">${safeCommentText}</span>
     `;
     return div;
+}
+
+function handleDeleteComment(commentId, buttonElement) {
+    const contextPath = $('meta[name="context-path"]').attr('content');
+    const url = `${contextPath}/api/bookComments/actions/delete/${commentId}`;
+
+    buttonElement.style.pointerEvents = 'none';
+    buttonElement.textContent = 'Deleting...';
+
+    const successCallback = function() {
+        const commentElement = document.querySelector(`[data-comment-element-id="${commentId}"]`);
+        if (commentElement) {
+            commentElement.style.transition = 'opacity 0.3s ease-out';
+            commentElement.style.opacity = '0';
+            setTimeout(() => commentElement.remove(), 300);
+        }
+    };
+
+    // Define what to do if the deletion fails
+    const errorCallback = function(jqXHR) {
+        showErrorAlert(jqXHR.responseText || 'Failed to delete comment.');
+        buttonElement.style.pointerEvents = 'auto';
+        buttonElement.textContent = 'Delete';
+    };
+
+    deleteData(url, null, 'json', successCallback, errorCallback);
 }
 
 function escapeHtml(unsafe) {

@@ -6,6 +6,7 @@ import com.bookWise.bookComments.impl.BookCommentsRestImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,18 @@ public class BookCommentsRestController {
         } catch (Exception e) {
             // A more robust solution would use a @ControllerAdvice for exception handling
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/delete/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+        try {
+            bookCommentsRest.deleteComment(commentId);
+            return ResponseEntity.noContent().build();
+        } catch (AccessDeniedException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN); // 403
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // 400
         }
     }
 

@@ -146,6 +146,5 @@
 </div>
 
 <script src="resources/script/home/home.js"></script>
-<script src="${pageContext.request.contextPath}/resources/script/bookDetails/bookDetails.js"></script>
 </body>
 </html>
