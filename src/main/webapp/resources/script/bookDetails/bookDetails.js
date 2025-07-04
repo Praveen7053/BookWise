@@ -19,6 +19,7 @@ function loadBookDetailsByID(bookEncounterId) {
             document.getElementById("bookDetailsSection").style.display = "block";
             document.getElementById("readerHomeMainDiv").style.display = "none";
             loadCommentsForBook(bookEncounterId);
+            loadRatingData(bookEncounterId);
         } else {
             closeProgressBar("progressBarDiv", "bodyDiv");
             showErrorAlert(response.message);
@@ -61,6 +62,8 @@ function clearBookDetails() {
     // Also clear the comments section and the input field
     document.getElementById('bd-comments').innerHTML = '';
     document.getElementById('bd-new-comment').value = '';
+    document.getElementById('bd-avg-rating').innerHTML = '';
+    renderUserRating(0);
 }
 
 function hideBookDetails(){
@@ -94,12 +97,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (deleteButton) {
                 e.preventDefault();
                 const commentId = deleteButton.dataset.commentId;
-                jConfirm('Are you sure you want to delete this comment?', function(response) {
-                    handleDeleteComment(commentId, deleteButton);
+                jConfirm('Are you sure you want to delete this comment?', function(isConfirmed) {
+                    // Only proceed if the user clicked "OK" or "Yes"
+                    if (isConfirmed) {
+                        handleDeleteComment(commentId, deleteButton);
+                    }
                 });
             }
         });
     }
+
+   const userRatingContainer = document.getElementById('bd-user-rating');
+   var bookEncounterId = document.getElementById("bookDetails_bookEncounterIdHidden").value;
+   if (userRatingContainer) {
+       userRatingContainer.addEventListener('click', handleStarClick);
+       userRatingContainer.addEventListener('mouseover', handleStarHover);
+       userRatingContainer.addEventListener('mouseout', () => {
+           const lastRating = parseInt(userRatingContainer.dataset.lastRating || '0', 10);
+           renderUserRating(lastRating);
+       });
+   }
 
 });
 
@@ -238,4 +255,99 @@ function escapeHtml(unsafe) {
          .replace(/>/g, "&gt;")
          .replace(/"/g, "&quot;")
          .replace(/'/g, "&#039;");
+}
+
+
+//Rating js from here ----------------------------------------------------
+
+function loadRatingData(bookEncounterId) {
+    const contextPath = $('meta[name="context-path"]').attr('content');
+    const url = `${contextPath}/api/ratings/book/${bookEncounterId}`;
+    getData(url, 'json', function(ratingData) {
+        renderAverageRating(ratingData);
+        renderUserRating(ratingData.currentUserRating);
+        // Store the user's rating for the mouseout event
+        document.getElementById('bd-user-rating').dataset.lastRating = ratingData.currentUserRating;
+    });
+}
+
+function renderAverageRating(ratingData) {
+    const container = document.getElementById('bd-avg-rating');
+    if (!container || ratingData.totalRatings === 0) {
+        container.innerHTML = '<span class="text-muted fs-6">Not yet rated</span>';
+        return;
+    }
+
+    const average = ratingData.averageRating;
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) {
+        if (average >= i) {
+            starsHtml += '<i class="fas fa-star"></i>'; // Full star
+        } else if (average > i - 0.75) {
+            starsHtml += '<i class="fas fa-star"></i>'; // Full star (alternative for > x.75)
+        } else if (average > i - 0.25) {
+            starsHtml += '<i class="fas fa-star-half-alt"></i>'; // Half star
+        } else {
+            starsHtml += '<i class="far fa-star"></i>'; // Empty star
+        }
+    }
+
+    const avgText = average.toFixed(1);
+    const totalText = ratingData.totalRatings === 1 ? '1 rating' : `${ratingData.totalRatings} ratings`;
+    container.innerHTML = `${starsHtml} <span class="text-muted fs-6 ms-1">(${avgText} / 5) from ${totalText}</span>`;
+}
+
+function renderUserRating(rating) {
+    const stars = document.querySelectorAll('#bd-user-rating .fa-star');
+    stars.forEach(star => {
+        const starValue = parseInt(star.dataset.val, 10);
+        if (starValue <= rating) {
+            star.classList.remove('far'); // regular
+            star.classList.add('fas');   // solid
+        } else {
+            star.classList.remove('fas');
+            star.classList.add('far');
+        }
+    });
+}
+
+function handleStarHover(e) {
+    const star = e.target.closest('.fa-star');
+    if (!star) return;
+    const hoverValue = parseInt(star.dataset.val, 10);
+    renderUserRating(hoverValue);
+}
+
+function handleStarClick(e) {
+    console.log('handleStarClick called');
+    const star = e.target.closest('.fa-star');
+    if (!star) return;
+
+    const ratingValue = parseInt(star.dataset.val, 10);
+    const bookEncounterId = document.getElementById("bookDetails_bookEncounterIdHidden").value;
+
+    if (!bookEncounterId) {
+        showErrorAlert("Cannot rate: A book must be selected first.");
+        return;
+    }
+
+    const contextPath = $('meta[name="context-path"]').attr('content');
+    const url = `${contextPath}/api/ratings/submit`;
+    const data = JSON.stringify({
+        bookEncounterId: parseInt(bookEncounterId, 10),
+        ratingValue: ratingValue
+    });
+
+    // Visually disable stars during submission
+    document.getElementById('bd-user-rating').style.pointerEvents = 'none';
+
+    postData(url, data, 'json', function(updatedRatingData) {
+        // On success, re-render both rating sections with fresh data from the server
+        loadRatingData(bookEncounterId);
+        document.getElementById('bd-user-rating').dataset.lastRating = updatedRatingData.currentUserRating;
+        document.getElementById('bd-user-rating').style.pointerEvents = 'auto'; // Re-enable
+    }, function() {
+        // Error callback
+        document.getElementById('bd-user-rating').style.pointerEvents = 'auto'; // Re-enable on error
+    });
 }

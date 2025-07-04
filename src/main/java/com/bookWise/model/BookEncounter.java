@@ -68,4 +68,12 @@ public class BookEncounter {
     )
     @OrderBy("createdAt DESC") // To get the newest comments first
     private Set<BookComment> comments;
+
+    @OneToMany(
+            mappedBy = "bookEncounter",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private Set<BookRating> ratings;
 }

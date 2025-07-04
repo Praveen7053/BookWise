@@ -1,6 +1,7 @@
 package com.bookWise.Impl;
 
 import com.bookWise.SecurityConfig.loginUserConfig.BookWiseLoginUser;
+import com.bookWise.bookDetails.dto.BookEncounterDTO;
 import com.bookWise.common.dto.ImageResponse;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookEncounter;
@@ -156,7 +157,6 @@ public class BookWiseRestControllerImpl {
     public ResponseEntity<Map<String, Object>> getSellerUploadedBooks(int page, int size) {
         Map<String, Object> response = new HashMap<>();
         try {
-            ObjectMapper mapper = new ObjectMapper();
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             BookWiseLoginUser user = (BookWiseLoginUser) authentication.getPrincipal();
 
@@ -165,10 +165,14 @@ public class BookWiseRestControllerImpl {
                 List<BookEncounter> bookEncounters = bookService.loadAllBookEncounter(user.getUserId(), start, size, "", "", "", "");
                 long totalBooks = bookService.countBooks(user.getUserId(), "", "", "");
 
+                List<BookEncounterDTO> bookDTOs = bookEncounters.stream()
+                        .map(bookService::mapToBookEncounterDTO)
+                        .collect(Collectors.toList());
+
                 int totalPages = (int) Math.ceil((double) totalBooks / size);
 
                 response.put("success", true);
-                response.put("books", bookEncounters);
+                response.put("books", bookDTOs);
                 response.put("currentPage", page);
                 response.put("totalPages", totalPages);
                 response.put("totalItems", totalBooks);

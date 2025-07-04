@@ -81,4 +81,12 @@ public class BookWiseUser {
             fetch = FetchType.LAZY
     )
     private Set<BookComment> comments;
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private Set<BookRating> ratings;
 }

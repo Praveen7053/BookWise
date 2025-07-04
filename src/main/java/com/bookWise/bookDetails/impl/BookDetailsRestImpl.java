@@ -48,23 +48,7 @@ public class BookDetailsRestImpl {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
                 }
 
-                BookEncounterDTO bookEncounterDTO = new BookEncounterDTO();
-                bookEncounterDTO.setBookEncounterId(bookEncounter.getBookEncounterId());
-                bookEncounterDTO.setBookTitle(bookEncounter.getBookTitle());
-                bookEncounterDTO.setBookAuthor(bookEncounter.getBookAuthor());
-                bookEncounterDTO.setBookIsbnNumber(bookEncounter.getBookIsbnNumber());
-                bookEncounterDTO.setBookPrice(bookEncounter.getBookPrice());
-                bookEncounterDTO.setBookPageNumber(bookEncounter.getBookPageNumber());
-                bookEncounterDTO.setBookCategory(bookEncounter.getBookCategory());
-                bookEncounterDTO.setPublicationDate(bookEncounter.getPublicationDate());
-                bookEncounterDTO.setBookLanguage(bookEncounter.getBookLanguage());
-                bookEncounterDTO.setBookDescription(bookEncounter.getBookDescription());
-                bookEncounterDTO.setPdfPath(bookEncounter.getPdfPath());
-                bookEncounterDTO.setFrontPageImagePath(bookEncounter.getFrontPageImagePath());
-                bookEncounterDTO.setUploadedByName(bookEncounter.getUploadedByName());
-                bookEncounterDTO.setUpdatedById(bookEncounter.getUpdatedById());
-                bookEncounterDTO.setUploadedTime(bookEncounter.getUploadedTime());
-
+                BookEncounterDTO bookEncounterDTO = bookService.mapToBookEncounterDTO(bookEncounter);
                 if (StringUtils.isNotBlank(bookEncounter.getFrontPageImagePath())) {
                     ImageResponse imageResponse = FileUtils.getImageContentAndMimeType(bookEncounter.getFrontPageImagePath(), "BookUpload");
                     if (imageResponse != null) {

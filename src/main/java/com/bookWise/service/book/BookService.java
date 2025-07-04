@@ -1,5 +1,6 @@
 package com.bookWise.service.book;
 
+import com.bookWise.bookDetails.dto.BookEncounterDTO;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookEncounter;
 import com.bookWise.util.BookUtils;
@@ -136,5 +137,25 @@ public class BookService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public BookEncounterDTO mapToBookEncounterDTO(BookEncounter book) {
+        BookEncounterDTO dto = new BookEncounterDTO();
+        dto.setBookEncounterId(book.getBookEncounterId());
+        dto.setBookTitle(book.getBookTitle());
+        dto.setBookAuthor(book.getBookAuthor());
+        dto.setBookIsbnNumber(book.getBookIsbnNumber());
+        dto.setBookPrice(book.getBookPrice());
+        dto.setBookPageNumber(book.getBookPageNumber());
+        dto.setBookCategory(book.getBookCategory());
+        dto.setPublicationDate(book.getPublicationDate());
+        dto.setBookLanguage(book.getBookLanguage());
+        dto.setBookDescription(book.getBookDescription());
+        dto.setPdfPath(book.getPdfPath());
+        dto.setFrontPageImagePath(book.getFrontPageImagePath());
+        dto.setUploadedByName(book.getUploadedByName());
+        dto.setUpdatedById(book.getUpdatedById());
+        dto.setUploadedTime(book.getUploadedTime());
+        return dto;
     }
 }
