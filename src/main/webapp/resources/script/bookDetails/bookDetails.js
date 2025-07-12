@@ -20,6 +20,7 @@ function loadBookDetailsByID(bookEncounterId) {
             document.getElementById("readerHomeMainDiv").style.display = "none";
             loadCommentsForBook(bookEncounterId);
             loadRatingData(bookEncounterId);
+            checkBookshelfStatus(bookEncounterId); // Check if book is in shelf
         } else {
             closeProgressBar("progressBarDiv", "bodyDiv");
             showErrorAlert(response.message);
@@ -369,3 +370,4 @@ function readPdfDetails() {
         showErrorAlert("PDF viewer is not available. Please refresh the page.");
     }
 }
+

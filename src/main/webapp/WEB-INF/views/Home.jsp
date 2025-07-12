@@ -96,6 +96,9 @@
             <li class="nav-item">
                 <a onclick="changeModulePage('readerUserHome');" class="nav-link text-white active" href="#"><i class="fas fa-home me-2"></i>Home</a>
             </li>
+            <li class="nav-item">
+                <a onclick="changeModulePage('myBookshelf');" class="nav-link text-white" href="#"><i class="fas fa-bookmark me-2"></i>My Bookshelf</a>
+            </li>
             <!-- Add more nav items if needed -->
         </ul>
 
@@ -142,6 +145,10 @@
     </div>
     <jsp:include page="userProfile/userProfile.jsp" />
     <jsp:include page="book-details/bookDetails.jsp" />
+    <jsp:include page="bookshelf/myBookshelf.jsp" />
+    
+    <!-- Include bookshelf.js only once for all bookshelf functionality -->
+    <script src="${pageContext.request.contextPath}/resources/script/bookShelf/bookshelf.js"></script>
 </div>
 
 <script src="resources/script/home/home.js"></script>

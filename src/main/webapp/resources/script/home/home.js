@@ -69,3 +69,65 @@ function handleHomeBooksResponse(response) {
         currentRow.innerHTML += bookCard;
     });
 }
+
+// Navigation functions
+function changeModulePage(moduleName) {
+    // Hide all pages first
+    hideAllPages();
+    
+    // Update sidebar active state
+    updateSidebarActiveState(moduleName);
+    
+    // Show the selected page
+    switch(moduleName) {
+        case 'readerUserHome':
+            showHomePage();
+            break;
+        case 'myBookshelf':
+            showMyBookshelf();
+            break;
+        case 'userProfileReader':
+            showUserProfile();
+            break;
+        default:
+            showHomePage();
+    }
+}
+
+function hideAllPages() {
+    // Hide all main content areas
+    const pages = [
+        'readerHomeMainDiv',
+        'myBookshelfPage',
+        'mainUserProfilePageMainDIV'
+    ];
+    
+    pages.forEach(pageId => {
+        const element = document.getElementById(pageId);
+        if (element) {
+            element.style.display = 'none';
+        }
+    });
+}
+
+function showHomePage() {
+    document.getElementById('readerHomeMainDiv').style.display = 'flex';
+    document.getElementById('readerHomeMainDiv').style.flexDirection = 'column';
+}
+
+function showUserProfile() {
+    document.getElementById('mainUserProfilePageMainDIV').style.display = 'block';
+}
+
+function updateSidebarActiveState(activeModule) {
+    // Remove active class from all nav links
+    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    
+    // Add active class to the clicked link
+    const activeLink = document.querySelector(`[onclick*="${activeModule}"]`);
+    if (activeLink) {
+        activeLink.classList.add('active');
+    }
+}

@@ -45,12 +45,82 @@ function loadUserProfile() {
             profileImage.onerror = function() {
                 this.src = contextPath + '/resources/images/default-user.png';
             };
+            
+            // Load bookshelf summary
+            loadBookshelfSummary();
         } else {
             // Handle error
             showErrorAlert(response.message);
         }
     });
 
+}
+
+function loadBookshelfSummary() {
+    const contextPath = $('meta[name="context-path"]').attr('content');
+    const url = `${contextPath}/api/bookshelf/my-shelf`;
+    
+    getData(url, 'json', function(response) {
+        if (response && Array.isArray(response)) {
+            renderBookshelfSummary(response);
+        } else {
+            renderBookshelfSummary([]);
+        }
+    }, function() {
+        renderBookshelfSummary([]);
+    });
+}
+
+function renderBookshelfSummary(books) {
+    const summaryContainer = document.getElementById('bookshelfSummary');
+    
+    if (!books || books.length === 0) {
+        summaryContainer.innerHTML = `
+            <div class="col-12 text-center py-3">
+                <div class="text-muted">
+                    <i class="fas fa-book-open fa-2x mb-2"></i>
+                    <h6>Your bookshelf is empty</h6>
+                    <p class="small mb-0">Start building your collection by adding books from the library!</p>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    // Show only the first 4 books
+    const booksToShow = books.slice(0, 4);
+    const booksHTML = booksToShow.map(book => createBookshelfSummaryCard(book)).join('');
+    
+    const totalBooks = books.length;
+    const moreBooksText = totalBooks > 4 ? `+${totalBooks - 4} more` : '';
+    
+    summaryContainer.innerHTML = `
+        ${booksHTML}
+        ${moreBooksText ? `
+            <div class="col-12 text-center mt-3">
+                <small class="text-muted">${moreBooksText}</small>
+            </div>
+        ` : ''}
+    `;
+}
+
+function createBookshelfSummaryCard(book) {
+    const coverImage = book.frontPageImagePath || 'resources/images/no_cover_available.png';
+    const addedDate = new Date(book.addedDate).toLocaleDateString();
+    
+    return `
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card h-100 shadow-sm">
+                <img src="${coverImage}" class="card-img-top" alt="${book.bookTitle}" 
+                     style="height: 120px; object-fit: cover;">
+                <div class="card-body p-2">
+                    <h6 class="card-title small text-truncate" title="${book.bookTitle}">${book.bookTitle}</h6>
+                    <p class="card-text text-muted small mb-1">by ${book.bookAuthor || 'Unknown'}</p>
+                    <small class="text-muted">Added: ${addedDate}</small>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 function triggerImageUpload() {

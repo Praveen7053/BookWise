@@ -39,7 +39,7 @@
                         onclick="readPdfDetails();">
                     <i class="fas fa-book-open me-1"></i> Read Now
                 </button>
-                <button class="btn btn-outline-secondary w-100">
+                <button id="add-to-shelf-btn" class="btn btn-outline-secondary w-100">
                   <i class="fas fa-bookmark me-1"></i> Add to shelf
                 </button>
               </div>

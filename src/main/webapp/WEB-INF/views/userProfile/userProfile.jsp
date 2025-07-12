@@ -138,6 +138,32 @@
             </div>
         </div>
     </div>
+    
+    <!-- Bookshelf Summary Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bookmark text-primary me-2"></i>My Bookshelf
+                    </h5>
+                    <button class="btn btn-outline-primary btn-sm" onclick="changeModulePage('myBookshelf');">
+                        <i class="fas fa-external-link-alt me-1"></i>View All
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="bookshelfSummary">
+                        <div class="col-12 text-center py-3">
+                            <div class="text-muted">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p class="mb-0">Loading your bookshelf...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="resources/script/userProfile/userProfile.js"></script>

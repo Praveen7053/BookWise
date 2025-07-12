@@ -71,7 +71,7 @@
     <bean id="webServiceAuthenticationFilter" class="com.bookWise.SecurityConfig.WebServiceAuthenticationFilter">
     </bean>
 
-    <mvc:resources mapping="/bookWiseFile/**" location="file:${user.home}/bookWiseFile/" />
+    <mvc:resources mapping="/bookWiseFile/**" location="file:C:/usr/local/bookWiseFile/" />
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
     <!-- Enable annotation-driven MVC -->
