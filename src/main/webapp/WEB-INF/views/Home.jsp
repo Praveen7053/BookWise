@@ -3,8 +3,7 @@
 <head>
     <title>User Home - BookWise</title>
     <%@include file="./base.jsp" %>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <style>
+    <%@ include file="dflip-viewer/dflip-viewer.jsp" %>    <style>
         html, body {
             height: 100%;
             margin: 0;

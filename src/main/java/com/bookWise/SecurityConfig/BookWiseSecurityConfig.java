@@ -63,6 +63,7 @@ public class BookWiseSecurityConfig {
                     .antMatchers("/userSignUpPage").permitAll()
                     .antMatchers("/userSignupNLogin/loginRegisteredUser").permitAll()
                     .antMatchers("/userSignupNLogin/registerNewUser").permitAll()
+                    .antMatchers("/api/bookWiseDflipView/book/download/**").permitAll() // Allow PDF downloads
                     .anyRequest().authenticated()
             )
             .formLogin(formLogin ->

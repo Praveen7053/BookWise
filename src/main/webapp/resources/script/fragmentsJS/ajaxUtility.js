@@ -98,6 +98,32 @@ function postData(url,data,dataType,callbackFunction){
     });
 }
 
+function postPdfBlob(url, data, successCallback, errorCallback) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        processData: false,
+        contentType: false,
+        crossDomain: true,
+        xhr: function() {
+            var xhr = new window.XMLHttpRequest();
+            xhr.responseType = 'blob';
+            return xhr;
+        },
+        success: function(data, textStatus, jqXHR) {
+            successCallback(data);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (typeof errorCallback === 'function') {
+                errorCallback(jqXHR, textStatus, errorThrown);
+            } else {
+                alert(errorThrown || "Something went wrong", "Error!");
+            }
+        }
+    });
+}
+
 function getContextPath(url){
     var urlsub = url.split('://')[1];
     var slashIndex1 = urlsub.indexOf("/");

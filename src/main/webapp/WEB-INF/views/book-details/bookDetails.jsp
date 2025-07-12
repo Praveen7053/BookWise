@@ -32,8 +32,12 @@
                 </div>
 
                 <!-- Actions -->
-                <button id="bd-read-btn" class="btn btn-primary w-100 mb-2">
-                  <i class="fas fa-book-open me-1"></i> Read Now
+                <!-- Actions -->
+                <%-- This is now a standard button. The onclick will be set by bookDetails.js --%>
+                <button id="read-now-btn"
+                        class="btn btn-primary w-100 mb-2"
+                        onclick="readPdfDetails();">
+                    <i class="fas fa-book-open me-1"></i> Read Now
                 </button>
                 <button class="btn btn-outline-secondary w-100">
                   <i class="fas fa-bookmark me-1"></i> Add to shelf

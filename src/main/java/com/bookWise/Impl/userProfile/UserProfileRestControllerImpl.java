@@ -2,6 +2,7 @@ package com.bookWise.Impl.userProfile;
 
 import com.bookWise.SecurityConfig.loginUserConfig.BookWiseLoginUser;
 import com.bookWise.common.dto.ImageResponse;
+import com.bookWise.common.dto.UserProfileDTO;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.BookWiseUser;
 import com.bookWise.util.FileUtils;
@@ -55,7 +56,7 @@ public class UserProfileRestControllerImpl {
                 }
             }
 
-            com.bookWise.dto.UserProfileDTO userProfileData = new com.bookWise.dto.UserProfileDTO(bookWiseUser);
+            UserProfileDTO userProfileData = new UserProfileDTO(bookWiseUser);
             if (bookWiseUser != null) {
                 response.put("data", mapper.writeValueAsString(userProfileData));
                 response.put("success", true);

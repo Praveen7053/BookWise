@@ -99,9 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const commentId = deleteButton.dataset.commentId;
                 jConfirm('Are you sure you want to delete this comment?', function(isConfirmed) {
                     // Only proceed if the user clicked "OK" or "Yes"
-                    if (isConfirmed) {
-                        handleDeleteComment(commentId, deleteButton);
-                    }
+                    handleDeleteComment(commentId, deleteButton);
                 });
             }
         });
@@ -350,4 +348,24 @@ function handleStarClick(e) {
         // Error callback
         document.getElementById('bd-user-rating').style.pointerEvents = 'auto'; // Re-enable on error
     });
+}
+
+function readPdfDetails() {
+    const bookEncounterId = document.getElementById("bookDetails_bookEncounterIdHidden").value;
+    const bookTitle = document.getElementById("bd-title").innerHTML;
+
+    if (!bookEncounterId || bookEncounterId === '0') {
+        showErrorAlert("Cannot open reader: A book must be selected first.");
+        return;
+    }
+
+    var contextPath = $('meta[name="context-path"]').attr('content');
+    var pdfUrl = contextPath + '/api/bookWiseDflipView/book/download/'+ bookEncounterId;
+
+    if (typeof openDflipViewer === 'function') {
+        openDflipViewer(pdfUrl, bookTitle);
+    } else {
+        console.error("dflip-viewer.js is not loaded or openDflipViewer function is not defined.");
+        showErrorAlert("PDF viewer is not available. Please refresh the page.");
+    }
 }

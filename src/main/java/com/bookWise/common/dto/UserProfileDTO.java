@@ -1,4 +1,4 @@
-package com.bookWise.dto;
+package com.bookWise.common.dto;
 
 import com.bookWise.model.BookWiseUser;
 import lombok.Data;
