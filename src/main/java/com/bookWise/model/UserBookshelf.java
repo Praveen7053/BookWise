@@ -33,6 +33,21 @@ public class UserBookshelf {
     @Column(name = "STATUS")
     private BookshelfStatus status;
 
+    @Column(name = "READING_PROGRESS", columnDefinition = "INT DEFAULT 0")
+    private Integer readingProgress; // Percentage (0-100)
+
+    @Column(name = "LAST_READ_PAGE")
+    private Integer lastReadPage;
+
+    @Column(name = "TOTAL_PAGES")
+    private Integer totalPages;
+
+    @Column(name = "LAST_READ_DATE")
+    private Timestamp lastReadDate;
+
+    @Column(name = "TOTAL_READING_TIME")
+    private Long totalReadingTime; // in minutes
+
     // Many-to-One relationship with BookWiseUser
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", insertable = false, updatable = false)
@@ -47,6 +62,8 @@ public class UserBookshelf {
     public UserBookshelf() {
         this.addedDate = new Timestamp(System.currentTimeMillis());
         this.status = BookshelfStatus.ACTIVE;
+        this.readingProgress = 0;
+        this.totalReadingTime = 0L;
     }
 
     // Constructor with required fields

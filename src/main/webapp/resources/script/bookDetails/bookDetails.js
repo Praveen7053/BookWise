@@ -318,7 +318,6 @@ function handleStarHover(e) {
 }
 
 function handleStarClick(e) {
-    console.log('handleStarClick called');
     const star = e.target.closest('.fa-star');
     if (!star) return;
 

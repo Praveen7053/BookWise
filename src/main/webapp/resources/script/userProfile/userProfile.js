@@ -5,7 +5,7 @@ function loadUserProfile() {
     const userEmail = $('#userEmailHidden').val();
     const loggedInUserId = $('#loggedInUserId').val();
 
-    console.log('loggedInUserId :: '+loggedInUserId);
+    // User profile loading
 
     var contextPath = $('meta[name="context-path"]').attr('content');
     var url = contextPath + '/api/user/profile/getUserProfileInfo';

@@ -24,7 +24,13 @@
         }
         
         // Show bookshelf page
-        document.getElementById('myBookshelfPage').style.display = 'block';
+        const bookshelfPage = document.getElementById('myBookshelfPage');
+        if (bookshelfPage) {
+            bookshelfPage.style.display = 'block';
+        } else {
+            console.error('myBookshelfPage element not found!');
+        }
+        
         loadBookshelfData();
         setupEventListeners();
     };
@@ -54,7 +60,8 @@
         });
     }
 
-    function loadBookshelfData() {
+    // Expose loadBookshelfData to global scope so it can be called from other files
+    window.loadBookshelfData = function() {
         const contextPath = $('meta[name="context-path"]').attr('content');
         const url = `${contextPath}/api/bookshelf/my-shelf`;
         
@@ -65,12 +72,14 @@
                 updateBookshelfStats();
                 renderBookshelfGrid();
             } else {
+                console.error('Invalid bookshelf response:', response);
                 showErrorAlert('Failed to load bookshelf data');
             }
-        }, function() {
+        }, function(error) {
+            console.error('Bookshelf data error:', error);
             showErrorAlert('Failed to load bookshelf data');
         });
-    }
+    };
 
     function updateBookshelfStats() {
         const totalBooks = currentBookshelfData.length;
@@ -92,11 +101,19 @@
             ? Object.keys(genreCount).reduce((a, b) => genreCount[a] > genreCount[b] ? a : b)
             : '-';
 
+        // Calculate average reading progress
+        const booksWithProgress = currentBookshelfData.filter(book => book.readingProgress !== undefined);
+        let averageProgress = 0;
+        if (booksWithProgress.length > 0) {
+            const totalProgress = booksWithProgress.reduce((sum, book) => sum + (book.readingProgress || 0), 0);
+            averageProgress = Math.round(totalProgress / booksWithProgress.length);
+        }
+
         // Update stats display
         document.getElementById('totalBooksCount').textContent = totalBooks;
         document.getElementById('recentlyAddedCount').textContent = recentlyAdded;
         document.getElementById('favoriteGenre').textContent = favoriteGenre;
-        document.getElementById('readingProgress').textContent = '0%'; // Placeholder for future feature
+        document.getElementById('readingProgress').textContent = averageProgress + '%';
     }
 
     function renderBookshelfGrid() {
@@ -146,6 +163,20 @@
         }
         const addedDate = new Date(book.addedDate).toLocaleDateString();
         
+        // Reading progress display
+        const progress = book.readingProgress || 0;
+        const progressBar = progress > 0 ? `
+            <div class="progress mb-2" style="height: 6px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: ${progress}%" 
+                     aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <small class="text-muted">${progress}% complete</small>
+        ` : '';
+        
+        // Reading time display
+        const readingTime = book.totalReadingTime ? 
+            `<small class="text-muted d-block">Reading time: ${formatReadingTime(book.totalReadingTime)}</small>` : '';
+        
         return `
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card h-100 shadow-sm book-card" data-book-id="${book.bookEncounterId}">
@@ -157,19 +188,31 @@
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
+                        ${progress > 0 ? `<div class="position-absolute bottom-0 start-0 w-100 p-2 bg-dark bg-opacity-75">
+                            <div class="progress" style="height: 4px;">
+                                <div class="progress-bar bg-success" style="width: ${progress}%"></div>
+                            </div>
+                        </div>` : ''}
                     </div>
                     <div class="card-body d-flex flex-column">
                         <h6 class="card-title text-truncate" title="${book.bookTitle}">${book.bookTitle}</h6>
                         <p class="card-text text-muted small mb-2">by ${book.bookAuthor || 'Unknown Author'}</p>
                         <p class="card-text small text-muted">Added: ${addedDate}</p>
                         ${book.notes ? `<p class="card-text small"><em>"${book.notes}"</em></p>` : ''}
+                        ${progressBar}
+                        ${readingTime}
                         <div class="mt-auto">
                             <button class="btn btn-primary btn-sm w-100 mb-2" onclick="readBookFromShelf(${book.bookEncounterId})">
-                                <i class="fas fa-book-open me-1"></i> Read Now
+                                <i class="fas fa-book-open me-1"></i> ${progress >= 100 ? 'Re-read' : 'Continue Reading'}
                             </button>
-                            <button class="btn btn-outline-secondary btn-sm w-100" onclick="showBookDetails(${book.bookEncounterId})">
-                                <i class="fas fa-info-circle me-1"></i> Details
-                            </button>
+                            <div class="d-flex gap-1">
+                                <button class="btn btn-outline-secondary btn-sm flex-fill" onclick="showBookDetails(${book.bookEncounterId})">
+                                    <i class="fas fa-info-circle me-1"></i> Details
+                                </button>
+                                <button class="btn btn-outline-success btn-sm" onclick="manualUpdateProgress(${book.bookEncounterId})" title="Update Progress">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -258,6 +301,16 @@
         const book = currentBookshelfData.find(b => b.bookEncounterId === bookEncounterId);
         const bookTitle = book ? book.bookTitle : 'Book';
         
+        // Start tracking reading session
+        const sessionStartTime = Date.now();
+        
+        // Store session info for progress tracking
+        window.currentReadingSession = {
+            bookEncounterId: bookEncounterId,
+            startTime: sessionStartTime,
+            book: book
+        };
+        
         if (typeof openDflipViewer === 'function') {
             openDflipViewer(pdfUrl, bookTitle);
         } else {
@@ -324,6 +377,155 @@
         $('#bookshelfBookModal').modal('show');
     };
 
+    // Helper function to format reading time
+    function formatReadingTime(minutes) {
+        if (!minutes || minutes === 0) return '0 min';
+        
+        if (minutes < 60) {
+            return `${minutes} min`;
+        } else {
+            const hours = Math.floor(minutes / 60);
+            const remainingMinutes = minutes % 60;
+            if (remainingMinutes === 0) {
+                return `${hours}h`;
+            } else {
+                return `${hours}h ${remainingMinutes}m`;
+            }
+        }
+    }
+
+    // Update reading progress for a book
+    window.updateReadingProgress = function(bookEncounterId, currentPage, totalPages, isCompleted = false) {
+        if (!window.currentReadingSession || window.currentReadingSession.bookEncounterId !== bookEncounterId) {
+            return;
+        }
+
+        const sessionDuration = Math.round((Date.now() - window.currentReadingSession.startTime) / 60000); // Convert to minutes
+        const contextPath = $('meta[name="context-path"]').attr('content');
+        const url = `${contextPath}/api/bookshelf/update-progress`;
+        
+        const data = {
+            bookEncounterId: bookEncounterId,
+            currentPage: currentPage,
+            totalPages: totalPages,
+            readingTimeMinutes: sessionDuration,
+            isCompleted: isCompleted
+        };
+        
+        postData(url, JSON.stringify(data), 'json', function(response) {
+            if (response && response.success) {
+                // Refresh bookshelf data to show updated progress
+                loadBookshelfData();
+            } else {
+                console.error('Failed to update reading progress:', response.message);
+            }
+        }, function(error) {
+            console.error('Error updating reading progress:', error);
+        });
+    };
+
+    // Manual progress update function (for user input)
+    window.manualUpdateProgress = function(bookEncounterId) {
+        const book = currentBookshelfData.find(b => b.bookEncounterId === bookEncounterId);
+        if (!book) {
+            showErrorAlert('Book not found in your shelf');
+            return;
+        }
+
+        // Create a simple modal for manual progress input
+        const modalHtml = `
+            <div class="modal fade" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="progressModalLabel">Update Reading Progress</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="progressForm">
+                                <div class="mb-3">
+                                    <label for="currentPage" class="form-label">Current Page</label>
+                                    <input type="number" class="form-control" id="currentPage" 
+                                           value="${book.lastReadPage || 1}" min="1" aria-describedby="currentPageHelp">
+                                    <div id="currentPageHelp" class="form-text">Enter the page you are currently reading</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="totalPages" class="form-label">Total Pages</label>
+                                    <input type="number" class="form-control" id="totalPages" 
+                                           value="${book.totalPages || ''}" min="1" aria-describedby="totalPagesHelp">
+                                    <div id="totalPagesHelp" class="form-text">Enter the total number of pages in the book</div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="isCompleted">
+                                        <label class="form-check-label" for="isCompleted">Mark as completed</label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" onclick="saveManualProgress(${bookEncounterId})">Save Progress</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Remove existing modal if any
+        const existingModal = document.getElementById('progressModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Add modal to body
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('progressModal'));
+        modal.show();
+    };
+
+    // Save manual progress
+    window.saveManualProgress = function(bookEncounterId) {
+        const currentPage = parseInt(document.getElementById('currentPage').value);
+        const totalPages = parseInt(document.getElementById('totalPages').value);
+        const isCompleted = document.getElementById('isCompleted').checked;
+
+        if (!currentPage || !totalPages) {
+            showErrorAlert('Please enter valid page numbers');
+            return;
+        }
+
+        if (currentPage > totalPages) {
+            showErrorAlert('Current page cannot be greater than total pages');
+            return;
+        }
+
+        const contextPath = $('meta[name="context-path"]').attr('content');
+        const url = `${contextPath}/api/bookshelf/update-progress`;
+        
+        const data = {
+            bookEncounterId: bookEncounterId,
+            currentPage: currentPage,
+            totalPages: totalPages,
+            readingTimeMinutes: 0, // Manual update doesn't track time
+            isCompleted: isCompleted
+        };
+        
+        postData(url, JSON.stringify(data), 'json', function(response) {
+            if (response && response.success) {
+                showSuccessAlert('Reading progress updated successfully!');
+                loadBookshelfData(); // Refresh the bookshelf
+                bootstrap.Modal.getInstance(document.getElementById('progressModal')).hide();
+            } else {
+                showErrorAlert(response.message || 'Failed to update reading progress');
+            }
+        }, function(error) {
+            showErrorAlert('Error updating reading progress');
+        });
+    };
+
     // ========== BOOK DETAILS SHELF FUNCTIONS ==========
     // These functions are used by the book details page
 
@@ -332,11 +534,7 @@ window.checkBookshelfStatus = function(bookEncounterId) {
     const contextPath = $('meta[name="context-path"]').attr('content');
     const url = `${contextPath}/api/bookshelf/check/${bookEncounterId}`;
     
-    console.log('Checking bookshelf status for book:', bookEncounterId);
-    console.log('API URL:', url);
-    
     getData(url, 'json', function(response) {
-        console.log('Bookshelf status response:', response);
         if (response && response.success !== undefined) {
             // Use the correct field name from the backend
             const isInShelf = response.isInShelf;
@@ -357,18 +555,14 @@ window.updateShelfButton = function(isInShelf) {
         return;
     }
     
-    console.log('Updating shelf button. isInShelf:', isInShelf);
-    
     if (isInShelf) {
         button.innerHTML = '<i class="fas fa-bookmark me-1"></i> Remove from shelf';
         button.className = 'btn btn-danger w-100 mb-2';
         button.onclick = removeFromShelf;
-        console.log('Button updated to: Remove from shelf');
     } else {
         button.innerHTML = '<i class="fas fa-bookmark me-1"></i> Add to shelf';
         button.className = 'btn btn-outline-secondary w-100 mb-2';
         button.onclick = addToShelf;
-        console.log('Button updated to: Add to shelf');
     }
 };
 

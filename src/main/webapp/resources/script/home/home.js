@@ -72,6 +72,8 @@ function handleHomeBooksResponse(response) {
 
 // Navigation functions
 function changeModulePage(moduleName) {
+    // Navigation to module page
+    
     // Hide all pages first
     hideAllPages();
     
@@ -81,20 +83,25 @@ function changeModulePage(moduleName) {
     // Show the selected page
     switch(moduleName) {
         case 'readerUserHome':
+            // Show home page
             showHomePage();
             break;
         case 'myBookshelf':
+            // Show bookshelf page
             showMyBookshelf();
             break;
         case 'userProfileReader':
+            // Show user profile page
             showUserProfile();
             break;
         default:
+            // Default: showing home page
             showHomePage();
     }
 }
 
 function hideAllPages() {
+    // Hide all pages
     // Hide all main content areas
     const pages = [
         'readerHomeMainDiv',
@@ -106,6 +113,8 @@ function hideAllPages() {
         const element = document.getElementById(pageId);
         if (element) {
             element.style.display = 'none';
+        } else {
+            console.warn('Page element not found:', pageId);
         }
     });
 }

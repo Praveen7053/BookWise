@@ -2,6 +2,7 @@ package com.bookWise.bookshelf.controller;
 
 import com.bookWise.bookshelf.dto.BookshelfRequest;
 import com.bookWise.bookshelf.dto.BookshelfResponse;
+import com.bookWise.bookshelf.dto.ReadingProgressRequest;
 import com.bookWise.bookshelf.impl.BookshelfImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +37,15 @@ public class BookshelfController {
     @GetMapping("/my-shelf")
     public ResponseEntity<List<Map<String, Object>>> getMyShelf() {
         return bookshelfImpl.getMyShelf();
+    }
+
+    @PostMapping("/update-progress")
+    public ResponseEntity<BookshelfResponse> updateReadingProgress(@RequestBody ReadingProgressRequest request) {
+        return bookshelfImpl.updateReadingProgress(request);
+    }
+
+    @GetMapping("/progress/{bookEncounterId}")
+    public ResponseEntity<Map<String, Object>> getReadingProgress(@PathVariable Integer bookEncounterId) {
+        return bookshelfImpl.getReadingProgress(bookEncounterId);
     }
 } 
