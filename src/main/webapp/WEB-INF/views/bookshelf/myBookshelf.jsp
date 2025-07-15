@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<style>
+#bookshelfGrid {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+</style>
+
 <div class="container-fluid" id="myBookshelfPage" style="display:none;">
     <div class="row">
         <div class="col-12">
@@ -103,7 +111,7 @@
             </div>
 
             <!-- Books Grid -->
-            <div class="row" id="bookshelfGrid">
+            <div class="row" id="bookshelfGrid" style="max-height: 60vh; overflow-y: auto; padding-right: 8px;">
                 <!-- Books will be dynamically loaded here -->
                 <div class="col-12 text-center py-5">
                     <div class="text-muted">
