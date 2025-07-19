@@ -2,6 +2,69 @@
 $(document).ready(function() {
     loadAllBooks();
     loadSidebarProfileImage();
+    // Sidebar toggle logic
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    const mainContent = document.querySelector('.main-content');
+    function closeSidebar() {
+        sidebar.classList.remove('show');
+        sidebar.setAttribute('aria-hidden', 'true');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+    function openSidebar() {
+        sidebar.classList.add('show');
+        sidebar.setAttribute('aria-hidden', 'false');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+    }
+    toggleBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (sidebar.classList.contains('show')) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    });
+    // Close sidebar when clicking outside (on mobile)
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 991 && sidebar.classList.contains('show')) {
+            if (!sidebar.contains(e.target) && e.target !== toggleBtn && !toggleBtn.contains(e.target)) {
+                closeSidebar();
+            }
+        }
+    });
+    // Close sidebar when a nav link is clicked (on mobile)
+    sidebar.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 991) {
+                closeSidebar();
+            }
+        });
+    });
+    // Accessibility: close sidebar on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && sidebar.classList.contains('show')) {
+            closeSidebar();
+        }
+    });
+    // Ensure sidebar is visible on desktop resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 991) {
+            sidebar.classList.remove('hide');
+            sidebar.classList.add('show');
+            sidebar.setAttribute('aria-hidden', 'false');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+        } else {
+            closeSidebar();
+        }
+    });
+    // Initial state
+    if (window.innerWidth > 991) {
+        sidebar.classList.add('show');
+        sidebar.setAttribute('aria-hidden', 'false');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+    } else {
+        closeSidebar();
+    }
 });
 
 function loadAllBooks() {
