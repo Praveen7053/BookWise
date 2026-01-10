@@ -35,7 +35,7 @@
         <property name="driverClassName" value="${JDBC_DATABASE_DRIVER:com.mysql.cj.jdbc.Driver}" />
         <property name="url" value="${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/bookwise}" />
         <property name="username" value="${JDBC_DATABASE_USERNAME:root}" />
-        <property name="password" value="${JDBC_DATABASE_PASSWORD:seaface}" />
+        <property name="password" value="${JDBC_DATABASE_PASSWORD:root}" />
     </bean>
 
     <!-- Add this definition in your spring-mvc-servlet.xml or your main Spring configuration file -->
