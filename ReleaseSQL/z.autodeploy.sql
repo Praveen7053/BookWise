@@ -1,3 +1,7 @@
+
+-- 1. Create database if not exists
+CREATE DATABASE IF NOT EXISTS bookwise;
+
 use bookwise;
 
 DROP TABLE IF EXISTS BOOK_WISE_USER;

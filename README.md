@@ -95,9 +95,16 @@ src/main/webapp/
    ```
 
 2. **Configure database**
-   - Create a MySQL database
-   - Update `application.properties` with your database credentials
-   - Run the SQL scripts in `ReleaseSQL/` directory
+## Database Setup
+      1. Open MySQL
+      2. Execute the SQL file:
+         ReleaseSQL/z.autodeploy.sql
+      3. This script will automatically:
+         - Create the database
+         - Create all required tables
+         - Insert initial data
+         - Update `application.properties` with your database credentials
+         - Run the SQL scripts in `ReleaseSQL/` directory
 
 3. **Build the project**
    ```bash
