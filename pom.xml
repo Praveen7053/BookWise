@@ -4,7 +4,7 @@
     <groupId>praveen</groupId>
     <artifactId>BookWise</artifactId>
     <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>B1.0</version>
     <name>bookWise</name>
     <properties>
         <spring.version>5.3.20</spring.version> <!-- Updated to latest compatible 4.x version -->
