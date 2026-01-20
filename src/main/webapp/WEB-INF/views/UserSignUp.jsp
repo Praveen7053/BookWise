@@ -55,9 +55,17 @@
                                 <label for="name" class="form-label"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                 <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required />
                             </div>
+
+                            <div class="form-group mb-3">
+                                <label for="loginUserId" class="form-label">
+                                    <i class="zmdi zmdi-account"></i>
+                                </label>
+                                <input type="text" name="loginUserId" id="loginUserId" class="form-control" placeholder="Choose a Login ID (username)" required />
+                            </div>
+
                             <div class="form-group mb-3">
                                 <label for="phone" class="form-label"><i class="zmdi zmdi-email"></i></label>
-                                <input type="text" name="phone" id="phone" class="form-control" placeholder="Your phone number" required />
+                                <input type="text" name="phone" id="phone" class="form-control" placeholder="10-digit mobile number" maxlength="10" required />
                             </div>
                             <div class="form-group mb-3">
                                 <label for="email" class="form-label"><i class="zmdi zmdi-email"></i></label>
@@ -85,9 +93,22 @@
     </div>
 </div>
 <script>
+    function isValidIndianMobile(phone) {
+        return /^[6-9]\d{9}$/.test(phone);
+    }
+
+
+
     $(document).ready(function() {
         $('#register-form').submit(function(event) {
             event.preventDefault();
+
+            let phone = $('#phone').val().trim();
+            if (!isValidIndianMobile(phone)) {
+                showErrorAlert("Please enter a valid 10-digit Indian mobile number.");
+                return;
+            }
+
             showProgressBar("progressBarDiv", "bodyDiv");
             $.ajax({
                 type: 'POST',

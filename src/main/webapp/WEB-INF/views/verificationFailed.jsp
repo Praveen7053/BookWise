@@ -1,0 +1,50 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Email Verification Failed | BookWise</title>
+    <%@include file="./base.jsp" %>
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .verify-card {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 30px;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .verify-card h2 {
+            color: #dc3545;
+            margin-bottom: 15px;
+        }
+        .verify-card p {
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="verify-card">
+    <h2>❌ Verification Failed</h2>
+
+    <p>
+        ${message}
+    </p>
+
+    <p>
+        Please try registering again or request a new verification email.
+    </p>
+
+    <a href="${pageContext.request.contextPath}/userSignUpPage"
+       class="btn btn-primary">
+        Register Again
+    </a>
+</div>
+
+</body>
+</html>

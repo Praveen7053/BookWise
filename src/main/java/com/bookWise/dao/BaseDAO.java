@@ -26,6 +26,8 @@ public interface BaseDAO {
 
     <T> List<T> findBy(String hsql);
 
+    <T> List<T> findBy(String hsql, Object... params);
+
     Object load(Class clazz, Serializable id);
 
     void flush();
@@ -33,4 +35,9 @@ public interface BaseDAO {
     void refresh(Object obj);
 
     <T> T get(Class<T> clazz, Serializable id);
+
+    boolean exists(String hsql);
+
+    boolean exists(String hsql, Object... param);
+
 }

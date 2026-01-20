@@ -72,7 +72,7 @@
                         <form id="login-form">
                             <div class="form-group mb-3">
                                 <label for="userLoginId" class="form-label"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="userLoginId" id="userLoginId" class="form-control" placeholder="Email / Phone Number" required />
+                                <input type="text" name="userLoginId" id="userLoginId" class="form-control" placeholder="User ID / Email / Phone Number" required />
                             </div>
                             <div class="form-group mb-3">
                                 <label for="your_pass" class="form-label"><i class="zmdi zmdi-lock"></i></label>

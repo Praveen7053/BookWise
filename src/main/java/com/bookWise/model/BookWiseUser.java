@@ -33,10 +33,10 @@ public class BookWiseUser {
     @Column(name = "MAIN_LANGUAGE")
     private String mainLanguage;
 
-    @Column(name = "USER_EMAIL")
+    @Column(name = "USER_EMAIL", unique = true)
     private String userEmail;
 
-    @Column(name = "USER_PHONE_NUMBER")
+    @Column(name = "USER_PHONE_NUMBER", unique = true)
     private String userPhoneNumber;
 
     @Column(name = "USER_TYPE")
@@ -65,6 +65,15 @@ public class BookWiseUser {
 
     @Column(name = "DESCRIPTION")
     private String description;
+
+    @Column(name = "EMAIL_VERIFIED")
+    private Boolean emailVerified = false;
+
+    @Column(name = "VERIFICATION_TOKEN")
+    private String verificationToken;
+
+    @Column(name = "LOGIN_USER_ID", unique = true)
+    private String loginUserId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

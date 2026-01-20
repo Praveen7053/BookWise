@@ -22,8 +22,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     private BookWiseDAOImpl bookWiseDAO;
 
     @Override
-    public UserDetails loadUserByUsername(String userLoginId) throws UsernameNotFoundException {
-        List<BookWiseUser> userList = bookWiseDAO.findBy("from BookWiseUser where userEmail = '"+userLoginId+"' or userPhoneNumber = '"+userLoginId+"' ");
+    public UserDetails loadUserByUsername(String input) throws UsernameNotFoundException {
+        List<BookWiseUser> userList = bookWiseDAO.findBy(
+            "from BookWiseUser where " +
+                 "userEmail = '"+input+"' or " +
+                 "userPhoneNumber = '"+input+"' or " +
+                 "loginUserId = '"+input+"'"
+        );
+
         BookWiseUser user = userList.stream().findFirst()
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -32,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toSet());
 
         return new BookWiseLoginUser(user.getUserId(), user.getUserName(), user.getUserEmail(),
-                user.getUserPhoneNumber(), user.getUserType(), user.getUserPassword(), authorities,
+                user.getUserPhoneNumber(), user.getUserType(), user.getUserPassword(), user.getLoginUserId() ,authorities,
                 true, true, true, true);
     }
 }

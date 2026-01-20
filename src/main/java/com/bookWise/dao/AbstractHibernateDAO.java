@@ -56,6 +56,10 @@ public abstract class AbstractHibernateDAO extends HibernateDaoSupport implement
         return (List<T>) getHibernateTemplate().find(hsql);
     }
 
+    public <T> List<T> findBy(String hsql, Object... params) {
+        return (List<T>) getHibernateTemplate().find(hsql, params);
+    }
+
     protected List findByCriteria(DetachedCriteria criteria, int firstResult, int maxResults) {
         return getHibernateTemplate().findByCriteria(criteria, firstResult, maxResults);
     }
@@ -78,5 +82,16 @@ public abstract class AbstractHibernateDAO extends HibernateDaoSupport implement
 
     public <T> T get(Class<T> clazz, Serializable id) {
         return getHibernateTemplate().get(clazz, id);
+    }
+
+    public boolean exists(String hsql) {
+        List<?> result = getHibernateTemplate().find(hsql);
+        return result != null && !result.isEmpty();
+    }
+
+    @Override
+    public boolean exists(String hsql, Object... params) {
+        List<?> result = getHibernateTemplate().find(hsql, params);
+        return result != null && !result.isEmpty();
     }
 }

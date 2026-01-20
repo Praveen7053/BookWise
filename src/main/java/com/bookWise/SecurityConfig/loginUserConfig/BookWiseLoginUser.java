@@ -14,9 +14,10 @@ public class BookWiseLoginUser extends BookWiseLoginUserImpl {
     private String userEmail;
     private String userPhoneNumber;
     private String userType;
+    private String userLoginID;
 
     public BookWiseLoginUser(int userId, String userName, String userEmail, String userPhoneNumber,
-                             String userType, String password, Set<GrantedAuthority> authorities,
+                             String userType, String password, String userLoginID, Set<GrantedAuthority> authorities,
                              boolean accountNonExpired, boolean accountNonLocked,
                              boolean credentialsNonExpired, boolean enabled) {
         super(password, userName, authorities, accountNonExpired, accountNonLocked, credentialsNonExpired, enabled);
@@ -25,5 +26,6 @@ public class BookWiseLoginUser extends BookWiseLoginUserImpl {
         this.userEmail = userEmail;
         this.userPhoneNumber = userPhoneNumber;
         this.userType = userType;
+        this.userLoginID = userLoginID;
     }
 }

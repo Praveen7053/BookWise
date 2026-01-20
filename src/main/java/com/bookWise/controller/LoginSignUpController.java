@@ -1,6 +1,7 @@
 package com.bookWise.controller;
 
 import com.bookWise.SecurityConfig.BookWiseSecurityConfig;
+import com.bookWise.bookEmailVerify.service.EmailService;
 import com.bookWise.dao.impl.BookWiseDAOImpl;
 import com.bookWise.model.Authority;
 import com.bookWise.model.BookWiseUser;
@@ -8,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +33,9 @@ public class LoginSignUpController {
     private BookWiseSecurityConfig bookWiseSecurityConfig;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
@@ -38,122 +43,153 @@ public class LoginSignUpController {
     @PostMapping("/registerNewUser")
     @ResponseBody
     public Map<String, Object> registerUser(HttpServletRequest request) {
+
         Map<String, Object> response = new HashMap<>();
+
         try {
             String name = request.getParameter("name");
             String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+            String loginUserId = request.getParameter("loginUserId");
             String password = request.getParameter("pass");
             String rePassword = request.getParameter("re_pass");
-            String phone = request.getParameter("phone");
 
-            if (StringUtils.isBlank(name) || StringUtils.isBlank(email) || StringUtils.isBlank(password) || StringUtils.isBlank(rePassword) || StringUtils.isBlank(phone)) {
-                response.put("success", false);
-                response.put("message", "All fields are required.");
-                return response;
+            // ✅ Basic validation
+            if (StringUtils.isAnyBlank(name, email, phone, loginUserId, password, rePassword)) {
+                return error(response, "All fields are required.");
+            }
+
+            // ✅ Validate phone (server-side safety)
+            if (!phone.matches("^[6-9]\\d{9}$")) {
+                return error(response, "Please enter a valid 10-digit Indian mobile number.");
             }
 
             if (!password.equals(rePassword)) {
-                response.put("success", false);
-                response.put("message", "Passwords do not match.");
-                return response;
+                return error(response, "Passwords do not match.");
             }
 
-            // Check if the user already exists
-            List<BookWiseUser> bookWiseUsersList = bookWiseDAO.findBy("from BookWiseUser obj where obj.userEmail='" + email + "' and obj.userPhoneNumber = '" + phone + "' ");
-            if (bookWiseUsersList != null && !bookWiseUsersList.isEmpty()) {
-                response.put("success", false);
-                response.put("message", "You are already registered. Please log in.");
-                return response;
+            if (bookWiseDAO.exists(
+                    "from BookWiseUser where userEmail = '" + email + "'")) {
+                return error(response, "Email already registered, please use another email.");
             }
 
-            // Encode the password
-            String encodedPassword = bookWiseSecurityConfig.passwordEncoder().encode(password);
-            // Assigning the default role USER_ROLE
+            // ✅ Normalize phone number
+            String normalizedPhone = "+91" + phone;
+            if (bookWiseDAO.exists(
+                    "from BookWiseUser where userPhoneNumber = '" + normalizedPhone + "'")) {
+                return error(response, "This phone number is already registered, please use another.");
+            }
+
+            if (bookWiseDAO.exists(
+                    "from BookWiseUser where loginUserId = '" + loginUserId + "'")) {
+                return error(response, "Login ID already taken, please choose another.");
+            }
+
+            // ✅ Create user
+            BookWiseUser user = new BookWiseUser();
+            user.setUserName(name);
+            user.setUserEmail(email);
+            user.setUserPhoneNumber(normalizedPhone);
+            user.setLoginUserId(loginUserId);
+            user.setUserPassword(bookWiseSecurityConfig.passwordEncoder().encode(password));
+
             Authority userRole = (Authority) bookWiseDAO.find(Authority.class, 1);
+            user.setAuthorities(Collections.singleton(userRole));
 
-            // Create and save the new user
-            BookWiseUser bookWiseUser = new BookWiseUser();
-            bookWiseUser.setAuthorities(Collections.singleton(userRole));
-            bookWiseUser.setUserName(name);
-            bookWiseUser.setUserEmail(email);
-            bookWiseUser.setUserPassword(encodedPassword);
-            bookWiseUser.setUserPhoneNumber(phone);
-            bookWiseDAO.saveOrUpdate(bookWiseUser);
+            // ✅ Email verification
+            user.setEmailVerified(false);
+            String token = UUID.randomUUID().toString();
+            user.setVerificationToken(token);
+
+            bookWiseDAO.saveOrUpdate(user);
+            emailService.sendVerificationEmail(email, token);
 
             response.put("success", true);
-            response.put("message", "Registration successful. Please log in.");
+            response.put("message", "Registration successful! A verification link has been sent to your email. Please verify to log in.");
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.put("success", false);
-            response.put("message", "An error occurred. Please try again.");
+            return error(response, "An error occurred. Please try again.");
         }
+
+        return response;
+    }
+
+    private Map<String, Object> error(Map<String, Object> response, String msg) {
+        response.put("success", false);
+        response.put("message", msg);
         return response;
     }
 
     @PostMapping("/loginRegisteredUser")
     @ResponseBody
     public Map<String, Object> loginRegisteredUser(
-            @RequestParam("userLoginId") String userLoginId,
+            @RequestParam("userLoginId") String inputLogin,
             @RequestParam("your_pass") String password,
             HttpServletRequest request) {
 
         Map<String, Object> response = new HashMap<>();
 
         try {
-            if (StringUtils.isBlank(userLoginId)) {
-                response.put("success", false);
-                response.put("message", "Login id cannot be blank.");
-                return response;
+            if (StringUtils.isAnyBlank(inputLogin, password)) {
+                return error(response, "Login ID and password are required.");
             }
 
-            if (StringUtils.isBlank(password)) {
-                response.put("success", false);
-                response.put("message", "Password cannot be blank.");
-                return response;
-            }
-
-            // ✅ Invalidate old session and clear security context
+            // ✅ Clear old session
             HttpSession oldSession = request.getSession(false);
             if (oldSession != null) {
                 oldSession.invalidate();
             }
             SecurityContextHolder.clearContext();
-
-            // ✅ Create a fresh session
             HttpSession newSession = request.getSession(true);
+            String input = inputLogin.trim();
 
-            List<BookWiseUser> userList = bookWiseDAO.findBy(
-                    "from BookWiseUser where userEmail = '" + userLoginId + "' or userPhoneNumber = '" + userLoginId + "'");
-            BookWiseUser user = (userList != null && !userList.isEmpty()) ? userList.get(0) : null;
+            // normalize email for consistency
+            String normalizedEmail = input.toLowerCase();
+
+            List<BookWiseUser> users = bookWiseDAO.findBy(
+                "from BookWiseUser where " +
+                     "userEmail = '" + normalizedEmail + "' " +
+                     "or userPhoneNumber = '" + input + "' " +
+                     "or loginUserId = '" + input + "'"
+            );
+
+            BookWiseUser user = (users != null && !users.isEmpty()) ? users.get(0) : null;
 
             if (user == null) {
-                response.put("success", false);
-                response.put("message", "User not found.");
-                return response;
+                return error(response, "User not found.");
             }
 
-            // ✅ Password match check
-            if (!bookWiseSecurityConfig.passwordEncoder().matches(password, user.getUserPassword())) {
-                response.put("success", false);
-                response.put("message", "Invalid password.");
-                return response;
+            // ✅ Email verification check
+            if (!Boolean.TRUE.equals(user.getEmailVerified())) {
+                return error(response, "Your email is not verified. We have sent a verification link to your email. Please verify to continue.");
             }
 
-            // ✅ Authenticate user and set new context
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userLoginId, password));
+            // ✅ Password check (fast fail)
+            if (!bookWiseSecurityConfig.passwordEncoder()
+                    .matches(password, user.getUserPassword())) {
+                return error(response, "Invalid password.");
+            }
+
+            System.out.println("Authenticating user: " + user.getLoginUserId());
+            Authentication authentication =
+                authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                        user.getLoginUserId(),
+                        password
+                    )
+                );
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // ✅ Store authentication in session (required for Spring Security to persist it)
-            newSession.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+            newSession.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext() );
 
             response.put("success", true);
             response.put("message", "Login successful.");
-            response.put("redirectUrl", request.getContextPath() + determineRedirectUrlBasedOnRole(authentication));
+            response.put("redirectUrl",request.getContextPath() + determineRedirectUrlBasedOnRole(authentication));
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.put("success", false);
-            response.put("message", "An error occurred. Please try again.");
+            return error(response, "An error occurred. Please try again.");
         }
 
         return response;
