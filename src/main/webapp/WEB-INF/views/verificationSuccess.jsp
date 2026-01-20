@@ -34,7 +34,7 @@
 <body>
 
 <div class="verify-card">
-    <h2>✅ Email Verified Successfully</h2>
+    <h2>✅ ${title}</h2>
 
     <p>
         ${message}

@@ -56,6 +56,9 @@ public class BookWiseSecurityConfig {
                 .and()
                 .authorizeRequests(authorizeRequests ->
                 authorizeRequests
+                    .antMatchers("/forgotPassword").permitAll()
+                    .antMatchers("/resetPassword").permitAll()
+                    .antMatchers("/api/actions/**").permitAll()
                     .antMatchers("/api/emailVerification/**").permitAll()
                     .antMatchers("/superadmin/**").hasRole("SUPERADMIN")
                     .antMatchers("/home").hasRole("USER")

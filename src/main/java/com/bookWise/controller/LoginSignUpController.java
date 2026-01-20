@@ -162,7 +162,7 @@ public class LoginSignUpController {
 
             // ✅ Email verification check
             if (!Boolean.TRUE.equals(user.getEmailVerified())) {
-                return error(response, "Your email is not verified. We have sent a verification link to your email. Please verify to continue.");
+                return error(response, "Please verify your email first.");
             }
 
             // ✅ Password check (fast fail)

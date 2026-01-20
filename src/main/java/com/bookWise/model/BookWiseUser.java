@@ -75,6 +75,12 @@ public class BookWiseUser {
     @Column(name = "LOGIN_USER_ID", unique = true)
     private String loginUserId;
 
+    @Column(name = "RESET_PASSWORD_TOKEN ")
+    private String resetPasswordToken;
+
+    @Column(name = "RESET_TOKEN_EXPIRY ")
+    private Timestamp resetTokenExpiry;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_AUTHORITY",

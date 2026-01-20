@@ -15,4 +15,9 @@ public class BaseController {
     public String userSignUp(){
         return "UserSignUp";
     }
+
+    @RequestMapping("/forgotPassword")
+    public String forgotPasswordPage() {
+        return "forgotPassword";
+    }
 }

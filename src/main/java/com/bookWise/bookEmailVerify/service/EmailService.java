@@ -36,6 +36,7 @@ public class EmailService {
 
         bookWiseDAO.saveOrUpdate(user);
 
+        model.addAttribute("title", "Email Verified Successfully");
         model.addAttribute("message", "Email verified successfully. You can now log in.");
         return "verificationSuccess";
     }
@@ -58,4 +59,28 @@ public class EmailService {
 
         mailSender.send(message);
     }
+
+    public void sendResetPasswordEmail(String toEmail, String token) {
+
+        String baseUrl = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .build()
+                .toUriString();
+
+        String link = baseUrl + "/api/actions/resetPassword?token=" + token;
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(toEmail);
+        mail.setSubject("Reset your BookWise password");
+        mail.setText(
+                "We received a request to reset your password.\n\n" +
+                        "Click the link below to reset it:\n" +
+                        link + "\n\n" +
+                        "This link is valid for 30 minutes.\n\n" +
+                        "If you didn’t request this, ignore this email."
+        );
+
+        mailSender.send(mail);
+    }
+
 }

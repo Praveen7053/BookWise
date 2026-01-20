@@ -59,6 +59,25 @@ function deleteData(url, data, dataType, successCallback, errorCallback) {
     });
 }
 
+function postFormData(url, data, callbackFunction) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data, // form-urlencoded
+        success: function (response, textStatus, jqXHR) {
+            if (jqXHR.status >= 200 && jqXHR.status < 300) {
+                callbackFunction(response);
+            } else {
+                alert("Something went wrong", "Error!");
+            }
+        },
+        error: function () {
+            closeProgressBar("progressBarDiv");
+            alert("Something went wrong", "Error!");
+        }
+    });
+}
+
 function postData(url,data,dataType,callbackFunction){
     $.ajax({
         type: "POST",

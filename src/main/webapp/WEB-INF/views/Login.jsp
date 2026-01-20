@@ -85,6 +85,11 @@
                         <div class="text-center mt-2">
                             <a href="${pageContext.request.contextPath}/userSignUpPage" class="small">Create an account</a>
                         </div>
+                        <div class="text-center mt-2">
+                            <a href="${pageContext.request.contextPath}/forgotPassword" class="small">
+                                Forgot password?
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
