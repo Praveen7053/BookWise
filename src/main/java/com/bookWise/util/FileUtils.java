@@ -2,6 +2,7 @@ package com.bookWise.util;
 
 import com.bookWise.common.dto.ImageResponse;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -79,6 +80,62 @@ public class FileUtils {
         // Return the relative path of the file
         return new File(mainDirFile, sanitizedBookTitle + File.separator + fileName).getPath()
                 .replace(BASE_UPLOAD_DIR, ""); // Remove the base directory part
+    }
+
+    /**
+     * Saves an uploaded multipart file using the same directory layout as saveBase64ToFile:
+     * BASE_UPLOAD_DIR + mainDir + sanitizedBookTitle + fileName.
+     * Writes via input stream to avoid Jetty/Servlet resolving the destination path
+     * relative to a temp directory (which causes paths like target/tmp/C:/usr/...).
+     */
+    public static String saveMultipartFile(MultipartFile multipartFile, String mainDir, String bookTitle, String uniqueSuffix) throws IOException {
+
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            throw new IllegalArgumentException("Multipart file is empty");
+        }
+
+        // Get MIME type
+        String mimeType = multipartFile.getContentType();
+        if (mimeType == null || !MIME_TYPE_MAP.containsKey(mimeType)) {
+            throw new IllegalArgumentException("Unsupported MIME type: " + mimeType);
+        }
+
+        // Determine file extension
+        String fileExtension = MIME_TYPE_MAP.get(mimeType);
+
+        // Sanitize book title (same as saveBase64ToFile)
+        String sanitizedBookTitle = sanitizeFileName(bookTitle + "_" + uniqueSuffix);
+
+        // Same directory structure as saveBase64ToFile: base + mainDir, then subdir by sanitized title
+        File mainDirFile = new File(BASE_UPLOAD_DIR, mainDir);
+        if (!mainDirFile.exists()) {
+            mainDirFile.mkdirs();
+        }
+
+        File bookDirFile = new File(mainDirFile, sanitizedBookTitle);
+        if (!bookDirFile.exists()) {
+            bookDirFile.mkdirs();
+        }
+
+        String fileName = UUID.randomUUID().toString() + "." + fileExtension;
+        // Use getAbsoluteFile() so the path is unambiguous when writing
+        File destFile = new File(bookDirFile, fileName).getAbsoluteFile();
+
+        // Copy via stream so the file is written to our absolute path (avoids Jetty
+        // treating the path as relative to its temp dir)
+        try (java.io.InputStream in = multipartFile.getInputStream();
+             FileOutputStream out = new FileOutputStream(destFile)) {
+            byte[] buf = new byte[8192];
+            int n;
+            while ((n = in.read(buf)) != -1) {
+                out.write(buf, 0, n);
+            }
+        }
+
+        // Return relative path (same as saveBase64ToFile)
+        return new File(mainDirFile, sanitizedBookTitle + File.separator + fileName)
+                .getPath()
+                .replace(BASE_UPLOAD_DIR, "");
     }
 
 

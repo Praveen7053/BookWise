@@ -1,0 +1,161 @@
+/* ===============================
+   My Bookshelf – Responsive UI
+   Prefix: myBookShelf_
+================================ */
+
+html, body {
+    overflow-x: hidden;
+}
+
+.myBookShelf_page {
+    padding: 16px;
+    width: 100%;
+    min-height: 100vh;
+    overflow-y: auto;
+}
+
+/* -------------------------------
+   Header
+-------------------------------- */
+.myBookShelf_header h2 {
+    font-weight: 600;
+}
+
+.myBookShelf_header button {
+    white-space: nowrap;
+}
+
+/* -------------------------------
+   Stats Cards
+-------------------------------- */
+.myBookShelf_statCard {
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.myBookShelf_statCard .card-body {
+    padding: 12px 14px;
+}
+
+.myBookShelf_statCard h4 {
+    font-size: 18px;
+    margin-bottom: 2px;
+    line-height: 1.1;
+}
+
+/* -------------------------------
+   Filters
+-------------------------------- */
+.myBookShelf_filters input,
+.myBookShelf_filters select {
+    border-radius: 10px;
+}
+
+/* -------------------------------
+   Books Grid
+-------------------------------- */
+.myBookShelf_grid {
+    margin-top: 10px;
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
+.myBookShelf_grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.myBookShelf_grid::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 6px;
+}
+
+.myBookShelf_grid .fa-book-open {
+    opacity: 0.4;
+}
+
+/* ===============================
+   TABLET & BELOW
+================================ */
+@media (max-width: 768px) {
+
+    .myBookShelf_page {
+        padding: 12px;
+    }
+
+    .myBookShelf_header {
+        position: relative;
+        padding-right: 48px;
+    }
+
+    .myBookShelf_header h2 {
+        font-size: 22px;
+    }
+
+    .myBookShelf_stats {
+        row-gap: 10px;
+    }
+
+    .myBookShelf_statCol {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding: 0 6px;
+    }
+
+    .myBookShelf_statCard {
+        min-height: 90px;
+        border-radius: 12px;
+    }
+
+    .myBookShelf_statCard small {
+        font-size: 12px;
+        opacity: 0.9;
+    }
+
+    .myBookShelf_statCard i {
+        font-size: 20px !important;
+    }
+
+    .myBookShelf_filters > div {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .myBookShelf_grid {
+        max-height: none;
+        overflow-y: visible;
+    }
+}
+
+/* ===============================
+   SMALL DEVICES (≤575px)
+================================ */
+@media (max-width: 575px) {
+
+    .myBookShelf_statCard {
+        min-height: 72px;
+    }
+
+    .myBookShelf_statCard .card-body {
+        padding: 10px 12px;
+    }
+
+    .myBookShelf_statCard h4 {
+        font-size: 16px;
+    }
+
+    .myBookShelf_statCard small {
+        font-size: 11px;
+    }
+
+    .myBookShelf_statCard i {
+        font-size: 16px !important;
+        opacity: 0.8;
+    }
+}
+
+/* ===============================
+   SMALL MOBILE (≤480px)
+================================ */
+@media (max-width: 480px) {
+
+}

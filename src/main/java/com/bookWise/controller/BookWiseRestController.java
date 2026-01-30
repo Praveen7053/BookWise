@@ -2,8 +2,10 @@ package com.bookWise.controller;
 
 import com.bookWise.Impl.BookWiseRestControllerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -15,9 +17,14 @@ public class BookWiseRestController {
     @Autowired
     private BookWiseRestControllerImpl bookWiseRestControllerImpl;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/saveUpdateNewBooks")
-    public Map<String, Object> saveUpdateNewBooks(@RequestBody String bookDataJson) {
-        return bookWiseRestControllerImpl.saveUpdateNewBooks(bookDataJson);
+    @PostMapping(value = "/saveUpdateNewBooks",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> saveUpdateNewBooks(
+            @RequestParam("bookData") String bookDataJson,
+            @RequestParam(value = "bookCover", required = false) MultipartFile bookCover,
+            @RequestParam(value = "bookPdf", required = false) MultipartFile bookPdf) {
+        return bookWiseRestControllerImpl.saveUpdateNewBooks(bookDataJson, bookCover, bookPdf);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/getSellerUploadedBooks")

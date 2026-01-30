@@ -3,54 +3,8 @@
 <html>
 <head>
     <title>Login Page</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/loginNSignupStyle.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/login.css"/>
     <%@include file="./base.jsp" %>
-    <style>
-        body {
-            background: #f8f9fa;
-        }
-        .login-card {
-            border-radius: 1rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-        .login-image {
-            background: #fff;
-        }
-        .form-title {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .form-submit {
-            width: 100%;
-            padding: 12px;
-            font-size: 1.1rem;
-        }
-        .social-login {
-            margin-top: 1.5rem;
-        }
-        .socials {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-        .socials li a {
-            font-size: 1.5rem;
-            color: #6dabe4;
-            transition: color 0.2s;
-        }
-        .socials li a:hover {
-            color: #4292dc;
-        }
-        /* Force show checkbox for remember-me */
-        #remember-me.form-check-input {
-          display: inline-block !important;
-        }
-        @media (max-width: 767.98px) {
-            .login-image { display: none; }
-            .login-card { border-radius: 0.5rem; }
-        }
-    </style>
 </head>
 <body>
 <div class="container min-vh-100 d-flex align-items-center justify-content-center">

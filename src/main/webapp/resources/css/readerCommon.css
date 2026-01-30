@@ -1,0 +1,224 @@
+/* Common Reader Layout Styles */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* Prevent full-page scroll */
+}
+
+.full-height-container {
+    height: 100vh;
+    display: flex;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+    z-index: 200;
+}
+
+.sidebar.hide {
+    transform: translateX(-100%);
+}
+
+.sidebar.show {
+    transform: translateX(0);
+}
+
+.sidebar h4 {
+    padding: 20px;
+}
+
+.sidebar .nav {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-left: 20px;
+}
+
+.sidebar-footer {
+    padding: 15px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-profile-img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+}
+
+/* Main Header Styles */
+.main-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;
+}
+
+.sticky-top {
+    top: 0;
+    z-index: 100; /* Ensures it stays above other content */
+}
+
+/* Hamburger button - Always visible on mobile */
+.sidebar-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    margin-right: 16px;
+    color: #343a40;
+    cursor: pointer;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s;
+}
+
+/* Responsive styles */
+@media (max-width: 991.98px) {
+    .full-height-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    }
+    
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
+    }
+    
+    /* Always show toggle button on mobile */
+    .sidebar-toggle-btn {
+        display: inline-block !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .main-header h2 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Custom user dropdown for sidebar */
+.user-dropdown {
+    position: relative;
+}
+
+.user-dropdown-toggle {
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+    padding: 8px 0;
+}
+
+.user-dropdown-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: 48px;
+    width: 100%;
+    background: #23272b;
+    color: #fff;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    z-index: 9999;
+    padding: 0.5rem 0;
+}
+
+.user-dropdown-menu .dropdown-item {
+    color: #fff;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+.user-dropdown-menu .dropdown-item:hover, 
+.user-dropdown-menu .dropdown-item:focus {
+    background: #343a40;
+    color: #ffd600;
+}
+
+.user-dropdown-menu .dropdown-divider {
+    height: 1px;
+    margin: 0.5rem 0;
+    background: rgba(255,255,255,0.1);
+    border: none;
+}
+
+@media (max-width: 991.98px) {
+    .user-dropdown-menu {
+        left: 0;
+        width: 100%;
+        min-width: 0;
+        border-radius: 0 0 8px 8px;
+    }
+}
+
+/* Custom: Sidebar user dropdown menu responsive fix */
+@media (max-width: 991.98px) {
+    .sidebar .dropdown-menu {
+        position: static !important;
+        float: none;
+        width: 100%;
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0 0 8px 8px;
+        z-index: 9999;
+    }
+    
+    .sidebar .dropdown-menu .dropdown-item {
+        text-align: left;
+        width: 100%;
+    }
+    
+    .sidebar .dropdown {
+        position: relative;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .sidebar .dropdown-menu {
+        min-width: 0;
+        width: 100vw;
+        left: 0 !important;
+        right: 0 !important;
+    }
+}
+
+/* Always ensure sidebar dropdown is above sidebar and not clipped */
+.sidebar .dropdown-menu {
+    z-index: 9999;
+}
+
+.sidebar .dropdown {
+    position: relative;
+}

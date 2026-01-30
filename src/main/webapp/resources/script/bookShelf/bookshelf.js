@@ -22,22 +22,53 @@
         if (bookDetailsSection) {
             bookDetailsSection.style.display = 'none';
         }
-        
+
         // Show bookshelf page
         const bookshelfPage = document.getElementById('myBookshelfPage');
         if (bookshelfPage) {
             bookshelfPage.style.display = 'block';
-        } else {
-            console.error('myBookshelfPage element not found!');
+        }
+
+        // 🔥 UPDATE COMMON HEADER
+        if (typeof updateHeaderTitle === 'function') {
+            updateHeaderTitle('My Bookshelf');
         }
         
+        // Update header right section with back button
+        if (typeof updateHeaderRight === 'function') {
+            updateHeaderRight('');
+        }
+        
+        // Hide home search bar
+        const searchInput = document.getElementById("searchBookByName");
+        if (searchInput && searchInput.closest('.home-search-container')) {
+            searchInput.closest('.home-search-container').style.display = 'none';
+        }
+
         loadBookshelfData();
         setupEventListeners();
     };
 
     window.hideMyBookshelf = function() {
         document.getElementById('myBookshelfPage').style.display = 'none';
-        // Show the main content or navigate back
+
+        // 🔥 RESTORE COMMON HEADER
+        if (typeof updateHeaderTitle === 'function') {
+            updateHeaderTitle('Available Books');
+        }
+        
+        // Clear header right section
+        if (typeof updateHeaderRight === 'function') {
+            updateHeaderRight('');
+        }
+        
+        // Show home search bar
+        const searchInput = document.getElementById("searchBookByName");
+        if (searchInput && searchInput.closest('.home-search-container')) {
+            searchInput.closest('.home-search-container').style.display = 'block';
+        }
+
+        // Show home content
         if (typeof showHomePage === 'function') {
             showHomePage();
         }
